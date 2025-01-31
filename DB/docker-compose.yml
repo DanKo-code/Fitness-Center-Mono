@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: fitness-center-db
+    volumes:
+      - fitness-center-db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - ${DB_PORT}:5432
+    networks:
+      - fitness-center-network
+
+volumes:
+  fitness-center-db-data:
+
+networks:
+  fitness-center-network:
+    driver: bridge

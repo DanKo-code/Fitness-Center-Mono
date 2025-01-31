@@ -1,0 +1,17 @@
+services:
+  localstack:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ${LS_CONTAINER_NAME}
+    volumes:
+      - fitness-center-ls-data:/var/lib/localstack
+      - ./aws:/etc/localstack/init/ready.d
+    ports:
+      - ${LS_PORT}:4566
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+
+volumes:
+ fitness-center-ls-data:

@@ -1,0 +1,199 @@
+definitions:
+  dtos.RefreshResponse:
+    properties:
+      accessToken:
+        type: string
+      accessTokenExpiration:
+        type: integer
+      user:
+        $ref: '#/definitions/dtos.User'
+    type: object
+  dtos.SignInRequestWithoutFingerprint:
+    properties:
+      email:
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dtos.SignInResponse:
+    properties:
+      accessToken:
+        type: string
+      accessTokenExpiration:
+        type: integer
+      user:
+        $ref: '#/definitions/dtos.User'
+    type: object
+  dtos.SignUpRequestWithOutFingerPrint:
+    properties:
+      email:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 2
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  dtos.SignUpResponse:
+    properties:
+      accessToken:
+        type: string
+      accessTokenExpiration:
+        type: integer
+      user:
+        $ref: '#/definitions/dtos.User'
+    type: object
+  dtos.User:
+    properties:
+      created_time:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      photo:
+        type: string
+      role:
+        type: string
+      updated_time:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /sso/logOut:
+    post:
+      consumes:
+      - application/json
+      description: Log-out for entered user. The API also manages fingerprint for
+        enhanced tracking.
+      responses:
+        "200":
+          description: Successful log-out
+        "400":
+          description: Invalid request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Log-out  user
+      tags:
+      - Authentication
+  /sso/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refreshing tokens for accessing secured resources. Getting Refresh
+        token from cookies. The API also manages fingerprint for enhanced tracking.
+      responses:
+        "200":
+          description: Successful Refresh tokens response containing access token,
+            expiration, and user details
+          schema:
+            $ref: '#/definitions/dtos.RefreshResponse'
+        "400":
+          description: Invalid request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Refreshing tokens for accessing secured resources
+      tags:
+      - Authentication
+  /sso/signIn:
+    post:
+      consumes:
+      - application/json
+      description: Sign-in for existing user with provided details including email,
+        and password. The API also manages fingerprint for enhanced tracking.
+      parameters:
+      - description: Details for the user sign-in
+        in: body
+        name: signInRequest
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.SignInRequestWithoutFingerprint'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful sign-in response containing access token, expiration,
+            and user details
+          schema:
+            $ref: '#/definitions/dtos.SignInResponse'
+        "400":
+          description: Invalid request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Sign-in  user
+      tags:
+      - Authentication
+  /sso/signUp:
+    post:
+      consumes:
+      - application/json
+      description: Sign-up a new user with provided details including name, email,
+        and password. The API also manages fingerprint for enhanced tracking.
+      parameters:
+      - description: Details for the user sign-up
+        in: body
+        name: signUpRequest
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.SignUpRequestWithOutFingerPrint'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful registration response containing access token, expiration,
+            and user details
+          schema:
+            $ref: '#/definitions/dtos.SignUpResponse'
+        "400":
+          description: Invalid request or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Sign-up a new user
+      tags:
+      - Authentication
+swagger: "2.0"

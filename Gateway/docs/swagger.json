@@ -1,0 +1,293 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/sso/logOut": {
+            "post": {
+                "description": "Log-out for entered user. The API also manages fingerprint for enhanced tracking.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Log-out  user",
+                "responses": {
+                    "200": {
+                        "description": "Successful log-out"
+                    },
+                    "400": {
+                        "description": "Invalid request or validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sso/refresh": {
+            "post": {
+                "description": "Refreshing tokens for accessing secured resources. Getting Refresh token from cookies. The API also manages fingerprint for enhanced tracking.",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Refreshing tokens for accessing secured resources",
+                "responses": {
+                    "200": {
+                        "description": "Successful Refresh tokens response containing access token, expiration, and user details",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.RefreshResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request or validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sso/signIn": {
+            "post": {
+                "description": "Sign-in for existing user with provided details including email, and password. The API also manages fingerprint for enhanced tracking.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign-in  user",
+                "parameters": [
+                    {
+                        "description": "Details for the user sign-in",
+                        "name": "signInRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.SignInRequestWithoutFingerprint"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful sign-in response containing access token, expiration, and user details",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.SignInResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request or validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/sso/signUp": {
+            "post": {
+                "description": "Sign-up a new user with provided details including name, email, and password. The API also manages fingerprint for enhanced tracking.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Sign-up a new user",
+                "parameters": [
+                    {
+                        "description": "Details for the user sign-up",
+                        "name": "signUpRequest",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.SignUpRequestWithOutFingerPrint"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful registration response containing access token, expiration, and user details",
+                        "schema": {
+                            "$ref": "#/definitions/dtos.SignUpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request or validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dtos.RefreshResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "accessTokenExpiration": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/dtos.User"
+                }
+            }
+        },
+        "dtos.SignInRequestWithoutFingerprint": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        },
+        "dtos.SignInResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "accessTokenExpiration": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/dtos.User"
+                }
+            }
+        },
+        "dtos.SignUpRequestWithOutFingerPrint": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 2
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                }
+            }
+        },
+        "dtos.SignUpResponse": {
+            "type": "object",
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "accessTokenExpiration": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/dtos.User"
+                }
+            }
+        },
+        "dtos.User": {
+            "type": "object",
+            "properties": {
+                "created_time": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "photo": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "updated_time": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
