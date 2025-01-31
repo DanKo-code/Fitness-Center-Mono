@@ -1,0 +1,229 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    volumes:
+      - fitness-center-db-data:/var/lib/postgresql/data
+      - ./DB/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: ${DB_SUPER_USER}
+      POSTGRES_PASSWORD: ${DB_SUPER_USER_PASSWORD}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    networks:
+      - fitness-center-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -h db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: migrate/migrate
+    container_name: migrate
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: [
+      "sh", "-c",
+      "migrate -path ${MIGRATIONS_PATH} -database '${DB_URL}' ${MIGRATE_COMMAND} && touch /migrations_done && tail -f /dev/null"
+    ]
+    volumes:
+      - ./Migrations/migrations:/migrations
+    networks:
+      - fitness-center-network 
+    healthcheck:
+      test: [ "CMD-SHELL", "[ -f /migrations_done ]" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  localstack:
+    build:
+      context: ./LocalStack
+      dockerfile: ./Dockerfile
+    container_name: localstack
+    volumes:
+      - fitness-center-ls-data:/var/lib/localstack
+      - ./LocalStack/aws:/etc/localstack/init/ready.d
+    ports:
+      - ${LS_PORT}:${LS_PORT}
+    environment:
+      - SERVICES=s3
+      - DATA_DIR=/var/lib/localstack/data
+      - LOCALSTACK_AUTH_TOKEN=ls-ziJeKOfI-CEtU-VABE-8153-4156yogAcb8c
+      - PERSISTENCE=1
+    networks:
+      - fitness-center-network
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:${LS_PORT}/_localstack/health || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gateway:
+    build:
+      context: ./Gateway
+      dockerfile: ./Dockerfile
+    container_name: gateway
+    ports:
+      - ${GATEWAY_PORT}:${GATEWAY_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  sso:
+    build:
+      context: ./SSO
+      dockerfile: ./Dockerfile
+    container_name: sso
+    ports:
+      - ${SSO_PORT}:${SSO_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  abonement:
+    build:
+      context: ./Abonement
+      dockerfile: ./Dockerfile
+    container_name: abonement
+    ports:
+      - ${ABONEMENT_PORT}:${ABONEMENT_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  coach:
+    build:
+      context: ./Coach
+      dockerfile: ./Dockerfile
+    container_name: coach
+    ports:
+      - ${COACH_PORT}:${COACH_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  order:
+    build:
+      context: ./Order
+      dockerfile: ./Dockerfile
+    container_name: order
+    ports:
+      - ${ORDER_PORT}:${ORDER_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  review:
+    build:
+      context: ./Review
+      dockerfile: ./Dockerfile
+    container_name: review
+    ports:
+      - ${REVIEW_PORT}:${REVIEW_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  service:
+    build:
+      context: ./Service
+      dockerfile: ./Dockerfile
+    container_name: service
+    ports:
+      - ${SERVICE_PORT}:${SERVICE_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  user:
+    build:
+      context: ./User
+      dockerfile: ./Dockerfile
+    container_name: user
+    ports:
+      - ${USER_PORT}:${USER_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
+
+  ui:
+    build:
+      context: ./UI/frontend
+      dockerfile: ./Dockerfile
+    container_name: ui
+    ports:
+      - ${UI_PORT}:80
+    networks:
+      - fitness-center-network
+
+  stripe-cli:
+    image: stripe/stripe-cli:latest
+    container_name: stripe-cli
+    depends_on:
+      - gateway
+    environment:
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+      - STRIPE_API_KEY=${STRIPE_API_KEY}
+    networks:
+      - fitness-center-network
+    command: listen --forward-to gateway:${GATEWAY_PORT}/checkout-session-completed --api-key ${STRIPE_API_KEY} --events checkout.session.completed
+
+
+volumes:
+  fitness-center-db-data:
+  fitness-center-ls-data: 
+
+networks:
+  fitness-center-network:
+    driver: bridge
