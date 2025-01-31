@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package fitness_center.abonement;
+
+option go_package = "FitnessCenter.protobuf.abonement";
+
+import "service.proto";
+
+service Abonement {
+  rpc CreateAbonement (stream CreateAbonementRequest) returns (CreateAbonementResponse);
+  rpc GetAbonementById (GetAbonementByIdRequest) returns (GetAbonementByIdResponse);
+  rpc UpdateAbonement (stream UpdateAbonementRequest) returns (UpdateAbonementResponse);
+  rpc DeleteAbonementById (DeleteAbonementByIdRequest) returns (DeleteAbonementByIdResponse);
+
+  rpc GetAbonements (google.protobuf.Empty) returns (GetAbonementsResponse);
+  rpc GetAbonementsWithServices (google.protobuf.Empty) returns (GetAbonementsWithServicesResponse);
+  rpc GetAbonementsByIds (GetAbonementsByIdsRequest) returns (GetAbonementsByIdsResponse);
+}
+
+message AbonementObject {
+  string id = 1;
+  string title = 2;
+  string validity = 3;
+  string visiting_time = 4;
+  string photo = 5;
+  int32 price = 6;
+  string created_time = 7;
+  string updated_time = 8;
+  string stripe_price_id = 9;
+}
+message AbonementWithServices{
+    AbonementObject abonement = 1;
+    repeated service.ServiceObject services = 2;
+}
+
+message AbonementDataForCreate {
+  string title = 1;
+  string validity = 2;
+  string visiting_time = 3;
+  int32 price = 4;
+  repeated string servicesIds = 5;
+}
+message AbonementDataForUpdate {
+  string id = 1;
+  string title = 2;
+  string validity = 3;
+  string visiting_time = 4;
+  int32 price = 5;
+  repeated string servicesIds = 6;
+}
+
+message CreateAbonementRequest {
+  oneof payload {
+    AbonementDataForCreate abonementDataForCreate = 1;
+    bytes abonementPhoto = 2;
+  }
+}
+message CreateAbonementResponse {
+  AbonementWithServices abonementWithServices = 1;
+}
+
+message GetAbonementByIdRequest {
+  string id = 1;
+}
+message GetAbonementByIdResponse {
+  AbonementObject abonementObject = 1;
+}
+
+message UpdateAbonementRequest  {
+  oneof payload{
+    AbonementDataForUpdate abonementDataForUpdate = 1;
+    bytes abonementPhoto = 2;
+  }
+}
+message UpdateAbonementResponse  {
+  AbonementWithServices abonementWithServices = 1;
+}
+
+message DeleteAbonementByIdRequest {
+  string id = 1;
+}
+message DeleteAbonementByIdResponse {
+  AbonementObject abonementObject = 1;
+}
+
+message GetAbonementsResponse {
+  repeated AbonementObject AbonementObjects = 1;
+}
+
+message GetAbonementsWithServicesResponse {
+    repeated AbonementWithServices abonementsWithServices = 1;
+}
+
+message GetAbonementsByIdsRequest {
+  repeated string ids = 1;
+}
+message GetAbonementsByIdsResponse {
+  repeated AbonementObject abonementObjects = 1;
+}

@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+package fitness_center.review;
+
+option go_package = "FitnessCenter.protobuf.review";
+
+service Review {
+  rpc CreateCoachReview (CreateCoachReviewRequest) returns (CreateCoachReviewResponse);
+  rpc GetReviewById (GetReviewByIdRequest) returns (GetReviewByIdResponse);
+  rpc UpdateReview (UpdateReviewRequest) returns (UpdateReviewResponse);
+  rpc DeleteReviewById (DeleteReviewByIdRequest) returns (DeleteReviewByIdResponse);
+
+  rpc GetCoachReviews (GetCoachReviewsRequest) returns (GetCoachReviewsResponse);
+  rpc GetCoachesReviews (GetCoachesReviewsRequest) returns (GetCoachesReviewsResponse);
+}
+
+message ReviewObject {
+  string id = 1;
+  string user_id = 2;
+  string body = 3;
+  string created_time = 4;
+  string updated_time = 5;
+}
+message CoachIdWithReviewObject {
+  string coach_id = 1;
+  repeated ReviewObject reviewObjects = 2;
+}
+
+message CoachReviewDataForCreate {
+  string user_id = 1;
+  string body = 2;
+  string coach_id = 3;
+}
+message ReviewDataForUpdate {
+  string id = 1;
+  string body = 2;
+}
+
+message CreateCoachReviewRequest {
+  CoachReviewDataForCreate reviewDataForCreate = 1;
+}
+message CreateCoachReviewResponse {
+  ReviewObject reviewObject = 1;
+}
+
+message GetReviewByIdRequest {
+  string id = 1;
+}
+message GetReviewByIdResponse {
+  ReviewObject reviewObject = 1;
+}
+
+message UpdateReviewRequest  {
+  ReviewDataForUpdate reviewDataForUpdate = 1;
+}
+message UpdateReviewResponse  {
+  ReviewObject reviewObject = 1;
+}
+
+message DeleteReviewByIdRequest {
+  string id = 1;
+}
+message DeleteReviewByIdResponse {
+  ReviewObject reviewObject = 1;
+}
+
+message GetCoachReviewsRequest {
+  string coach_id = 1;
+}
+message GetCoachReviewsResponse {
+  repeated ReviewObject reviewObjects = 1;
+}
+
+message GetCoachesReviewsRequest {
+  repeated string coaches_ids = 1;
+}
+message GetCoachesReviewsResponse {
+    repeated CoachIdWithReviewObject coachIdWithReviewObject = 1;
+}

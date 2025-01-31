@@ -1,0 +1,2 @@
+ALTER TABLE coach
+    ALTER COLUMN description TYPE VARCHAR(500);

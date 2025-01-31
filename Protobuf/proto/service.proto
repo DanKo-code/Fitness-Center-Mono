@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package fitness_center.service;
+
+option go_package = "FitnessCenter.protobuf.service";
+
+service Service {
+  rpc CreateService (stream CreateServiceRequest) returns (CreateServiceResponse);
+  rpc GetServiceById (GetServiceByIdRequest) returns (GetServiceByIdResponse);
+  rpc UpdateService (stream UpdateServiceRequest) returns (UpdateServiceResponse);
+  rpc DeleteServiceById (DeleteServiceByIdRequest) returns (DeleteServiceByIdResponse);
+
+  rpc GetServices (google.protobuf.Empty) returns (GetServicesResponse);
+  rpc CreateCoachServices (CreateCoachServicesRequest) returns (CreateCoachServicesResponse);
+  rpc CreateAbonementServices (CreateAbonementServicesRequest) returns (CreateAbonementServicesResponse);
+  rpc UpdateAbonementServices (UpdateAbonementServicesRequest) returns (UpdateAbonementServicesResponse);
+  rpc UpdateCoachServices (UpdateCoachServicesRequest) returns (UpdateCoachServicesResponse);
+  rpc GetAbonementsServices (GetAbonementsServicesRequest) returns (GetAbonementsServicesResponse);
+  rpc GetCoachesServices (GetCoachesServicesRequest) returns (GetCoachesServicesResponse);
+}
+
+message ServiceObject {
+  string id = 1;
+  string title = 2;
+  string photo = 3;
+  string created_time = 4;
+  string updated_time = 5;
+}
+message AbonementIdWithServices{
+  string abonementId = 1;
+  repeated ServiceObject serviceObjects = 2;
+}
+message CoachIdWithServices{
+  string coachId = 1;
+  repeated ServiceObject serviceObjects = 2;
+}
+
+message ServiceDataForCreate {
+  string title = 1;
+}
+message ServiceDataForUpdate {
+  string id = 1;
+  string title = 2;
+}
+
+message CoachService {
+  string coachId = 1;
+  repeated string serviceId = 2;
+}
+message AbonementService {
+  string abonementId = 1;
+  repeated string serviceId = 2;
+}
+
+message CreateServiceRequest {
+  oneof payload {
+      ServiceDataForCreate serviceDataForCreate = 1;
+      bytes servicePhoto = 2;
+  }
+}
+message CreateServiceResponse {
+  ServiceObject serviceObject = 1;
+}
+
+message GetServiceByIdRequest {
+  string id = 1;
+}
+message GetServiceByIdResponse {
+  ServiceObject serviceObject = 1;
+}
+
+message UpdateServiceRequest  {
+  oneof payload{
+    ServiceDataForUpdate serviceDataForUpdate = 1;
+    bytes servicePhoto = 2;
+  }
+}
+message UpdateServiceResponse  {
+  ServiceObject serviceObject = 1;
+}
+
+message DeleteServiceByIdRequest {
+  string id = 1;
+}
+message DeleteServiceByIdResponse {
+  ServiceObject serviceObject = 1;
+}
+
+message GetServicesResponse {
+  repeated ServiceObject serviceObject = 1;
+}
+
+message CreateCoachServicesRequest {
+  CoachService coachService = 1;
+}
+message CreateCoachServicesResponse {
+  CoachService coachService = 1;
+}
+
+message CreateAbonementServicesRequest {
+  AbonementService abonementService = 1;
+}
+message CreateAbonementServicesResponse {
+  AbonementService abonementService = 1;
+}
+
+message UpdateAbonementServicesRequest {
+  AbonementService abonementService = 1;
+}
+message UpdateAbonementServicesResponse {
+  AbonementService abonementService = 1;
+}
+
+message UpdateCoachServicesRequest {
+  CoachService coachService = 1;
+}
+message UpdateCoachServicesResponse {
+  CoachService coachService = 1;
+}
+
+message GetAbonementsServicesRequest {
+  repeated string abonementIds = 1;
+}
+message GetAbonementsServicesResponse {
+  repeated AbonementIdWithServices abonementIdsWithServices = 1;
+}
+
+message GetCoachesServicesRequest {
+  repeated string coachIds = 1;
+}
+message GetCoachesServicesResponse {
+  repeated CoachIdWithServices coachIdsWithServices = 1;
+}

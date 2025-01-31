@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package fitness_center.sso;
+
+option go_package = "FitnessCenter.protobuf.sso";
+
+import "google/protobuf/empty.proto";
+import "user.proto";
+
+service SSO {
+  rpc SignUp (SignUpRequest) returns (SignUpResponse);
+  rpc SignIn (SignInRequest) returns (SignInResponse);
+  rpc LogOut (LogOutRequest) returns (google.protobuf.Empty);
+  rpc Refresh (RefreshRequest) returns (RefreshResponse);
+}
+
+message SignUpRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+  string finger_print = 4;
+}
+message SignUpResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string access_token_expiration = 3;
+  string refresh_token_expiration = 4;
+  fitness_center.user.UserObject user = 5;
+}
+
+message SignInRequest {
+  string email = 1;
+  string password = 2;
+  string finger_print = 3;
+}
+message SignInResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string access_token_expiration = 3;
+  string refresh_token_expiration = 4;
+  fitness_center.user.UserObject user = 5;
+}
+
+message LogOutRequest {
+  string refresh_token = 1;
+}
+
+message RefreshRequest {
+  string finger_print = 1;
+  string refresh_token = 2;
+}
+message RefreshResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+  string access_token_expiration = 3;
+  string refresh_token_expiration = 4;
+  fitness_center.user.UserObject user = 5;
+}

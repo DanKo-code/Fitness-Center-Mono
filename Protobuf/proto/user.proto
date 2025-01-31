@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package fitness_center.user;
+
+option go_package = "FitnessCenter.protobuf.user";
+
+import "google/protobuf/empty.proto";
+
+service User {
+  rpc CreateUser (stream CreateUserRequest) returns (CreateUserResponse);
+  rpc GetUserById (GetUserByIdRequest) returns (GetUserByIdResponse);
+  rpc UpdateUser (stream UpdateUserRequest) returns (UpdateUserResponse);
+  rpc DeleteUserById (DeleteUserByIdRequest) returns (DeleteUserByIdResponse);
+
+  rpc GetUserByEmail (GetUserByEmailRequest) returns (GetUserByEmailResponse);
+  rpc CheckPassword (CheckPasswordRequest) returns (google.protobuf.Empty);
+  rpc GetUsersByIds (GetUsersByIdsRequest) returns (GetUsersByIdsResponse);
+  rpc GetClients (google.protobuf.Empty) returns (GetClientsResponse);
+}
+
+message UserObject {
+  string id = 1;
+  string email = 2;
+  string role = 3;
+  string photo = 4;
+  string name = 5;
+  string created_time = 6;
+  string updated_time = 7;
+}
+
+message UserDataForCreate {
+  string email = 1;
+  string role = 2;
+  string password = 3;
+  string name = 4;
+}
+message UserDataForUpdate {
+  string id = 1;
+  string email = 2;
+  string role = 3;
+  string name = 4;
+}
+
+message CreateUserRequest {
+  oneof payload {
+      UserDataForCreate userDataForCreate = 1;
+      bytes userPhoto = 2;
+  }
+}
+message CreateUserResponse {
+    UserObject userObject = 1;
+}
+
+message GetUserByIdRequest {
+  string id = 1;
+}
+message GetUserByIdResponse {
+  UserObject userObject = 1;
+}
+
+message UpdateUserRequest {
+  oneof payload{
+    UserDataForUpdate userDataForUpdate = 1;
+    bytes userPhoto = 2;
+  }
+}
+message UpdateUserResponse {
+    UserObject userObject = 1;
+}
+
+message DeleteUserByIdRequest {
+ string id = 1;
+}
+message DeleteUserByIdResponse {
+    UserObject userObject = 1;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+message GetUserByEmailResponse {
+    UserObject userObject = 1;
+}
+
+message CheckPasswordRequest {
+  string userId = 1;
+  string password = 2;
+}
+
+message GetUsersByIdsRequest {
+  repeated string usersIds = 1;
+}
+message GetUsersByIdsResponse {
+  repeated UserObject usersObjects = 1;
+}
+
+message GetClientsResponse {
+  repeated UserObject userObjects = 1;
+}

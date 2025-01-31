@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package fitness_center.order;
+
+option go_package = "FitnessCenter.protobuf.order";
+
+import "abonement.proto";
+import "service.proto";
+
+service Order {
+  rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse);
+  rpc GetUserOrders (GetUserOrdersRequest) returns (GetUserOrdersResponse);
+  rpc CreateCheckoutSession (CreateCheckoutSessionRequest) returns (CreateCheckoutSessionResponse);
+}
+
+message OrderObject {
+  string id = 1;
+  string user_id = 2;
+  string abonement_id = 3;
+  string status = 4;
+  string created_time = 5;
+  string updated_time = 6;
+}
+
+message OrderObjectWithAbonementWithServices {
+    OrderObject orderObject = 1;
+    fitness_center.abonement.AbonementObject abonementObject = 2;
+    repeated fitness_center.service.ServiceObject serviceObjects = 3;
+}
+
+message OrderDataForCreate {
+  string user_id = 1;
+  string abonement_id = 2;
+}
+
+message CreateOrderRequest {
+  OrderDataForCreate orderDataForCreate = 1;
+}
+message CreateOrderResponse {
+    OrderObject orderObject = 1;
+}
+
+message GetUserOrdersRequest {
+  string user_id = 1;
+}
+message GetUserOrdersResponse {
+    repeated OrderObjectWithAbonementWithServices orderObjectWithAbonementWithServices = 1;
+}
+
+message CreateCheckoutSessionRequest {
+  string client_id = 1;
+  string abonement_id = 2;
+  string stripe_price_id = 3;
+}
+message CreateCheckoutSessionResponse {
+  string session_url = 1;
+}

@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package fitness_center.coach;
+
+option go_package = "FitnessCenter.protobuf.coach";
+
+import "service.proto";
+import "review.proto";
+import "user.proto";
+
+service Coach {
+  rpc CreateCoach (stream CreateCoachRequest) returns (CreateCoachResponse);
+  rpc GetCoachById (GetCoachByIdRequest) returns (GetCoachByIdResponse);
+  rpc UpdateCoach (stream UpdateCoachRequest) returns (UpdateCoachResponse);
+  rpc DeleteCoachById (DeleteCoachByIdRequest) returns (DeleteCoachByIdResponse);
+
+  rpc GetCoaches (google.protobuf.Empty) returns (GetCoachesResponse);
+  rpc GetCoachesWithServicesWithReviewsWithUsers (google.protobuf.Empty) returns (GetCoachesWithServicesWithReviewsWithUsersResponse);
+}
+
+message CoachObject {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string photo = 4;
+  string created_time = 5;
+  string updated_time = 6;
+}
+message ReviewWithUser {
+    review.ReviewObject reviewObject = 1;
+    user.UserObject userObject = 2;
+}
+message CoachWithServicesWithReviewsWithUsers{
+  CoachObject coach = 1;
+  repeated service.ServiceObject services = 2;
+  repeated ReviewWithUser reviewWithUser = 3;
+}
+message CoachWithServices{
+  CoachObject coach = 1;
+  repeated service.ServiceObject services = 2;
+}
+
+message CoachDataForCreate {
+  string name = 1;
+  string description = 2;
+  repeated string coach_service_ids = 3;
+}
+message CoachDataForUpdate {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string coach_service_ids = 4;
+}
+
+message CreateCoachRequest {
+  oneof payload {
+      CoachDataForCreate coachDataForCreate = 1;
+      bytes coachPhoto = 2;
+  }
+}
+message CreateCoachResponse {
+  CoachWithServices coachWithServices = 1;
+}
+
+message GetCoachByIdRequest {
+  string id = 1;
+}
+message GetCoachByIdResponse {
+  CoachObject coachObject = 1;
+}
+
+message UpdateCoachRequest {
+  oneof payload {
+    CoachDataForUpdate coachDataForUpdate = 1;
+    bytes coachPhoto = 2;
+  }
+}
+message UpdateCoachResponse {
+  CoachWithServices coachWithServices = 1;
+}
+
+message DeleteCoachByIdRequest {
+  string id = 1;
+}
+message DeleteCoachByIdResponse {
+  CoachObject coachObject = 1;
+}
+
+message GetCoachesResponse {
+  repeated CoachObject coachObjects = 1;
+}
+
+message GetCoachesWithServicesWithReviewsWithUsersResponse {
+  repeated CoachWithServicesWithReviewsWithUsers coachWithServicesWithReviewsWithUsers = 1;
+}
