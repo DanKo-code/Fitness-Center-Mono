@@ -1,0 +1,9 @@
+.sliderItemDiv{
+    text-align: center;
+}
+
+.sliderItemImg{
+    max-width: 90%;
+    max-height: 300px;
+    object-fit: cover;
+}
