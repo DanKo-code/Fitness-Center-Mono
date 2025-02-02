@@ -1,4 +1,4 @@
-package internal
+package usecase
 
 import (
 	"encoding/json"
