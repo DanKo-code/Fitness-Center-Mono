@@ -8,6 +8,7 @@ import (
 type TrainingRepository interface {
 	Insert(context.Context, model.Training) (model.Training, error)
 	UpdateTrainingsStatuses(ctx context.Context) (activeTrainings []model.Training, passedTrainings []model.Training, err error)
+	GetTrainingsByDate(ctx context.Context, date string) ([]model.Training, error)
 }
 
 type Training struct {
@@ -52,4 +53,13 @@ func (t Training) UpdateRoomsList(ctx context.Context, roomMap *model.RoomMap) e
 	}
 
 	return nil
+}
+
+func (t Training) GetTrainingsByDate(ctx context.Context, date string) ([]model.Training, error) {
+	trainings, err := t.repository.GetTrainingsByDate(ctx, date)
+	if err != nil {
+		return nil, err
+	}
+
+	return trainings, nil
 }

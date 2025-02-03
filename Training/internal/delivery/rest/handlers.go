@@ -20,6 +20,7 @@ const (
 
 type trainingUseCase interface {
 	Insert(ctx context.Context, training model.Training) (model.Training, error)
+	GetTrainingsByDate(ctx context.Context, date string) ([]model.Training, error)
 }
 
 type Handlers struct {
@@ -47,13 +48,21 @@ func (h Handlers) Insert(c *gin.Context) {
 		return
 	}
 
+	convertedTimeFrom, convertedTimeUntil, err := createTimeFromAndTimeUntil(bookTrainingQuery.Date, bookTrainingQuery.TimeFrom, bookTrainingQuery.TimeUntil)
+
+	userId, ok := c.Get("UserIdFromToken")
+	if !ok {
+		c.Error(fmt.Errorf("UserIdFromToken not dound in context"))
+		return
+	}
+
 	trainingModel := model.Training{
 		Id:          uuid.New(),
-		TimeFrom:    bookTrainingQuery.TimeFrom,
-		TimeUntil:   bookTrainingQuery.TimeUntil,
+		TimeFrom:    convertedTimeFrom,
+		TimeUntil:   convertedTimeUntil,
 		Status:      BookTrainingStatus,
 		CoachId:     bookTrainingQuery.CoachId,
-		ClientId:    bookTrainingQuery.ClientId,
+		ClientId:    uuid.MustParse(userId.(string)),
 		CreatedTime: time.Now(),
 		UpdatedTime: time.Now(),
 	}
@@ -66,6 +75,35 @@ func (h Handlers) Insert(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, insertedTrainingModel)
+}
+
+func createTimeFromAndTimeUntil(date, timeFrom, timeUntil string) (convertedTimeFrom, convertedTimeUntil time.Time, err error) {
+	parsedDate, err := time.Parse("2006-01-02", date)
+	if err != nil {
+		return time.Time{}, time.Time{}, err
+	}
+
+	parsedTimeFrom, err := time.Parse("15:04", timeFrom)
+	if err != nil {
+		return time.Time{}, time.Time{}, err
+	}
+
+	parsedTimeUntil, err := time.Parse("15:04", timeUntil)
+	if err != nil {
+		return time.Time{}, time.Time{}, err
+	}
+
+	convertedTimeFrom = time.Date(
+		parsedDate.Year(), parsedDate.Month(), parsedDate.Day(),
+		parsedTimeFrom.Hour(), parsedTimeFrom.Minute(), 0, 0, time.Local,
+	)
+
+	convertedTimeUntil = time.Date(
+		parsedDate.Year(), parsedDate.Month(), parsedDate.Day(),
+		parsedTimeUntil.Hour(), parsedTimeUntil.Minute(), 0, 0, time.Local,
+	)
+
+	return convertedTimeFrom, convertedTimeUntil, nil
 }
 
 var upgrader = websocket.Upgrader{
@@ -164,4 +202,22 @@ func (h Handlers) Join(c *gin.Context) {
 
 		h.broadcast <- msg
 	}
+}
+
+func (h Handlers) GetTrainingsByDay(c *gin.Context) {
+	day := c.Param("day")
+
+	_, err := time.Parse("2006-01-02", day)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	trainings, err := h.useCase.GetTrainingsByDate(context.Background(), day)
+	if err != nil {
+		c.Error(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"trainings": trainings})
 }

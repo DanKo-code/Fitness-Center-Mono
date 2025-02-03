@@ -78,7 +78,7 @@ func NewServer(driver, dsn, appAddress string) Server {
 func (s Server) Run(ctx context.Context, certFile, keyFile string, roomCheckInterval time.Duration) error {
 
 	go func() {
-		if err := s.server.ListenAndServeTLS(certFile, keyFile); err != nil {
+		if err := s.server.ListenAndServe(); err != nil {
 			logger.Logger.Error(err.Error())
 			os.Exit(1)
 		}

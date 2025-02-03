@@ -10,7 +10,7 @@ import Carousel from "react-multi-carousel";
 import mainCss from "../../../MainNavHome/MainNavHome.module.css";
 import AbonnementCard from "../../MainAbonements/AbonementsCard/abonementCard";
 import { Modal, TextareaAutosize } from "@mui/material";
-import { Resource } from "../../../../context/AuthContext";
+import { Resource, TrainingResource } from "../../../../context/AuthContext";
 import showErrorMessage from "../../../../utils/showErrorMessage";
 import ShowErrorMessage from "../../../../utils/showErrorMessage";
 import ShowSuccessMessage from "../../../../utils/showSuccessMessage";
@@ -26,6 +26,26 @@ export default function CoachDetailsCard(props) {
 
   const [date, setDate] = useState("");
   const today = new Date().toISOString().split("T")[0];
+
+  const [dayTrainings, setDayTrainings] = useState([
+    { time_from: "7:00", time_until: "8:00", status: "free" },
+    { time_from: "8:00", time_until: "9:00", status: "free" },
+    { time_from: "9:00", time_until: "10:00", status: "free" },
+    { time_from: "10:00", time_until: "11:00", status: "free" },
+    { time_from: "11:00", time_until: "12:00", status: "free" },
+    { time_from: "12:00", time_until: "13:00", status: "free" },
+    { time_from: "13:00", time_until: "14:00", status: "free" },
+    { time_from: "14:00", time_until: "15:00", status: "free" },
+    { time_from: "15:00", time_until: "16:00", status: "free" },
+    { time_from: "16:00", time_until: "17:00", status: "free" },
+    { time_from: "17:00", time_until: "18:00", status: "free" },
+    { time_from: "18:00", time_until: "19:00", status: "free" },
+    { time_from: "19:00", time_until: "20:00", status: "free" },
+    { time_from: "20:00", time_until: "21:00", status: "free" },
+    { time_from: "21:00", time_until: "22:00", status: "free" },
+    { time_from: "22:00", time_until: "23:00", status: "free" },
+    { time_from: "23:00", time_until: "24:00", status: "free" },
+  ]);
 
   let currentUser = useSelector((state) => state.userSliceMode.user);
 
@@ -77,10 +97,10 @@ export default function CoachDetailsCard(props) {
       if (error?.response?.data?.error) {
         ShowErrorMessage(error?.response?.data?.error);
       } else {
-        ShowErrorMessage("Can't update coach");
+        ShowErrorMessage("Can't send review");
       }
 
-      console.error("Can't update coach: " + JSON.stringify(error, null, 2));
+      console.error("Can't send review: " + JSON.stringify(error, null, 2));
     }
   };
 
@@ -95,8 +115,72 @@ export default function CoachDetailsCard(props) {
     }
   };
 
+  const handleTrainingSelect = async (timeFrom, timeUntil) => {
+    try {
+      const data = {
+        coach_id: coach.coach.id,
+        time_from: timeFrom,
+        time_until: timeUntil,
+        date: date,
+      };
+
+      const response = await TrainingResource.post("/training/book", data);
+
+      if (response.status === 200) {
+        console.log("postTraining: " + JSON.stringify(response, null, 2));
+
+        /*setCoachComments((coachComments) =>
+          [response.data.reviewWithUser, ...coachComments].sort(
+            (a, b) =>
+              new Date(b.reviewObject.created_time) -
+              new Date(a.reviewObject.created_time),
+          ),
+        );*/
+        ShowSuccessMessage("Тренировка успешно забронирована");
+      }
+    } catch (error) {
+      if (error?.response?.data?.error) {
+        ShowErrorMessage(error?.response?.data?.error);
+      } else {
+        ShowErrorMessage("Can't book training");
+      }
+
+      console.error("Can't book training: " + JSON.stringify(error, null, 2));
+    }
+  };
+
   /*comments schedule buttons*/
   const [active, setActive] = useState("schedule");
+
+  const handleDateChange = async (dateFromInput) => {
+    setDate(dateFromInput);
+
+    try {
+      const response = await TrainingResource.get("/training/" + dateFromInput);
+
+      if (response.status === 200) {
+        console.log("get Trainings: " + JSON.stringify(response, null, 2));
+
+        /*setCoachComments((coachComments) =>
+                [response.data.reviewWithUser, ...coachComments].sort(
+                  (a, b) =>
+                    new Date(b.reviewObject.created_time) -
+                    new Date(a.reviewObject.created_time),
+                ),
+              );*/
+      }
+    } catch (error) {
+      if (error?.response?.data?.error) {
+        ShowErrorMessage(error?.response?.data?.error);
+      } else {
+        ShowErrorMessage("Ошибка взятия тренировок");
+      }
+
+      console.error(
+        "Ошибка взятия тренировок: " + JSON.stringify(error, null, 2),
+      );
+    }
+  };
 
   return (
     <div
@@ -359,7 +443,7 @@ export default function CoachDetailsCard(props) {
             <input
               type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={(e) => handleDateChange(e.target.value)}
               min={today}
               style={{
                 padding: "10px",
@@ -373,6 +457,72 @@ export default function CoachDetailsCard(props) {
                 transition: "0.3s",
               }}
             />
+
+            <div
+              style={{
+                marginTop: "20px",
+                height: "400px",
+                position: "relative",
+              }}
+            >
+              {/* Заголовки колонок */}
+              <div
+                style={{
+                  display: "flex",
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 1, // Поверх контента
+                  fontWeight: "bold",
+                  padding: "10px 0",
+                  gap: "20px",
+                }}
+              >
+                <div style={{ flex: 1 }}>Время</div>
+                <div style={{ flex: 1 }}>Статус</div>
+              </div>
+
+              {/* Список клиентов */}
+              {dayTrainings.length > 0 ? (
+                <div>
+                  {dayTrainings.map((training) => (
+                    <div
+                      key={training.time_from}
+                      style={{
+                        display: "flex",
+                        marginTop: "10px",
+                        gap: "20px",
+                        alignItems: "center",
+                        padding: "5px 0",
+                      }}
+                    >
+                      {/* Время */}
+                      <div style={{ flex: 1 }}>
+                        {training.time_from + " - " + training.time_until}
+                      </div>
+
+                      {/* Статус */}
+                      <Button
+                        style={{
+                          flex: 1,
+                          color: "white",
+                          background: "rgba(160, 147, 197, 1)",
+                        }}
+                        onClick={() =>
+                          handleTrainingSelect(
+                            training.time_from,
+                            training.time_until,
+                          )
+                        }
+                      >
+                        {training.status}
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div>Нету никаких тренировок</div>
+              )}
+            </div>
           </div>
         )}
       </div>
