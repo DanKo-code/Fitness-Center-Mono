@@ -86,6 +86,9 @@ export default function CoachDetailsCard(props) {
         }
     }
 
+    /*comments schedule buttons*/
+    const [active, setActive] = useState("schedule");
+
     return (
 
         <div style={{width: '70%', height: '100vh', background: 'rgba(117,100,163,255)', overflowY: 'scroll'}}>
@@ -220,50 +223,72 @@ export default function CoachDetailsCard(props) {
                     }
                 </div>
 
+                <div style={{display: "flex", justifyContent:"space-between", gap:"200px"}}>
+                    <Button
+                        onClick={() => setActive("schedule")}
+                        disabled={active === "schedule"}
+                            style={{color: 'white', background: 'rgba(160, 147, 197, 1)', height: '62px', marginTop: '5%'}}
+                            >
+                        Расписание
+                    </Button>
 
-                <div style={{marginTop: '5px', fontSize: '18px'}}>
-                    Комментарии:
+                    <Button
+                        onClick={() => setActive("comments")}
+                        disabled={active === "comments"}
+                        style={{color: 'white', background: 'rgba(160, 147, 197, 1)', height: '62px', marginTop: '5%'}}
+                            >
+                        Комментарии
+                    </Button>
                 </div>
 
-                <div style={{display: 'flex', justifyContent: 'center', marginTop: '5px', width: '100%'}}>
-                    {coachComments.length > 0 ? <div style={{marginTop: '40px'}}>
-                        {coachComments
-                            .sort((a, b) => new Date(b.reviewObject.updated_time) - new Date(a.reviewObject.updated_time))
-                            .map(comment => (
-                            /*<AbonnementCard abonnement={abonnement} width={'600px'} height={'400px'}
-                                            buyButton={{buttonState: true}}/>*/
+                {active === "comments" && (
+                    <>
+                    <div style={{marginTop: '5px', fontSize: '18px'}}>
+                Комментарии:
+            </div>
+
+            <div style={{display: 'flex', justifyContent: 'center', marginTop: '5px', width: '100%'}}>
+                {coachComments.length > 0 ? <div style={{marginTop: '40px'}}>
+                    {coachComments
+                        .sort((a, b) => new Date(b.reviewObject.updated_time) - new Date(a.reviewObject.updated_time))
+                        .map(comment => (
 
                             <div
-                            style={{
-                            display: 'flex',
-                            marginBottom: '50px',
-                            background: 'rgba(160, 147, 197, 1)',
-                            padding: '10px',
-                            borderRadius: '10px',
-                            width: '500px',
-                            alignItems: 'flex-start', // Гарантирует, что текст не выходит за пределы изображения
-                        }}
-                    >
-                        <div style={{ marginRight: '10px' }}>
-                            <div style={{ width: '100px' }}>
-                                {/* {abonnement.Photo} */}
-                                <img style={{ width: '100%', height: 'auto' }} src={comment.userObject.photo || noAva} />
-                            </div>
-                            <div style={{ display: 'flex', gap: '4px' }}>
-                                <div>{comment.userObject.name}</div>
-                            </div>
-                        </div>
+                                style={{
+                                    display: 'flex',
+                                    marginBottom: '50px',
+                                    background: 'rgba(160, 147, 197, 1)',
+                                    padding: '10px',
+                                    borderRadius: '10px',
+                                    width: '500px',
+                                    alignItems: 'flex-start',
+                                }}
+                            >
+                                <div style={{ marginRight: '10px' }}>
+                                    <div style={{ width: '100px' }}>
+                                        <img style={{ width: '100%', height: 'auto' }} src={comment.userObject.photo || noAva} />
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                        <div>{comment.userObject.name}</div>
+                                    </div>
+                                </div>
 
-                        {/* Текстовый блок */}
-                        <div style={{ flex: 1, whiteSpace: 'normal', wordBreak: 'break-word' }}>
-                            {comment.reviewObject.body}
-                        </div>
-                    </div>
+                                <div style={{ flex: 1, whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                                    {comment.reviewObject.body}
+                                </div>
+                            </div>
 
                         ))}
-                    </div> : <div>There are no comments</div>
-                    }
-                </div>
+                </div> : <div>There are no comments</div>
+                }
+            </div>
+                    </>
+                )}
+            {active === "schedule" && (
+                <div className="p-4 border rounded-lg bg-green-100">Это второй блок</div>
+            )}
+
+
             </div>
         </div>
     )
