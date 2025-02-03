@@ -4,6 +4,7 @@ import (
 	"Training/internal/model"
 	"Training/pkg/logger"
 	"context"
+	"log"
 	"time"
 )
 
@@ -14,12 +15,14 @@ type roomUseCase interface {
 type RoomChecker struct {
 	roomMap     *model.RoomMap
 	roomUseCase roomUseCase
+	broadcast   chan model.BroadcastMsg
 }
 
-func NewRoomChecker(roomMap *model.RoomMap, roomUseCase roomUseCase) *RoomChecker {
+func NewRoomChecker(roomMap *model.RoomMap, roomUseCase roomUseCase, broadcast chan model.BroadcastMsg) *RoomChecker {
 	return &RoomChecker{
 		roomMap,
 		roomUseCase,
+		broadcast,
 	}
 }
 
@@ -41,4 +44,35 @@ func (rc RoomChecker) Run(ctx context.Context, interval time.Duration) error {
 		}
 	}
 
+}
+
+func (rc RoomChecker) RunBroadcaster(ctx context.Context) {
+	for {
+
+		select {
+		case <-ctx.Done():
+			logger.Logger.Error("Ending broadcaster")
+			return
+		default:
+			logger.Logger.Info("start get from chanal broadcast: ")
+			msg := <-rc.broadcast
+			logger.Logger.Info("end get from chanal broadcast: ", msg)
+
+			for _, client := range rc.roomMap.Map[msg.RoomKey] {
+				if client.Conn != msg.Client {
+					client.Mutex.Lock()
+					err := client.Conn.WriteJSON(msg.Message)
+					client.Mutex.Unlock()
+
+					if err != nil {
+						err := client.Conn.Close()
+						if err != nil {
+							return
+						}
+						log.Fatal(err)
+					}
+				}
+			}
+		}
+	}
 }

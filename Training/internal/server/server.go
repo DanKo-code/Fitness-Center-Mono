@@ -9,6 +9,7 @@ import (
 	"Training/pkg/db_connection"
 	"Training/pkg/logger"
 	"context"
+	"crypto/tls"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -47,18 +48,26 @@ func NewServer(driver, dsn, appAddress string) Server {
 
 	trainingUseCase := training_usecase.NewTraining(trainingRepository)
 
-	rest.RegisterEndpoints(router, trainingUseCase)
-
-	server := &http.Server{
-		Addr:    appAddress,
-		Handler: router,
-	}
-
 	roomMap := &model.RoomMap{
 		Mutex: sync.RWMutex{},
 		Map:   make(map[model.RoomMapKey][]model.Participant),
 	}
-	roomsChecker := room_checker.NewRoomChecker(roomMap, trainingUseCase)
+	broadcast := make(chan model.BroadcastMsg)
+
+	rest.RegisterEndpoints(router, trainingUseCase, roomMap, broadcast)
+
+	tlsConfig := &tls.Config{
+		InsecureSkipVerify: true, // Игнорировать проверку сертификатов
+		ClientAuth:         tls.NoClientCert,
+	}
+
+	server := &http.Server{
+		Addr:      appAddress,
+		Handler:   router,
+		TLSConfig: tlsConfig,
+	}
+
+	roomsChecker := room_checker.NewRoomChecker(roomMap, trainingUseCase, broadcast)
 
 	return Server{
 		server,
@@ -81,6 +90,10 @@ func (s Server) Run(ctx context.Context, certFile, keyFile string, roomCheckInte
 			logger.Logger.Error(err.Error())
 			os.Exit(1)
 		}
+	}()
+
+	go func() {
+		s.roomsChecker.RunBroadcaster(ctx)
 	}()
 
 	<-ctx.Done()

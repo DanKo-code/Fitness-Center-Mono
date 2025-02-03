@@ -19,6 +19,12 @@ type RoomMapKey struct {
 	CoachId  uuid.UUID
 }
 
+type BroadcastMsg struct {
+	Message map[string]interface{}
+	RoomKey RoomMapKey
+	Client  *websocket.Conn
+}
+
 type RoomMap struct {
 	Mutex sync.RWMutex
 	Map   map[RoomMapKey][]Participant
@@ -56,6 +62,18 @@ func (r *RoomMap) InsertIntoRoom(roomKey RoomMapKey, conn *websocket.Conn) {
 func (r *RoomMap) DeleteRoom(roomKey RoomMapKey) {
 	r.Mutex.Lock()
 	defer r.Mutex.Unlock()
+
+	if participants, ok := r.Map[roomKey]; !ok {
+		for _, participant := range participants {
+			err := participant.Conn.WriteJSON(map[string]interface{}{
+				"end": struct{}{},
+			})
+			if err != nil {
+				logger.Logger.Error(err.Error())
+				return
+			}
+		}
+	}
 
 	delete(r.Map, roomKey)
 }
