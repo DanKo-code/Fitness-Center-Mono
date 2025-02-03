@@ -24,6 +24,9 @@ export default function CoachDetailsCard(props) {
   const [reviewText, setReviewText] = useState("");
   const [coachComments, setCoachComments] = useState([]);
 
+  const [date, setDate] = useState("");
+  const today = new Date().toISOString().split("T")[0];
+
   let currentUser = useSelector((state) => state.userSliceMode.user);
 
   useEffect(() => {
@@ -352,8 +355,24 @@ export default function CoachDetailsCard(props) {
         )}
 
         {active === "schedule" && (
-          <div className="p-4 border rounded-lg bg-green-100">
-            Это второй блок
+          <div style={{ marginTop: "20px" }}>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              min={today}
+              style={{
+                padding: "10px",
+                fontSize: "16px",
+                borderRadius: "8px",
+                border: "2px solid #A093C5",
+                backgroundColor: "rgba(160, 147, 197, 1)",
+                color: "white",
+                outline: "none",
+                cursor: "pointer",
+                transition: "0.3s",
+              }}
+            />
           </div>
         )}
       </div>
