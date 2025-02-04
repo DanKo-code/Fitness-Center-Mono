@@ -4,6 +4,7 @@ import (
 	"Training/internal/model"
 	"Training/pkg/logger"
 	"context"
+	"errors"
 	"github.com/jmoiron/sqlx"
 	"time"
 )
@@ -130,6 +131,60 @@ func (t Training) GetTrainingsByDateAndCoach(ctx context.Context, date string, c
 	}
 
 	return trainingsModel, nil
+}
+
+func (t Training) GetTrainingByTime(ctx context.Context, timeFrom, timeUntil time.Time) (model.Training, error) {
+
+	var trainingDB TrainingDB
+
+	query := `
+				SELECT id, time_from, time_until, status, coach_id, client_id, created_time, updated_time
+				FROM training
+				WHERE time_from = $1 AND time_until = $2
+			`
+
+	err := t.db.Get(&trainingDB, query, timeFrom, timeUntil)
+	if err != nil {
+		return model.Training{}, err
+	}
+
+	trainingModel := convertTrainingDBToModel(trainingDB)
+
+	return trainingModel, nil
+}
+
+func (t Training) GetAvailableCoaches(ctx context.Context, training model.Training) ([]string, error) {
+	var coachIDs []string
+
+	query := `
+		SELECT DISTINCT coach_service.coach_id
+		FROM "order"
+		JOIN abonement ON "order".abonement_id = abonement.id
+		JOIN abonement_service ON abonement.id = abonement_service.abonement_id
+		JOIN coach_service ON coach_service.service_id = abonement_service.service_id
+		WHERE "order".user_id = $1
+		AND "order".status = 'Valid'
+		AND (
+			abonement.visiting_time = 'Any Time'
+			OR (
+				CAST(replace(split_part(abonement.visiting_time, ' - ', 1), '.', ':') || ':00' AS TIME) 
+				<= CAST($2 AS TIME)
+				AND CAST(replace(split_part(abonement.visiting_time, ' - ', 2), '.', ':') || ':00' AS TIME) 
+				>= CAST($3 AS TIME)
+			)
+		);
+	`
+
+	err := t.db.SelectContext(ctx, &coachIDs, query, training.ClientId, training.TimeFrom, training.TimeUntil)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(coachIDs) == 0 {
+		return nil, errors.New("невозможно забронировать в связи с ограничением купленных абонементов")
+	}
+
+	return coachIDs, nil
 }
 
 func convertTrainingModelToDB(trainingModel model.Training) TrainingDB {

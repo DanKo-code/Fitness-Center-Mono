@@ -3,13 +3,18 @@ package training_usecase
 import (
 	"Training/internal/model"
 	"context"
+	"database/sql"
+	"errors"
 	"fmt"
+	"time"
 )
 
 type TrainingRepository interface {
 	Insert(context.Context, model.Training) (model.Training, error)
 	UpdateTrainingsStatuses(ctx context.Context) (activeTrainings []model.Training, passedTrainings []model.Training, err error)
 	GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error)
+	GetTrainingByTime(ctx context.Context, timeFrom, timeUntil time.Time) (model.Training, error)
+	GetAvailableCoaches(ctx context.Context, training model.Training) ([]string, error)
 }
 
 type Training struct {
@@ -38,6 +43,16 @@ func (t Training) Insert(ctx context.Context, trainingModel model.Training) (mod
 
 	if trainingsPerDayCount == 2 {
 		return model.Training{}, fmt.Errorf("превышен лимит дневных тренировок: 2")
+	}
+
+	_, err = t.repository.GetTrainingByTime(ctx, trainingModel.TimeFrom, trainingModel.TimeUntil)
+	if err == nil || !errors.Is(err, sql.ErrNoRows) {
+		return model.Training{}, fmt.Errorf("У вас уже забронирована тренировка в это время")
+	}
+
+	_, err = t.repository.GetAvailableCoaches(ctx, trainingModel)
+	if err != nil {
+		return model.Training{}, err
 	}
 
 	insertedTrainingModel, err := t.repository.Insert(ctx, trainingModel)
