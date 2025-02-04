@@ -51,7 +51,7 @@ services:
     environment:
       - SERVICES=s3
       - DATA_DIR=/var/lib/localstack/data
-      - LOCALSTACK_AUTH_TOKEN=ls-ziJeKOfI-CEtU-VABE-8153-4156yogAcb8c
+      - LOCALSTACK_AUTH_TOKEN=ls-dIsa7160-yIDU-nuru-jANu-yesuLepOf656
       - PERSISTENCE=1
     networks:
       - fitness-center-network
@@ -219,6 +219,22 @@ services:
       - fitness-center-network
     command: listen --forward-to gateway:${GATEWAY_PORT}/checkout-session-completed --api-key ${STRIPE_API_KEY} --events checkout.session.completed
 
+  training:
+    build:
+      context: ./Training
+      dockerfile: ./Dockerfile
+    container_name: training
+    ports:
+      - ${ABONEMENT_PORT}:${ABONEMENT_PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+      migrate:
+        condition: service_healthy
+    networks:
+      - fitness-center-network
 
 volumes:
   fitness-center-db-data:
