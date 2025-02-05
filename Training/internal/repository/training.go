@@ -164,18 +164,19 @@ func (t Training) GetAvailableCoaches(ctx context.Context, training model.Traini
 		JOIN coach_service ON coach_service.service_id = abonement_service.service_id
 		WHERE "order".user_id = $1
 		AND "order".status = 'Valid'
+		AND  coach_service.coach_id = $2
 		AND (
 			abonement.visiting_time = 'Any Time'
 			OR (
 				CAST(replace(split_part(abonement.visiting_time, ' - ', 1), '.', ':') || ':00' AS TIME) 
-				<= CAST($2 AS TIME)
+				<= CAST($3 AS TIME)
 				AND CAST(replace(split_part(abonement.visiting_time, ' - ', 2), '.', ':') || ':00' AS TIME) 
-				>= CAST($3 AS TIME)
+				>= CAST($4 AS TIME)
 			)
 		);
 	`
 
-	err := t.db.SelectContext(ctx, &coachIDs, query, training.ClientId, training.TimeFrom, training.TimeUntil)
+	err := t.db.SelectContext(ctx, &coachIDs, query, training.ClientId, training.CoachId, training.TimeFrom, training.TimeUntil)
 	if err != nil {
 		return nil, err
 	}
