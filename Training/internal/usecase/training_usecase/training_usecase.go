@@ -3,12 +3,13 @@ package training_usecase
 import (
 	"Training/internal/model"
 	"context"
+	"fmt"
 )
 
 type TrainingRepository interface {
 	Insert(context.Context, model.Training) (model.Training, error)
 	UpdateTrainingsStatuses(ctx context.Context) (activeTrainings []model.Training, passedTrainings []model.Training, err error)
-	GetTrainingsByDate(ctx context.Context, date string) ([]model.Training, error)
+	GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error)
 }
 
 type Training struct {
@@ -22,6 +23,23 @@ func NewTraining(repository TrainingRepository) Training {
 }
 
 func (t Training) Insert(ctx context.Context, trainingModel model.Training) (model.Training, error) {
+
+	trainings, err := t.repository.GetTrainingsByDateAndCoach(ctx, trainingModel.TimeUntil.Format("2006-01-02"), trainingModel.CoachId.String())
+	if err != nil {
+		return model.Training{}, err
+	}
+
+	trainingsPerDayCount := 0
+	for _, training := range trainings {
+		if training.ClientId == trainingModel.ClientId {
+			trainingsPerDayCount++
+		}
+	}
+
+	if trainingsPerDayCount == 2 {
+		return model.Training{}, fmt.Errorf("превышен лимит дневных тренировок: 2")
+	}
+
 	insertedTrainingModel, err := t.repository.Insert(ctx, trainingModel)
 	if err != nil {
 		return model.Training{}, err
@@ -55,8 +73,8 @@ func (t Training) UpdateRoomsList(ctx context.Context, roomMap *model.RoomMap) e
 	return nil
 }
 
-func (t Training) GetTrainingsByDate(ctx context.Context, date string) ([]model.Training, error) {
-	trainings, err := t.repository.GetTrainingsByDate(ctx, date)
+func (t Training) GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error) {
+	trainings, err := t.repository.GetTrainingsByDateAndCoach(ctx, date, coachId)
 	if err != nil {
 		return nil, err
 	}

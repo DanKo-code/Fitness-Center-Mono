@@ -108,17 +108,17 @@ func (t Training) UpdateTrainingsStatuses(ctx context.Context) (activeTrainings 
 	return activeTrainingsModels, passedTrainingsModels, nil
 }
 
-func (t Training) GetTrainingsByDate(ctx context.Context, date string) ([]model.Training, error) {
+func (t Training) GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error) {
 
 	var trainings []TrainingDB
 
 	query := `
 				SELECT id, time_from, time_until, status, coach_id, client_id, created_time, updated_time
 				FROM training
-				WHERE time_from::DATE = $1
+				WHERE coach_id = $1 AND time_from::DATE = $2
 			`
 
-	err := t.db.SelectContext(ctx, &trainings, query, date)
+	err := t.db.SelectContext(ctx, &trainings, query, coachId, date)
 	if err != nil {
 		return nil, err
 	}

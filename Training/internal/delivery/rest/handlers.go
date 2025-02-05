@@ -20,7 +20,7 @@ const (
 
 type trainingUseCase interface {
 	Insert(ctx context.Context, training model.Training) (model.Training, error)
-	GetTrainingsByDate(ctx context.Context, date string) ([]model.Training, error)
+	GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error)
 }
 
 type Handlers struct {
@@ -204,8 +204,9 @@ func (h Handlers) Join(c *gin.Context) {
 	}
 }
 
-func (h Handlers) GetTrainingsByDay(c *gin.Context) {
+func (h Handlers) GetTrainingsByDayAndCoach(c *gin.Context) {
 	day := c.Param("day")
+	coachId := c.Param("coachId")
 
 	_, err := time.Parse("2006-01-02", day)
 	if err != nil {
@@ -213,10 +214,14 @@ func (h Handlers) GetTrainingsByDay(c *gin.Context) {
 		return
 	}
 
-	trainings, err := h.useCase.GetTrainingsByDate(context.Background(), day)
+	trainings, err := h.useCase.GetTrainingsByDateAndCoach(context.Background(), day, coachId)
 	if err != nil {
 		c.Error(err)
 		return
+	}
+
+	if trainings == nil {
+		trainings = []model.Training{}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"trainings": trainings})
