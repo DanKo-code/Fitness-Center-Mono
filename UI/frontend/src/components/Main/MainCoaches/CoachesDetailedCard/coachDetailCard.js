@@ -33,7 +33,6 @@ const initTrainingsState = [
   { time_from: "20:00", time_until: "21:00", status: "свободно" },
   { time_from: "21:00", time_until: "22:00", status: "свободно" },
   { time_from: "22:00", time_until: "23:00", status: "свободно" },
-  { time_from: "23:00", time_until: "24:00", status: "свободно" },
 ];
 
 const today = new Date().toISOString().split("T")[0];
@@ -133,6 +132,14 @@ export default function CoachDetailsCard(props) {
 
       if (response.status === 200) {
         console.log("postTraining: " + JSON.stringify(response, null, 2));
+
+        setDayTrainings((prevTrainings) =>
+          prevTrainings.map((training) =>
+            training.time_from === timeFrom && training.time_until === timeUntil
+              ? { ...training, status: "забронировано" }
+              : training,
+          ),
+        );
 
         ShowSuccessMessage("Тренировка успешно забронирована");
       }
