@@ -24,8 +24,8 @@ func NewCoachRepository(db *sqlx.DB) *CoachRepository {
 
 func (coachRep *CoachRepository) CreateCoach(ctx context.Context, coach *models.Coach) (*models.Coach, error) {
 	_, err := coachRep.db.NamedExecContext(ctx, `
-	INSERT INTO "coach" (id, name, description, photo, created_time, updated_time)
-	VALUES (:id, :name, :description, :photo, :created_time, :updated_time)`, *coach)
+	INSERT INTO "coach" (id, name, description, photo, created_time, updated_time, "user")
+	VALUES (:id, :name, :description, :photo, :created_time, :updated_time, :user)`, *coach)
 	if err != nil {
 		logger.ErrorLogger.Printf("Error CreateCoach: %v", err)
 		return nil, err

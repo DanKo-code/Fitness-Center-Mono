@@ -92,6 +92,7 @@ func (c *CoachUseCase) CreateCoach(
 		Name:        cmd.Name,
 		Description: cmd.Description,
 		Photo:       cmd.Photo,
+		User:        uuid.MustParse(createdUser.UserObject.Id),
 		UpdatedTime: time.Now(),
 		CreatedTime: time.Now(),
 	}

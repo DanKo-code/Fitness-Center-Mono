@@ -13,4 +13,5 @@ type Coach struct {
 	Photo       string    `db:"photo"`
 	UpdatedTime time.Time `db:"updated_time"`
 	CreatedTime time.Time `db:"created_time"`
+	User        uuid.UUID `db:"user"`
 }
