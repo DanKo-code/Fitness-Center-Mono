@@ -1,68 +1,53 @@
-import {Routes, Route, Navigate} from 'react-router-dom';
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import SignIn from './components/signIn/signIn';
-import MainNavHome from './components/MainNavHome/MainNavHome'
+import SignIn from "./components/signIn/signIn";
+import MainNavHome from "./components/MainNavHome/MainNavHome";
 import SignUp from "./components/signUp/signUp";
-import MainNavAbonnements from './components/MainNavAbonnements/MainNavAbonnements';
-import MainNavCoaches from './components/MainNavCoaches/MainNavCoaches';
+import MainNavAbonnements from "./components/MainNavAbonnements/MainNavAbonnements";
+import MainNavCoaches from "./components/MainNavCoaches/MainNavCoaches";
 import MainNavProfile from "./components/MainNavProfile/MainNavProfile";
-import {useContext} from "react";
-import {AuthContext} from "./context/AuthContext";
+import { useContext } from "react";
+import { AuthContext } from "./context/AuthContext";
 import CoachDetailsCard from "./components/Main/MainCoaches/CoachesDetailedCard/coachDetailCard";
 import MainNavCoachDetailCard from "./components/MainNavAbonementDetail/MainNavAbonementDetail";
 import MainNavAdminPanel from "./components/AdminPanel/AdminPanel";
+import MainTrainingRoom from "./components/Main/MainTrainingRoom/mainTrainingRoom";
+import MainNavTrainingRoom from "./components/MainNavTrainingRoom/MainNavTrainingRoom";
 
 export function AppRouter() {
-    const {isUserLogged} = useContext(AuthContext);
+  const { isUserLogged } = useContext(AuthContext);
 
-    return (
-        <Routes>
-            {!isUserLogged ? (
-                <>
-                    <Route
-                        path='/signin'
-                        element={<SignIn/>}
-                    />
-                    <Route
-                        path='/signup'
-                        element={<SignUp/>}
-                    />
-                </>
-            ) : (
-                <>
-                    <Route
-                        path='/main/home'
-                        element={<MainNavHome/>}
-                    />
-                    <Route
-                        path='/main/abonnements'
-                        element={<MainNavAbonnements/>}
-                    />
+  return (
+    <Routes>
+      {!isUserLogged ? (
+        <>
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+        </>
+      ) : (
+        <>
+          <Route path="/main/home" element={<MainNavHome />} />
+          <Route path="/main/abonnements" element={<MainNavAbonnements />} />
 
-                    <Route
-                        path='/main/profile'
-                        element={<MainNavProfile/>}
-                    />
+          <Route path="/main/profile" element={<MainNavProfile />} />
 
-                    <Route
-                        path='/main/coaches'
-                        element={<MainNavCoaches/>}
-                    />
+          <Route path="/main/coaches" element={<MainNavCoaches />} />
 
-                    <Route
-                        path='/main/coaches/details'
-                        element={<MainNavCoachDetailCard/>}
-                    />
+          <Route
+            path="/main/coaches/details"
+            element={<MainNavCoachDetailCard />}
+          />
 
-                    <Route
-                        path='/adminPanel'
-                        element={<MainNavAdminPanel/>}
-                    />
-                </>
-            )}
+          <Route path="/adminPanel" element={<MainNavAdminPanel />} />
 
-            <Route path="*" element={<Navigate to={isUserLogged ? "/main/home" : "/signin"}/>}></Route>
+          <Route path="/trainingRoom" element={<MainNavTrainingRoom />} />
+        </>
+      )}
 
-        </Routes>
-    );
+      <Route
+        path="*"
+        element={<Navigate to={isUserLogged ? "/main/home" : "/signin"} />}
+      ></Route>
+    </Routes>
+  );
 }

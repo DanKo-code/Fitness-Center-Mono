@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import sad_doing_abonnements_card from "../../../../images/sad_doing_abonnements_card.jpg";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import danilaAvatar from "../../../../images/danila_avatar.jpg";
 import Carousel from "react-multi-carousel";
 import mainCss from "../../../MainNavHome/MainNavHome.module.css";
@@ -48,6 +48,8 @@ export default function CoachDetailsCard(props) {
   const [date, setDate] = useState("");
 
   const [dayTrainings, setDayTrainings] = useState("");
+
+  const navigate = useNavigate();
 
   let currentUser = useSelector((state) => state.userSliceMode.user);
 
@@ -119,7 +121,14 @@ export default function CoachDetailsCard(props) {
     }
   };
 
-  const handleTrainingSelect = async (timeFrom, timeUntil) => {
+  const handleTrainingSelect = async (timeFrom, timeUntil, status) => {
+    if (status === "активно") {
+      //redirect to training room
+      navigate("/trainingRoom");
+      return;
+    }
+
+    //change statuses if no "активно"
     try {
       const data = {
         coach_id: coach.coach.id,
@@ -584,13 +593,15 @@ export default function CoachDetailsCard(props) {
                         disabled={
                           training.status === "забронировано" ||
                           training.status === "недоступно" ||
-                          training.status === "активно" ||
-                          (today === date && training.status === "свободно")
+                          (today === date &&
+                            training.status === "свободно" &&
+                            training.client_id !== currentUser.id)
                         }
                         onClick={() =>
                           handleTrainingSelect(
                             training.time_from,
                             training.time_until,
+                            training.status,
                           )
                         }
                       >
