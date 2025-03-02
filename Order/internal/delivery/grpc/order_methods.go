@@ -2,6 +2,8 @@ package grpc
 
 import (
 	"context"
+	"log"
+
 	"github.com/DanKo-code/FitnessCenter-Order/internal/dtos"
 	"github.com/DanKo-code/FitnessCenter-Order/internal/usecase"
 	"github.com/DanKo-code/FitnessCenter-Order/pkg/logger"
@@ -10,7 +12,6 @@ import (
 	"github.com/stripe/stripe-go/v81"
 	"github.com/stripe/stripe-go/v81/checkout/session"
 	"google.golang.org/grpc"
-	"log"
 )
 
 type OrdergRPC struct {

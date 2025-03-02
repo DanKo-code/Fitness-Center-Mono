@@ -3,6 +3,7 @@ package rest
 import (
 	abonementMW "Gateway/internal/abonement/middlewares"
 	"Gateway/internal/common_middlewares/middlewares"
+
 	abonementGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.abonement"
 	"github.com/gin-gonic/gin"
 )

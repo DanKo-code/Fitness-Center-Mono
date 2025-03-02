@@ -3,6 +3,9 @@ package user_usecase
 import (
 	"context"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/DanKo-code/Fitness-Center-Abonement/internal/dtos"
 	customErrors "github.com/DanKo-code/Fitness-Center-Abonement/internal/errors"
 	"github.com/DanKo-code/Fitness-Center-Abonement/internal/models"
@@ -11,8 +14,6 @@ import (
 	"github.com/DanKo-code/Fitness-Center-Abonement/pkg/logger"
 	serviceGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.service"
 	"github.com/google/uuid"
-	"strings"
-	"time"
 )
 
 type AbonementUseCase struct {

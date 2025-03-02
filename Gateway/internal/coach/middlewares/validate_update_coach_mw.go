@@ -3,11 +3,12 @@ package middlewares
 import (
 	"Gateway/internal/coach/dtos"
 	"Gateway/pkg/logger"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"net/http"
 	"regexp"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func ValidateUpdateCoachMW() gin.HandlerFunc {

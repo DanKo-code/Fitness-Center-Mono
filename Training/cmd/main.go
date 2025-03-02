@@ -5,11 +5,12 @@ import (
 	"Training/pkg/logger"
 	"context"
 	"fmt"
-	"github.com/joho/godotenv"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/joho/godotenv"
 )
 
 const (

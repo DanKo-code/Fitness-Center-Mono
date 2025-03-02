@@ -2,6 +2,11 @@ package server
 
 import (
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
+
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
 	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 	reviewGRPC "github.com/DanKo-code/FitnessCenter-Review/internal/delivery/grpc"
@@ -12,10 +17,6 @@ import (
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type AppGRPC struct {

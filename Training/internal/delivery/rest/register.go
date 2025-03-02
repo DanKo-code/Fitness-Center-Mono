@@ -3,6 +3,7 @@ package rest
 import (
 	"Training/internal/common_middlewares/middlewares"
 	"Training/internal/model"
+
 	"github.com/gin-gonic/gin"
 )
 

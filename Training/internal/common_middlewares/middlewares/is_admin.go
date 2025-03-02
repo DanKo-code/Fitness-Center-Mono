@@ -3,8 +3,9 @@ package middlewares
 import (
 	"Training/internal/common_middlewares/common_middlewares_errors"
 	"Training/pkg/logger"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func IsAdminMiddleware() gin.HandlerFunc {

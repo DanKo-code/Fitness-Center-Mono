@@ -4,10 +4,11 @@ import (
 	"Gateway/internal/coach/coach_errors"
 	"Gateway/internal/coach/dtos"
 	"Gateway/pkg/logger"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"regexp"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func ValidateCreateCoachMW() gin.HandlerFunc {

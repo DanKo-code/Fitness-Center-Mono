@@ -6,14 +6,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+
 	orderGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.order"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/stripe/stripe-go/v79"
 	"github.com/stripe/stripe-go/v79/webhook"
-	"io/ioutil"
-	"log"
-	"net/http"
 )
 
 const endpointSecret = "whsec_07715d3864ab33c2cb0d10293ce78d99e311a165f98a15a40f4c1cd2711b286d"

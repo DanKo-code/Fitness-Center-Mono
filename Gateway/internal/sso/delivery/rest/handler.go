@@ -6,14 +6,15 @@ import (
 	logger "Gateway/pkg/logger"
 	"context"
 	"fmt"
-	ssoGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.sso"
-	"github.com/gin-gonic/gin"
-	"github.com/go-playground/validator/v10"
-	"google.golang.org/grpc"
 	"net/http"
 	"os"
 	"strconv"
 	"strings"
+
+	ssoGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.sso"
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"google.golang.org/grpc"
 )
 
 var (

@@ -7,13 +7,14 @@ import (
 	"SSO/internal/usecase/sso_usecase"
 	"SSO/pkg/logger"
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net"
-	"os"
-	"os/signal"
 )
 
 type AppGRPC struct {

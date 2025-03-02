@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/DanKo-code/FitnessCenter-Review/internal/dtos"
 	customErrors "github.com/DanKo-code/FitnessCenter-Review/internal/errors"
 	"github.com/DanKo-code/FitnessCenter-Review/internal/models"
@@ -12,7 +14,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"time"
 )
 
 type ReviewRepository struct {

@@ -6,12 +6,13 @@ import (
 	"Service/internal/models"
 	"Service/internal/repository"
 	"context"
+	"time"
+
 	abonementGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.abonement"
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"time"
 )
 
 type ServiceUseCase struct {

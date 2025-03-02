@@ -3,6 +3,7 @@ package rest
 import (
 	coachMW "Gateway/internal/coach/middlewares"
 	"Gateway/internal/common_middlewares/middlewares"
+
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
 	"github.com/gin-gonic/gin"
 )

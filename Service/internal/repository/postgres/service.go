@@ -9,10 +9,11 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/lib/pq"
-	"time"
 )
 
 type ServiceRepository struct {

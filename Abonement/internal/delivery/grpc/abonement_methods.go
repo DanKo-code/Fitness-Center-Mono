@@ -3,6 +3,11 @@ package grpc
 import (
 	"context"
 	"errors"
+	"io"
+	"reflect"
+	"strings"
+	"time"
+
 	"github.com/DanKo-code/Fitness-Center-Abonement/internal/dtos"
 	customErrors "github.com/DanKo-code/Fitness-Center-Abonement/internal/errors"
 	"github.com/DanKo-code/Fitness-Center-Abonement/internal/usecase"
@@ -14,10 +19,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"io"
-	"reflect"
-	"strings"
-	"time"
 )
 
 var _ abonementProtobuf.AbonementServer = (*AbonementgRPC)(nil)

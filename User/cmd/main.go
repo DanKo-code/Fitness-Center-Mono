@@ -4,8 +4,9 @@ import (
 	"User/internal/models"
 	"User/internal/server"
 	"User/pkg/logger"
-	"github.com/joho/godotenv"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {

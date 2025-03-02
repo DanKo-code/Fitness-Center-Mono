@@ -2,10 +2,11 @@ package model
 
 import (
 	"Training/pkg/logger"
-	"github.com/google/uuid"
-	"github.com/gorilla/websocket"
 	"log"
 	"sync"
+
+	"github.com/google/uuid"
+	"github.com/gorilla/websocket"
 )
 
 type Participant struct {

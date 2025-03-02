@@ -3,8 +3,9 @@ package main
 import (
 	"Gateway/internal/server"
 	logger "Gateway/pkg/logger"
-	"github.com/joho/godotenv"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {

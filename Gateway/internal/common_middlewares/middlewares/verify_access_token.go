@@ -3,11 +3,12 @@ package middlewares
 import (
 	"Gateway/pkg/logger"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type Claims struct {

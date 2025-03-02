@@ -6,6 +6,7 @@ import (
 	"SSO/internal/usecase"
 	"context"
 	"errors"
+
 	ssoGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.sso"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

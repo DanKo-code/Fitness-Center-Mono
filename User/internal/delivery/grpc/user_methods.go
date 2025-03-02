@@ -7,16 +7,17 @@ import (
 	"User/pkg/logger"
 	"context"
 	"errors"
+	"io"
+	"reflect"
+	"strings"
+	"time"
+
 	userProtobuf "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"io"
-	"reflect"
-	"strings"
-	"time"
 )
 
 var _ userProtobuf.UserServer = (*UsergRPC)(nil)

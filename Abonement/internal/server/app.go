@@ -3,6 +3,11 @@ package server
 import (
 	"context"
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
+
 	userGRPC "github.com/DanKo-code/Fitness-Center-Abonement/internal/delivery/grpc"
 	"github.com/DanKo-code/Fitness-Center-Abonement/internal/models"
 	"github.com/DanKo-code/Fitness-Center-Abonement/internal/repository/postgres"
@@ -20,10 +25,6 @@ import (
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type AppGRPC struct {

@@ -4,11 +4,12 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/DanKo-code/Fitness-Center-Abonement/internal/models"
 	"github.com/DanKo-code/Fitness-Center-Abonement/pkg/logger"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"strings"
 )
 
 type LocalstackUseCase struct {

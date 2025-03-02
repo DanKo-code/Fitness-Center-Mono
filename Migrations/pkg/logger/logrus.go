@@ -2,12 +2,13 @@ package logger
 
 import (
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"io"
 	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/sirupsen/logrus"
 )
 
 var Logger *logrus.Logger

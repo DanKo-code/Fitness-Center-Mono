@@ -2,10 +2,11 @@ package rest
 
 import (
 	"context"
+	"net/http"
+
 	serviceGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.service"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"net/http"
 )
 
 type Handler struct {

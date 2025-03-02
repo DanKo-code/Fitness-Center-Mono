@@ -11,6 +11,12 @@ import (
 	"Service/pkg/logger"
 	"context"
 	"fmt"
+	"io/ioutil"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
+
 	abonementGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.abonement"
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -22,11 +28,6 @@ import (
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"io/ioutil"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type AppGRPC struct {

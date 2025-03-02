@@ -7,12 +7,13 @@
 package FitnessCenter_protobuf_abonement
 
 import (
+	reflect "reflect"
+	sync "sync"
+
 	FitnessCenter_protobuf_service "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.service"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	emptypb "google.golang.org/protobuf/types/known/emptypb"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (

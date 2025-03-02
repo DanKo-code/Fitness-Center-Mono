@@ -2,6 +2,8 @@ package review_usecase
 
 import (
 	"context"
+	"time"
+
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
 	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 	"github.com/DanKo-code/FitnessCenter-Review/internal/dtos"
@@ -11,7 +13,6 @@ import (
 	"github.com/google/uuid"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"time"
 )
 
 type ReviewUseCase struct {

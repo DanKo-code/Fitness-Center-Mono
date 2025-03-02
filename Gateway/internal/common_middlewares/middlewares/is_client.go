@@ -3,8 +3,9 @@ package middlewares
 import (
 	"Gateway/internal/common_middlewares/common_middlewares_errors"
 	"Gateway/pkg/logger"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func IsClientMiddleware() gin.HandlerFunc {

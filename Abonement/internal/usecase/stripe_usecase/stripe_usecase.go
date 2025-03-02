@@ -2,11 +2,12 @@ package stripe_usecase
 
 import (
 	"fmt"
+	"log"
+
 	"github.com/DanKo-code/Fitness-Center-Abonement/pkg/logger"
 	"github.com/stripe/stripe-go/v72"
 	"github.com/stripe/stripe-go/v72/price"
 	"github.com/stripe/stripe-go/v72/product"
-	"log"
 )
 
 type StripeUseCase struct {

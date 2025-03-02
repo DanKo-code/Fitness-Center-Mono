@@ -3,6 +3,12 @@ package server
 import (
 	"context"
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
 	"github.com/DanKo-code/FitnessCenter-Order/internal/background"
 	"github.com/DanKo-code/FitnessCenter-Order/internal/background/order_background"
 	orderGRPC "github.com/DanKo-code/FitnessCenter-Order/internal/delivery/grpc"
@@ -16,11 +22,6 @@ import (
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
 )
 
 var (

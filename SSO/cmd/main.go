@@ -4,8 +4,9 @@ import (
 	"SSO/internal/server"
 	"SSO/pkg/logger"
 	"fmt"
-	"github.com/joho/godotenv"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {

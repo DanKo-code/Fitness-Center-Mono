@@ -3,12 +3,13 @@ package rest
 import (
 	"Gateway/pkg/logger"
 	"context"
+	"net/http"
+
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
 	reviewGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.review"
 	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"net/http"
 )
 
 type Handler struct {

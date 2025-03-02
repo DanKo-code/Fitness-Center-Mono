@@ -11,6 +11,11 @@ import (
 	"User/pkg/logger"
 	"context"
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
@@ -19,10 +24,6 @@ import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type AppGRPC struct {

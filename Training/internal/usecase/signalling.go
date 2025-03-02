@@ -2,11 +2,12 @@ package usecase
 
 import (
 	"encoding/json"
-	"github.com/gorilla/websocket"
 	"log"
 	"math/rand"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 // AllRooms is the global hashmap for the server

@@ -5,12 +5,13 @@ import (
 	"Gateway/pkg/logger"
 	"context"
 	"fmt"
+	"io"
+	"net/http"
+
 	abonementGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.abonement"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"io"
-	"net/http"
 )
 
 type Handler struct {

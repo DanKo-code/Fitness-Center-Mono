@@ -3,10 +3,11 @@ package postgres
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/DanKo-code/FitnessCenter-Order/internal/models"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"time"
 )
 
 type OrderRepository struct {

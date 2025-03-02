@@ -9,10 +9,11 @@ import (
 	"User/pkg/logger"
 	"context"
 	"fmt"
-	"github.com/google/uuid"
-	"golang.org/x/crypto/bcrypt"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type UserUseCase struct {

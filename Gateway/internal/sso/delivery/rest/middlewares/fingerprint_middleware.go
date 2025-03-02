@@ -3,9 +3,10 @@ package middlewares
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/gin-gonic/gin"
 	"os"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func FingerprintMiddleware() gin.HandlerFunc {

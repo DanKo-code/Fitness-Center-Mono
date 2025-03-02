@@ -2,6 +2,9 @@ package order_usecase
 
 import (
 	"context"
+	"strconv"
+	"time"
+
 	"github.com/DanKo-code/FitnessCenter-Order/internal/dtos"
 	"github.com/DanKo-code/FitnessCenter-Order/internal/models"
 	"github.com/DanKo-code/FitnessCenter-Order/internal/repository"
@@ -11,8 +14,6 @@ import (
 	serviceGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.service"
 	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 	"github.com/google/uuid"
-	"strconv"
-	"time"
 )
 
 type OrderUseCase struct {

@@ -5,8 +5,9 @@ import (
 	"Training/pkg/logger"
 	"context"
 	"errors"
-	"github.com/jmoiron/sqlx"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type Training struct {

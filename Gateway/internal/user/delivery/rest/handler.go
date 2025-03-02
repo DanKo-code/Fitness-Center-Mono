@@ -5,14 +5,15 @@ import (
 	logger "Gateway/pkg/logger"
 	"context"
 	"fmt"
+	"io"
+	"net/http"
+
 	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"io"
-	"net/http"
 )
 
 type Handler struct {

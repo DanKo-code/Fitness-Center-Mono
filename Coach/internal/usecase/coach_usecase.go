@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/dtos"
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/models"
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"

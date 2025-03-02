@@ -2,6 +2,7 @@ package rest
 
 import (
 	"Gateway/internal/common_middlewares/middlewares"
+
 	orderGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.order"
 	"github.com/gin-gonic/gin"
 )

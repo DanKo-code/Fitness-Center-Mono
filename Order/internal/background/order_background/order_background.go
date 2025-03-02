@@ -2,9 +2,10 @@ package order_background
 
 import (
 	"context"
+	"time"
+
 	"github.com/DanKo-code/FitnessCenter-Order/internal/usecase"
 	"github.com/DanKo-code/FitnessCenter-Order/pkg/logger"
-	"time"
 )
 
 type OrderExpiredChecker struct {

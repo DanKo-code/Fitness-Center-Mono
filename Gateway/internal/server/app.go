@@ -11,6 +11,11 @@ import (
 	userRest "Gateway/internal/user/delivery/rest"
 	logger "Gateway/pkg/logger"
 	"context"
+	"net/http"
+	"os"
+	"os/signal"
+	"time"
+
 	abonementGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.abonement"
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
 	orderGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.order"
@@ -24,10 +29,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net/http"
-	"os"
-	"os/signal"
-	"time"
 )
 
 type App struct {

@@ -3,6 +3,11 @@ package server
 import (
 	"context"
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
+
 	coachGRPC "github.com/DanKo-code/FitnessCenter-Coach/internal/delivery/grpc"
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/models"
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/repository/postgres"
@@ -21,10 +26,6 @@ import (
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 type AppGRPC struct {
@@ -76,7 +77,7 @@ func NewAppGRPC(cloudConfig *models.CloudConfig) (*AppGRPC, error) {
 
 	localStackUseCase := localstack_usecase.NewLocalstackUseCase(client, cloudConfig)
 
-	coachUseCase := user_usecase.NewCoachUseCase(repository, &serviceClient, &reviewClient, &userClient, localStackUseCase)
+	coachUseCase := coach_usecase.NewCoachUseCase(repository, &serviceClient, &reviewClient, &userClient, localStackUseCase)
 
 	gRPCServer := grpc.NewServer()
 

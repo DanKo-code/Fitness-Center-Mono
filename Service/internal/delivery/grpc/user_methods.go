@@ -7,14 +7,15 @@ import (
 	"Service/pkg/logger"
 	"context"
 	"errors"
+	"io"
+	"time"
+
 	serviceProtobuf "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.service"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"io"
-	"time"
 )
 
 type ServicegRPC struct {

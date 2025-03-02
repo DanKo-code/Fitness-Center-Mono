@@ -1,8 +1,11 @@
-package user_usecase
+package coach_usecase
 
 import (
 	"context"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/dtos"
 	customErrors "github.com/DanKo-code/FitnessCenter-Coach/internal/errors"
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/models"
@@ -14,8 +17,6 @@ import (
 	serviceGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.service"
 	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 	"github.com/google/uuid"
-	"strings"
-	"time"
 )
 
 type CoachUseCase struct {
@@ -123,7 +124,7 @@ func (c *CoachUseCase) DeleteCoachById(
 			return nil, err
 		}
 	}
-	
+
 	return coach, nil
 }
 

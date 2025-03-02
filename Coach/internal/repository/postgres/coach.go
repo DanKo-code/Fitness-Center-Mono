@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"fmt"
+
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/dtos"
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/models"
 	"github.com/DanKo-code/FitnessCenter-Coach/internal/repository"

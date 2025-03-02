@@ -3,12 +3,13 @@ package middlewares
 import (
 	"Gateway/internal/abonement/dtos"
 	"Gateway/pkg/logger"
-	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"net/http"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func ValidateUpdateAbonementMW() gin.HandlerFunc {

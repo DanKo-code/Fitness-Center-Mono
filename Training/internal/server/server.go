@@ -10,12 +10,13 @@ import (
 	"Training/pkg/logger"
 	"context"
 	"crypto/tls"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
 	"sync"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 const (

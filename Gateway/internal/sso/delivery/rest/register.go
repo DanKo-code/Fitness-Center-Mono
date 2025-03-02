@@ -2,6 +2,7 @@ package rest
 
 import (
 	"Gateway/internal/sso/delivery/rest/middlewares"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"google.golang.org/grpc"

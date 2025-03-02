@@ -6,6 +6,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"os"
+
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -13,7 +15,6 @@ import (
 	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"os"
 )
 
 func main() {
