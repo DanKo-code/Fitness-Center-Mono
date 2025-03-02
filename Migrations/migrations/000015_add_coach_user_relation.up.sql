@@ -1,0 +1,3 @@
+ALTER TABLE coach
+    ADD COLUMN "user" UUID,
+    ADD CONSTRAINT fk_user FOREIGN KEY ("user") REFERENCES "user"(id) ON DELETE CASCADE;
