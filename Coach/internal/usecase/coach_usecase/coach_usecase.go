@@ -48,6 +48,45 @@ func (c *CoachUseCase) CreateCoach(
 	cmd *dtos.CreateCoachCommand,
 ) (*models.Coach, error) {
 
+	//create user
+	nuc := *c.userClient
+
+	stream, err := nuc.CreateUser(context.TODO())
+	if err != nil {
+		logger.ErrorLogger.Printf("Error getted stream for creating user")
+		return nil, err
+	}
+
+	userDataForCreate := &userGRPC.UserDataForCreate{
+		Email:    uuid.New().String() + "@gmail.com",
+		Role:     "coach",
+		Password: uuid.New().String(),
+		Name:     cmd.Name,
+	}
+
+	fmt.Printf("userDataForCreate: %v\n", userDataForCreate)
+
+	createUserRequest := &userGRPC.CreateUserRequest{
+		Payload: &userGRPC.CreateUserRequest_UserDataForCreate{
+			UserDataForCreate: userDataForCreate,
+		},
+	}
+
+	err = stream.Send(createUserRequest)
+	if err != nil {
+		return nil, err
+	}
+
+	createdUser, err := stream.CloseAndRecv()
+	if err != nil {
+		logger.ErrorLogger.Printf("Failed get createdUser")
+		return nil, err
+	}
+
+	if createdUser.UserObject == nil {
+		return nil, customErrors.VoidUserData
+	}
+
 	coach := &models.Coach{
 		Id:          cmd.Id,
 		Name:        cmd.Name,

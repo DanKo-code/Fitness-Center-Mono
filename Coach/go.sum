@@ -1,7 +1,7 @@
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
 filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
-github.com/DanKo-code/FitnessCenter-Protobuf v0.6.18 h1:l9qZnizBJERpedo0JOMpS4UzLqLf1nuJy5tVjd4Yr78=
-github.com/DanKo-code/FitnessCenter-Protobuf v0.6.18/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27 h1:IrE6VUzgwTOUn97keA3/2ee4LkFuMErMb1icAeID2QU=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
 github.com/aws/aws-sdk-go-v2 v1.32.6 h1:7BokKRgRPuGmKkFMhEg/jSul+tB9VvXhcViILtfG8b4=
 github.com/aws/aws-sdk-go-v2 v1.32.6/go.mod h1:P5WJBrYqqbWVaOxgH0X/FYYD47/nooaPOZPlQdmiN2U=
 github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.7 h1:lL7IfaFzngfx0ZwUGOZdsFFnQ5uLvR0hWqqhyE7Q9M8=

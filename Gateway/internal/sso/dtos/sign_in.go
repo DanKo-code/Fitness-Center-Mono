@@ -2,13 +2,13 @@ package dtos
 
 type SignInRequest struct {
 	Email       string `json:"email" validate:"required,email"`
-	Password    string `json:"password" validate:"required,min=8,max=30"`
+	Password    string `json:"password" validate:"required,min=8,max=36"`
 	FingerPrint string `json:"finger_print"`
 }
 
 type SignInRequestWithoutFingerprint struct {
 	Email    string `json:"email" validate:"required,email"`
-	Password string `json:"password" validate:"required,min=8,max=30"`
+	Password string `json:"password" validate:"required,min=8,max=36"`
 }
 
 type SignInResponse struct {
