@@ -121,10 +121,15 @@ export default function CoachDetailsCard(props) {
     }
   };
 
-  const handleTrainingSelect = async (timeFrom, timeUntil, status) => {
+  const handleTrainingSelect = async (
+    timeFrom,
+    timeUntil,
+    status,
+    trainingId,
+  ) => {
     if (status === "активно") {
       //redirect to training room
-      navigate("/trainingRoom");
+      navigate(`/trainingRoom/${trainingId}/${coach.coach.id}`);
       return;
     }
 
@@ -197,6 +202,8 @@ export default function CoachDetailsCard(props) {
                 dayTrainingsReact[i].time_until ===
                   trainingsFromResp[j].TimeUntil.split("T")[1].slice(0, 5)
               ) {
+                dayTrainingsReact[i].id = trainingsFromResp[j].Id;
+
                 if (
                   trainingsFromResp[j].Status === "booked" &&
                   trainingsFromResp[j].ClientId === currentUser.id
@@ -231,6 +238,11 @@ export default function CoachDetailsCard(props) {
               }
             }
           }
+
+          console.log(
+            "dayTrainingsReact: ",
+            JSON.stringify(dayTrainingsReact, null, 2),
+          );
 
           setDayTrainings([...dayTrainingsReact]);
         }
@@ -602,6 +614,7 @@ export default function CoachDetailsCard(props) {
                             training.time_from,
                             training.time_until,
                             training.status,
+                            training.id,
                           )
                         }
                       >

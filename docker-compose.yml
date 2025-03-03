@@ -197,16 +197,6 @@ services:
     networks:
       - fitness-center-network
 
-  ui:
-    build:
-      context: ./UI/frontend
-      dockerfile: ./Dockerfile
-    container_name: ui
-    ports:
-      - ${UI_PORT}:80
-    networks:
-      - fitness-center-network
-
   stripe-cli:
     image: stripe/stripe-cli:latest
     container_name: stripe-cli

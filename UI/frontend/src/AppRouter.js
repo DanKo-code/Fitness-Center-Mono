@@ -40,7 +40,10 @@ export function AppRouter() {
 
           <Route path="/adminPanel" element={<MainNavAdminPanel />} />
 
-          <Route path="/trainingRoom" element={<MainNavTrainingRoom />} />
+          <Route
+            path="/trainingRoom/:trainingId/:coachId"
+            element={<MainNavTrainingRoom />}
+          />
         </>
       )}
 
