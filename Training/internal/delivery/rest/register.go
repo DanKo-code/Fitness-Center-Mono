@@ -10,7 +10,7 @@ func RegisterEndpoints(router *gin.Engine, useCase trainingUseCase, roomMap *mod
 	h := NewHandler(useCase, roomMap, broadcast)
 
 	authorized := router.Group("/", middlewares.VerifyAccessTokenMiddleware())
-	authorized.POST("/training/book", h.Insert)
+	authorized.POST("/training/book", middlewares.IsClientMiddleware(), h.Insert)
 	router.GET("/training/join/:roomId", h.Join)
 	router.GET("/training/day/:day/coach/:coachId", h.GetTrainingsByDayAndCoach)
 }

@@ -16,8 +16,6 @@ WORKDIR /root/
 
 COPY --from=build /app/Training .
 
-COPY --from=build /app/internal/images ./internal/images
-
 COPY .env .
 
 EXPOSE ${APP_PORT}

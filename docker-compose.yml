@@ -225,7 +225,7 @@ services:
       dockerfile: ./Dockerfile
     container_name: training
     ports:
-      - ${ABONEMENT_PORT}:${ABONEMENT_PORT}
+      - ${TRAINING_PORT}:${TRAINING_PORT}
     depends_on:
       db:
         condition: service_healthy
