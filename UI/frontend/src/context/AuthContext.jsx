@@ -21,6 +21,7 @@ export const Resource = axios.create({
 export const TrainingResource = axios.create({
   baseURL: `${config.TRAINING_API_URL}`,
   withCredentials: true,
+  mode: "cors",
 });
 
 Resource.interceptors.request.use(

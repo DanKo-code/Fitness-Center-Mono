@@ -154,6 +154,8 @@ func (h *Handler) SignIn(c *gin.Context) {
 		return
 	}
 
+	fmt.Printf("ShouldBindJSON")
+
 	err := h.validator.Struct(siReq)
 	if err != nil {
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
@@ -170,6 +172,8 @@ func (h *Handler) SignIn(c *gin.Context) {
 		return
 	}
 
+	fmt.Printf("validator")
+
 	fingerPrintValue, exists := c.Get(os.Getenv("APP_FINGERPRINT_REQUEST_KEY"))
 	if !exists {
 		logger.ErrorLogger.Printf("Error binding SignUpRequest: %v", sso_errors.FingerPrintNotFoundInContext)
@@ -183,6 +187,8 @@ func (h *Handler) SignIn(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": sso_errors.FingerPrintNotFoundInContext})
 		return
 	}
+
+	fmt.Printf("fingerPrintValue")
 
 	siReq.FingerPrint = FingerPrintValueCasted
 

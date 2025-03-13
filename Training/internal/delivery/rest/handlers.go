@@ -144,21 +144,9 @@ func VerifyAccessToken(accessToken string) (*Claims, error) {
 
 func (h Handlers) Join(c *gin.Context) {
 	roomId := c.Param("roomId")
-	/*userIdFromToken, exists := c.Get("UserIdFromToken")
-	if !exists {
-		c.Error(fmt.Errorf("cant find UserIdFromToken in context"))
-		return
-	}
 
-	var joinTrainingQuery JoinTrainingQuery
-	err := c.ShouldBindJSON(&joinTrainingQuery)
-	if err != nil {
-		c.Error(fmt.Errorf("cant Bind JoinTrainingQuery"))
-		return
-	}*/
-
-	coachId := c.Query("coachId") // ?userId=123
-	token := c.Query("token")     // ?token=abcd
+	coachId := c.Query("coachId")
+	token := c.Query("token")
 
 	claims, err := VerifyAccessToken(token)
 	if err != nil {
@@ -190,7 +178,6 @@ func (h Handlers) Join(c *gin.Context) {
 
 		var msg model.BroadcastMsg
 
-		log.Println("Start ws.ReadJSON: ", msg)
 		err := ws.ReadJSON(&msg.Message)
 		if err != nil {
 			log.Fatal("Read Error: ", err)
@@ -198,8 +185,6 @@ func (h Handlers) Join(c *gin.Context) {
 
 		msg.Client = ws
 		msg.RoomKey = roomKey
-
-		log.Println("End ws.ReadJSON: ", msg)
 
 		h.broadcast <- msg
 	}

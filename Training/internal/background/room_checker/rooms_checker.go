@@ -36,7 +36,7 @@ func (rc RoomChecker) Run(ctx context.Context, interval time.Duration) error {
 			if err != nil {
 				return err
 			}
-			logger.Logger.Info("Successfully UpdateRoomsList")
+			//logger.Logger.Info("Successfully UpdateRoomsList")
 
 		case <-ctx.Done():
 			logger.Logger.Info("Stopping RoomChecker...")

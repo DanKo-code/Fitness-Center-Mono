@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import AbonnementCard from "../MainAbonements/AbonementsCard/abonementCard";
 import { useParams } from "react-router-dom";
+import inMemoryJWT from "../../../services/inMemoryJWT";
 
 const Room = (props) => {
   const { trainingId, coachId } = useParams();
@@ -47,8 +48,10 @@ const Room = (props) => {
       userVideo.current.srcObject = stream;
       userStream.current = stream;
 
+      const accessToken = inMemoryJWT.getToken();
+
       webSocketRef.current = new WebSocket(
-        `ws://localhost:3499/join/${trainingId}?coachId=${coachId}`,
+        `wss://localhost:3499/training/join/${trainingId}?coachId=${coachId}&token=${accessToken}`,
       );
 
       webSocketRef.current.addEventListener("open", () => {

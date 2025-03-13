@@ -85,6 +85,13 @@ func (t Training) UpdateRoomsList(ctx context.Context, roomMap *model.RoomMap) e
 		})
 	}
 
+	//here
+	/*ogger.Logger.Info("roomMap: %v", roomMap.Map)
+
+	for key, participants := range roomMap.Map {
+
+	}*/
+
 	return nil
 }
 

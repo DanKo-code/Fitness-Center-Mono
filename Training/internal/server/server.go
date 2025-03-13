@@ -33,8 +33,9 @@ func NewServer(driver, dsn, appAddress string) Server {
 
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3333", "http://localhost:3001"},
-		AllowHeaders:     []string{"Content-Type", "Authorization"},
+		AllowHeaders:     []string{"Content-Type", "Authorization", "Upgrade", "Connection"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		ExposeHeaders:    []string{"Upgrade"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
