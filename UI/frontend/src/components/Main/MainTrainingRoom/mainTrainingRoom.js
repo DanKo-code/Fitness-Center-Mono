@@ -8,11 +8,15 @@ import noAva from "../../../images/no_ava.png";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import AbonnementCard from "../MainAbonements/AbonementsCard/abonementCard";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import inMemoryJWT from "../../../services/inMemoryJWT";
 
 const Room = (props) => {
-  const { trainingId, coachId } = useParams();
+  const { trainingId, coachId, coachName, clientName } = useParams();
+
+  let currentUser = useSelector((state) => state.userSliceMode.user);
+
+  const navigate = useNavigate();
 
   //our camera and micro
   const userVideo = useRef();
@@ -87,6 +91,28 @@ const Room = (props) => {
             console.log("Error Receiving ICE Candidate", err);
           }
         }
+
+        if (message.end) {
+          if (userStream.current) {
+            userStream.current.getTracks().forEach((track) => track.stop());
+            userStream.current = null;
+          }
+
+          if (userVideo.current) userVideo.current.srcObject = null;
+          if (partnerVideo.current) partnerVideo.current.srcObject = null;
+
+          if (peerRef.current) {
+            peerRef.current.close();
+            peerRef.current = null;
+          }
+
+          if (webSocketRef.current) {
+            webSocketRef.current.close();
+            webSocketRef.current = null;
+          }
+
+          navigate("/main");
+        }
       });
     });
   });
@@ -159,12 +185,67 @@ const Room = (props) => {
     partnerVideo.current.srcObject = e.streams[0];
   };
 
-  return (
-    <div>
-      <video autoPlay controls={true} ref={userVideo}></video>
-      <video autoPlay controls={true} ref={partnerVideo}></video>
+  const videoStyle = {
+    width: "500px",
+    height: "300px",
+    borderWidth: "4px",
+    borderColor: "rgba(160, 147, 197, 1)",
+    borderStyle: "solid",
+    borderRadius: "10px",
+    objectFit: "cover",
+  };
+
+  return currentUser.role === "client" || currentUser.role === "coach" ? (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "40px",
+        background:
+          currentUser.role === "client"
+            ? "rgba(117,100,163,255)"
+            : "rgba(100,117,163,255)",
+        width: "100%",
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <video
+          style={{ ...videoStyle, transform: "scaleX(-1)" }}
+          autoPlay
+          ref={userVideo}
+        ></video>
+        <div
+          style={{
+            paddingTop: "10px",
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "24px",
+          }}
+        >
+          {currentUser.role === "client" ? coachName : clientName}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <video
+          style={{ ...videoStyle, transform: "scaleX(-1)" }}
+          autoPlay
+          ref={partnerVideo}
+        ></video>
+        <div
+          style={{
+            paddingTop: "10px",
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "24px",
+          }}
+        >
+          {currentUser.role === "client" ? clientName : coachName}
+        </div>
+      </div>
     </div>
-  );
+  ) : null;
 };
 
 export default Room;

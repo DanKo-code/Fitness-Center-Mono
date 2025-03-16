@@ -41,7 +41,7 @@ export function AppRouter() {
           <Route path="/adminPanel" element={<MainNavAdminPanel />} />
 
           <Route
-            path="/trainingRoom/:trainingId/:coachId"
+            path="/trainingRoom/:trainingId/:coachId/:coachName/:clientName"
             element={<MainNavTrainingRoom />}
           />
         </>

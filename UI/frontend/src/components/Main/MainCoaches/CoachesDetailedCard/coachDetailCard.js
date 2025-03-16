@@ -154,10 +154,21 @@ export default function CoachDetailsCard(props) {
     timeUntil,
     status,
     trainingId,
+    clientName,
   ) => {
     if (status === "активно") {
       //redirect to training room
-      navigate(`/trainingRoom/${trainingId}/${coach.coach.id}`);
+      if (currentUser.role === "client") {
+        navigate(
+          `/trainingRoom/${trainingId}/${coach.coach.id}/${coach.coach.name}/${currentUser.name}`,
+        );
+      }
+      if (currentUser.role === "coach") {
+        navigate(
+          `/trainingRoom/${trainingId}/${coach.coach.id}/${coach.coach.name}/${clientName}`,
+        );
+      }
+
       return;
     }
 
@@ -609,91 +620,98 @@ export default function CoachDetailsCard(props) {
               {/* Список клиентов */}
               {dayTrainings.length > 0 ? (
                 <div>
-                  {dayTrainings.map((training) => (
-                    <div
-                      key={training.time_from}
-                      style={{
-                        display: "flex",
-                        marginTop: "10px",
-                        gap: "20px",
-                        alignItems: "center",
-                        padding: "5px 0",
-                      }}
-                    >
-                      {currentUser.role === "coach" ? (
-                        training.status === "активно" ||
-                        training.status === "недоступно" ? (
-                          (() => {
-                            const client = allUsers.current.find(
-                              (c) => c.ClientId === training.client_id,
-                            );
-                            return client ? (
-                              <div style={{ flex: 1 }}>
-                                <div
-                                  style={{
-                                    width: "100%",
-                                    paddingRight: "20px",
-                                  }}
-                                >
-                                  <img
-                                    style={{ width: "100%", height: "auto" }}
-                                    src={client.photo}
-                                  />
-                                </div>
-                                <p>Name: {client.name}</p>
-                              </div>
-                            ) : (
-                              <p>Клиент не найден</p>
-                            );
-                          })()
-                        ) : (
-                          <div style={{ flex: 1, color: "red" }}></div>
-                        )
-                      ) : null}
+                  {dayTrainings.map((training) => {
+                    const client = allUsers.current.find(
+                      (c) => c.ClientId === training.client_id,
+                    );
 
-                      {/* Время */}
-                      <div style={{ flex: 1 }}>
-                        {training.time_from + " - " + training.time_until}
-                      </div>
-
-                      {/* Статус */}
-                      <Button
+                    return (
+                      <div
+                        key={training.time_from}
                         style={{
-                          flex: 1,
-                          color: "white",
-                          background:
-                            training.status === "забронировано"
-                              ? "gray"
-                              : training.status === "недоступно"
-                                ? "red"
-                                : training.status === "активно"
-                                  ? "blue"
-                                  : "rgba(160, 147, 197, 1)", // Цвет по умолчанию
+                          display: "flex",
+                          marginTop: "10px",
+                          gap: "20px",
+                          alignItems: "center",
+                          padding: "5px 0",
                         }}
-                        disabled={
-                          training.status === "забронировано" ||
-                          training.status === "недоступно" ||
-                          (today === date &&
-                            training.status === "свободно" &&
-                            training.client_id !== currentUser.id) ||
-                          (currentUser.role === "coach" &&
-                            training.status !== "active")
-                        }
-                        onClick={() =>
-                          handleTrainingSelect(
-                            training.time_from,
-                            training.time_until,
-                            training.status,
-                            training.id,
-                          )
-                        }
                       >
-                        {today === date && training.status === "свободно"
-                          ? "недоступно"
-                          : training.status}
-                      </Button>
-                    </div>
-                  ))}
+                        {currentUser.role === "coach" ? (
+                          training.status === "активно" ||
+                          training.status === "недоступно" ? (
+                            (() => {
+                              const client = allUsers.current.find(
+                                (c) => c.ClientId === training.client_id,
+                              );
+                              return client ? (
+                                <div style={{ flex: 1 }}>
+                                  <div
+                                    style={{
+                                      width: "100%",
+                                      paddingRight: "20px",
+                                    }}
+                                  >
+                                    <img
+                                      style={{ width: "100%", height: "auto" }}
+                                      src={client.photo}
+                                    />
+                                  </div>
+                                  <p>Имя: {client.name}</p>
+                                </div>
+                              ) : (
+                                <p>Клиент не найден</p>
+                              );
+                            })()
+                          ) : (
+                            <div style={{ flex: 1, color: "red" }}></div>
+                          )
+                        ) : null}
+
+                        {/* Время */}
+                        <div style={{ flex: 1 }}>
+                          {training.time_from + " - " + training.time_until}
+                        </div>
+
+                        {/* Статус */}
+                        <Button
+                          style={{
+                            flex: 1,
+                            color: "white",
+                            background:
+                              training.status === "забронировано"
+                                ? "gray"
+                                : training.status === "недоступно"
+                                  ? "red"
+                                  : training.status === "активно"
+                                    ? "blue"
+                                    : "rgba(160, 147, 197, 1)", // Цвет по умолчанию
+                          }}
+                          disabled={
+                            training.status === "забронировано" ||
+                            training.status === "недоступно" ||
+                            (today === date &&
+                              training.status === "свободно" &&
+                              training.client_id !== currentUser.id) ||
+                            (currentUser.role === "coach" &&
+                              training.status !== "активно")
+                          }
+                          onClick={() =>
+                            handleTrainingSelect(
+                              training.time_from,
+                              training.time_until,
+                              training.status,
+                              training.id,
+                              client.name,
+                            )
+                          }
+                        >
+                          {today === date && training.status === "свободно"
+                            ? "недоступно"
+                            : training.status}
+                        </Button>
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <div>Нету никаких тренировок</div>

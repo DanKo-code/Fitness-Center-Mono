@@ -84,7 +84,7 @@ func (r *RoomMap) DeleteRoom(roomKey RoomMapKey) {
 	r.Mutex.Lock()
 	defer r.Mutex.Unlock()
 
-	if participants, ok := r.Map[roomKey]; !ok {
+	if participants, ok := r.Map[roomKey]; ok {
 		for _, participant := range participants {
 			err := participant.Conn.WriteJSON(map[string]interface{}{
 				"end": struct{}{},

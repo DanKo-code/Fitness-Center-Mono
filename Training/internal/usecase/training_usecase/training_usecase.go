@@ -127,25 +127,18 @@ func (t Training) UpdateRoomsList(ctx context.Context, roomMap *model.RoomMap) e
 	for _, training := range activeTrainings {
 		roomMap.InitRoom(model.RoomMapKey{
 			RoomId:   training.Id,
-			ClientId: training.ClientId,
-			CoachId:  training.CoachId,
+			ClientId: uuid.Nil,
+			CoachId:  uuid.Nil,
 		})
 	}
 
 	for _, training := range passedTrainings {
 		roomMap.DeleteRoom(model.RoomMapKey{
 			RoomId:   training.Id,
-			ClientId: training.ClientId,
-			CoachId:  training.CoachId,
+			ClientId: uuid.Nil,
+			CoachId:  uuid.Nil,
 		})
 	}
-
-	//here
-	/*ogger.Logger.Info("roomMap: %v", roomMap.Map)
-
-	for key, participants := range roomMap.Map {
-
-	}*/
 
 	return nil
 }
