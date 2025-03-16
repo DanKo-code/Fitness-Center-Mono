@@ -52,6 +52,7 @@ export default function CoachDetailsCard(props) {
   const navigate = useNavigate();
 
   const userCoach = useRef(false);
+  const allUsers = useRef(false);
 
   let currentUser = useSelector((state) => state.userSliceMode.user);
 
@@ -86,7 +87,12 @@ export default function CoachDetailsCard(props) {
       }
     };
 
-    fetchCoaches();
+    fetchCoaches().then((r) =>
+      Resource.get("/users/for-coach").then((res) => {
+        console.log("/users/for-coach: " + JSON.stringify(res, null, 2));
+        allUsers.current = res.data.clients;
+      }),
+    );
   }, [coach.reviewWithUser, currentUser.id]);
 
   const handleOpenModal = () => {
@@ -595,6 +601,7 @@ export default function CoachDetailsCard(props) {
                   gap: "20px",
                 }}
               >
+                <div style={{ flex: 1 }}></div>
                 <div style={{ flex: 1 }}>Время</div>
                 <div style={{ flex: 1 }}>Статус</div>
               </div>
@@ -613,6 +620,37 @@ export default function CoachDetailsCard(props) {
                         padding: "5px 0",
                       }}
                     >
+                      {currentUser.role === "coach" ? (
+                        training.status === "активно" ||
+                        training.status === "недоступно" ? (
+                          (() => {
+                            const client = allUsers.current.find(
+                              (c) => c.ClientId === training.client_id,
+                            );
+                            return client ? (
+                              <div style={{ flex: 1 }}>
+                                <div
+                                  style={{
+                                    width: "100%",
+                                    paddingRight: "20px",
+                                  }}
+                                >
+                                  <img
+                                    style={{ width: "100%", height: "auto" }}
+                                    src={client.photo}
+                                  />
+                                </div>
+                                <p>Name: {client.name}</p>
+                              </div>
+                            ) : (
+                              <p>Клиент не найден</p>
+                            );
+                          })()
+                        ) : (
+                          <div style={{ flex: 1, color: "red" }}></div>
+                        )
+                      ) : null}
+
                       {/* Время */}
                       <div style={{ flex: 1 }}>
                         {training.time_from + " - " + training.time_until}
@@ -637,7 +675,9 @@ export default function CoachDetailsCard(props) {
                           training.status === "недоступно" ||
                           (today === date &&
                             training.status === "свободно" &&
-                            training.client_id !== currentUser.id)
+                            training.client_id !== currentUser.id) ||
+                          (currentUser.role === "coach" &&
+                            training.status !== "active")
                         }
                         onClick={() =>
                           handleTrainingSelect(

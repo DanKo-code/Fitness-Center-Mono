@@ -15,5 +15,6 @@ func RegisterHTTPEndpoints(router *gin.Engine, validator *validator.Validate, ss
 
 	authorized.PUT("/users/:id", middlewares.IsClientMiddleware(), h.UpdateUser)
 	authorized.GET("/users", middlewares.IsAdminMiddleware(), h.GetClients)
+	authorized.GET("/users/for-coach", h.GetClients)
 	authorized.DELETE("/users/:id", middlewares.IsAdminMiddleware(), h.DeleteClientById)
 }
