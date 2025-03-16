@@ -1,6 +1,6 @@
 import sad_doing_coachs_card from "../../../../images/sad_doing_abonnements_card.jpg";
 import Button from "@mui/material/Button";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import sad_doing_abonnements_card from "../../../../images/sad_doing_abonnements_card.jpg";
@@ -51,21 +51,43 @@ export default function CoachDetailsCard(props) {
 
   const navigate = useNavigate();
 
+  const userCoach = useRef(false);
+
   let currentUser = useSelector((state) => state.userSliceMode.user);
 
   useEffect(() => {
-    if (coach.reviewWithUser?.length > 0) {
-      setCoachComments(
-        coach.reviewWithUser.sort(
-          (a, b) =>
-            new Date(b.reviewObject.created_time) -
-            new Date(a.reviewObject.created_time),
-        ),
-      );
-    }
+    const fetchCoaches = async () => {
+      try {
+        if (coach.reviewWithUser?.length > 0) {
+          setCoachComments(
+            [...coach.reviewWithUser].sort(
+              (a, b) =>
+                new Date(b.reviewObject.created_time) -
+                new Date(a.reviewObject.created_time),
+            ),
+          );
+        }
 
-    //handleDateChange(today).then((r) => console.log("ok"));
-  }, []);
+        let allCoaches = await Resource.get("/coaches");
+
+        allCoaches =
+          allCoaches.data.coaches.coachWithServicesWithReviewsWithUsers;
+
+        console.log("allCoaches:", allCoaches);
+        console.log("currentUser.id:", currentUser.id);
+
+        userCoach.current = allCoaches.find(
+          (c) => c.coach.user === currentUser.id,
+        );
+
+        console.log("Найденный коуч:", userCoach);
+      } catch (error) {
+        console.error("Ошибка при загрузке коучей:", error);
+      }
+    };
+
+    fetchCoaches();
+  }, [coach.reviewWithUser, currentUser.id]);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -234,6 +256,10 @@ export default function CoachDetailsCard(props) {
 
                 if (trainingsFromResp[j].Status === "passed") {
                   dayTrainingsReact[i].status = "недоступно";
+                }
+
+                if (currentUser.role === "coach" && userCoach.current) {
+                  dayTrainingsReact[i].status = "активно";
                 }
               }
             }

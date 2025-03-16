@@ -10,6 +10,8 @@ import (
 	"Training/pkg/logger"
 	"context"
 	"crypto/tls"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
 	"os"
 	"sync"
@@ -17,6 +19,9 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
+	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
+	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
 )
 
 const (
@@ -28,11 +33,11 @@ type Server struct {
 	roomsChecker *room_checker.RoomChecker
 }
 
-func NewServer(driver, dsn, appAddress string) Server {
+func NewServer(driver, dsn, appAddress string) (Server, error) {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3333", "http://localhost:3001"},
+		AllowOrigins:     []string{"https://localhost:3333", "https://localhost:3001"},
 		AllowHeaders:     []string{"Content-Type", "Authorization", "Upgrade", "Connection"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		ExposeHeaders:    []string{"Upgrade"},
@@ -48,7 +53,21 @@ func NewServer(driver, dsn, appAddress string) Server {
 
 	trainingRepository := repository.NewTraining(*db)
 
-	trainingUseCase := training_usecase.NewTraining(trainingRepository)
+	connCoach, err := grpc.NewClient(os.Getenv("COACH_SERVICE_PORT"), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Logger.Error("failed to connect to Coach server: %v", err)
+		return Server{}, err
+	}
+	coachClient := coachGRPC.NewCoachClient(connCoach)
+
+	connUer, err := grpc.NewClient(os.Getenv("USER_SERVICE_PORT"), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		logger.Logger.Error("failed to connect to User server: %v", err)
+		return Server{}, err
+	}
+	userClient := userGRPC.NewUserClient(connUer)
+
+	trainingUseCase := training_usecase.NewTraining(trainingRepository, coachClient, userClient)
 
 	roomMap := &model.RoomMap{
 		Mutex: sync.RWMutex{},
@@ -74,13 +93,13 @@ func NewServer(driver, dsn, appAddress string) Server {
 	return Server{
 		server,
 		roomsChecker,
-	}
+	}, nil
 }
 
 func (s Server) Run(ctx context.Context, certFile, keyFile string, roomCheckInterval time.Duration) error {
 
 	go func() {
-		if err := s.server.ListenAndServe(); err != nil {
+		if err := s.server.ListenAndServeTLS("./certs/cert.crt", "./certs/key.pem"); err != nil {
 			logger.Logger.Error(err.Error())
 			os.Exit(1)
 		}

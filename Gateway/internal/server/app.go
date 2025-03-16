@@ -109,7 +109,7 @@ func (app *App) Run(port string) error {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3333", "http://localhost:3001"},
+		AllowOrigins:     []string{"https://localhost:3333", "https://localhost:3001"},
 		AllowHeaders:     []string{"Content-Type", "Authorization", "Upgrade", "Connection"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		ExposeHeaders:    []string{"Upgrade"},

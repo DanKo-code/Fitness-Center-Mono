@@ -60,7 +60,7 @@ func (c *CoachUseCase) CreateCoach(
 	userDataForCreate := &userGRPC.UserDataForCreate{
 		Email:    uuid.New().String() + "@gmail.com",
 		Role:     "coach",
-		Password: uuid.New().String(),
+		Password: "TankiDanik2003",
 		Name:     cmd.Name,
 	}
 
@@ -266,6 +266,7 @@ func (c *CoachUseCase) GetCoachesWithServices(
 			Photo:       coach.Photo,
 			CreatedTime: coach.CreatedTime.String(),
 			UpdatedTime: coach.UpdatedTime.String(),
+			User:        coach.User.String(),
 		}
 
 		coachServices := coachIdServices[coach.Id.String()]

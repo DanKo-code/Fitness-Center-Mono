@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"io"
+	"log/slog"
 	"reflect"
 	"strings"
 	"time"
@@ -154,6 +155,8 @@ func (c *CoachgRPC) CreateCoach(g grpc.ClientStreamingServer[coachProtobuf.Creat
 
 func (c *CoachgRPC) GetCoachById(ctx context.Context, request *coachProtobuf.GetCoachByIdRequest) (*coachProtobuf.GetCoachByIdResponse, error) {
 
+	slog.Info("GetCoachById")
+
 	coach, err := c.coachUseCase.GetCoachById(ctx, uuid.MustParse(request.Id))
 	if err != nil {
 
@@ -171,6 +174,7 @@ func (c *CoachgRPC) GetCoachById(ctx context.Context, request *coachProtobuf.Get
 		Photo:       coach.Photo,
 		CreatedTime: coach.CreatedTime.String(),
 		UpdatedTime: coach.UpdatedTime.String(),
+		User:        coach.User.String(),
 	}
 
 	response := &coachProtobuf.GetCoachByIdResponse{
@@ -355,12 +359,15 @@ func (c *CoachgRPC) GetCoaches(ctx context.Context, _ *emptypb.Empty) (*coachPro
 			Photo:       coach.Photo,
 			CreatedTime: coach.CreatedTime.String(),
 			UpdatedTime: coach.UpdatedTime.String(),
+			User:        coach.User.String(),
 		}
 
 		coachObjects = append(coachObjects, coachObject)
 	}
 
 	response := &coachProtobuf.GetCoachesResponse{CoachObjects: coachObjects}
+
+	logger.InfoLogger.Printf("GetCoachesResponse: %v", response)
 
 	return response, nil
 }

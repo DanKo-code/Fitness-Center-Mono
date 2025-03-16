@@ -60,6 +60,26 @@ func (r *RoomMap) InsertIntoRoom(roomKey RoomMapKey, conn *websocket.Conn) {
 	r.Map[roomKey] = append(r.Map[roomKey], p)
 }
 
+func (r *RoomMap) DeleteFromRoom(roomKey RoomMapKey, conn *websocket.Conn) {
+	r.Mutex.Lock()
+	defer r.Mutex.Unlock()
+
+	log.Println("Deleting from Room with RoomID: ", roomKey.RoomId)
+
+	index := 0
+	enter := false
+	for i, participant := range r.Map[roomKey] {
+		if participant.Conn == conn {
+			enter = true
+			index = i
+		}
+	}
+
+	if enter {
+		r.Map[roomKey] = append(r.Map[roomKey][:index], r.Map[roomKey][index+1:]...)
+	}
+}
+
 func (r *RoomMap) DeleteRoom(roomKey RoomMapKey) {
 	r.Mutex.Lock()
 	defer r.Mutex.Unlock()

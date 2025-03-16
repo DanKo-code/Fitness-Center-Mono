@@ -1,10 +1,14 @@
 package repository
 
 import (
+	errorsx "Training/internal/errors"
 	"Training/internal/model"
 	"Training/pkg/logger"
 	"context"
+	"database/sql"
 	"errors"
+	"fmt"
+	"github.com/google/uuid"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -18,6 +22,23 @@ func NewTraining(db sqlx.DB) Training {
 	return Training{
 		db: db,
 	}
+}
+
+func (t Training) GetById(ctx context.Context, id uuid.UUID) (model.Training, error) {
+	var trainingDB TrainingDB
+	err := t.db.GetContext(ctx, &trainingDB, `SELECT id, time_from, time_until, status, coach_id, client_id, created_time, updated_time FROM training WHERE id = $1`, id)
+	if err != nil {
+
+		if errors.Is(err, sql.ErrNoRows) {
+			return model.Training{}, fmt.Errorf(`[Training Repository] [GetById]: %w %w`, err, errorsx.ErrTrainingNotFound)
+		}
+
+		return model.Training{}, fmt.Errorf(`[Training Repository] [GetById]: %w`, err)
+	}
+
+	training := convertTrainingDBToModel(trainingDB)
+
+	return training, nil
 }
 
 func (t Training) Insert(ctx context.Context, training model.Training) (model.Training, error) {

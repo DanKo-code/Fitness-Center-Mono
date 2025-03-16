@@ -22,6 +22,7 @@ const (
 type trainingUseCase interface {
 	Insert(ctx context.Context, training model.Training) (model.Training, error)
 	GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error)
+	IsValidParticipant(ctx context.Context, roomId, clientId, coachId uuid.UUID, role string) error
 }
 
 type Handlers struct {
@@ -160,8 +161,14 @@ func (h Handlers) Join(c *gin.Context) {
 	}
 
 	roomKey.RoomId = uuid.MustParse(roomId)
-	roomKey.ClientId = uuid.MustParse(claims.UserId)
-	roomKey.CoachId = uuid.MustParse(coachId)
+	roomKey.ClientId = uuid.Nil
+	roomKey.CoachId = uuid.Nil
+
+	err = h.useCase.IsValidParticipant(c.Request.Context(), roomKey.RoomId, uuid.MustParse(claims.UserId), uuid.MustParse(coachId), claims.Role)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
@@ -180,7 +187,9 @@ func (h Handlers) Join(c *gin.Context) {
 
 		err := ws.ReadJSON(&msg.Message)
 		if err != nil {
-			log.Fatal("Read Error: ", err)
+			log.Printf("Read Error: ", err)
+			h.roomMap.DeleteFromRoom(roomKey, ws)
+			return
 		}
 
 		msg.Client = ws

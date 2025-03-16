@@ -38,7 +38,11 @@ func main() {
 		os.Getenv("DB_SLLMODE"),
 	)
 
-	newServer := server.NewServer(os.Getenv("DB_DRIVER"), dsn, os.Getenv("APP_ADDRESS"))
+	newServer, err := server.NewServer(os.Getenv("DB_DRIVER"), dsn, os.Getenv("APP_ADDRESS"))
+	if err != nil {
+		logger.Logger.Error(err.Error())
+		os.Exit(1)
+	}
 
 	err = newServer.Run(ctx, os.Getenv("APP_CERT_FILE"), os.Getenv("APP_KEY_FILE"), roomCheckerInterval)
 	if err != nil {

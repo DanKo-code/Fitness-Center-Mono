@@ -36,7 +36,7 @@ func (coachRep *CoachRepository) CreateCoach(ctx context.Context, coach *models.
 
 func (coachRep *CoachRepository) GetCoachById(ctx context.Context, id uuid.UUID) (*models.Coach, error) {
 	coach := &models.Coach{}
-	err := coachRep.db.GetContext(ctx, coach, `SELECT id, name, description, photo, created_time, updated_time FROM "coach" WHERE id = $1`, id)
+	err := coachRep.db.GetContext(ctx, coach, `SELECT id, name, description, photo, created_time, updated_time, "user" FROM "coach" WHERE id = $1`, id)
 	if err != nil {
 		logger.ErrorLogger.Printf("Error GetCoachById: %v", err)
 		return nil, err
@@ -104,7 +104,7 @@ func (coachRep *CoachRepository) DeleteCoachById(ctx context.Context, id uuid.UU
 func (coachRep *CoachRepository) GetCoaches(ctx context.Context) ([]*models.Coach, error) {
 	var coaches []*models.Coach
 
-	err := coachRep.db.SelectContext(ctx, &coaches, `SELECT id, name, description, photo, created_time, updated_time FROM "coach"`)
+	err := coachRep.db.SelectContext(ctx, &coaches, `SELECT id, name, description, photo, created_time, updated_time, "user" FROM "coach"`)
 	if err != nil {
 		logger.ErrorLogger.Printf("Error GetCoaches: %v", err)
 		return nil, err

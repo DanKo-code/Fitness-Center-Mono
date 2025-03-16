@@ -1,11 +1,16 @@
 package training_usecase
 
 import (
+	errorsx "Training/internal/errors"
 	"Training/internal/model"
 	"context"
 	"database/sql"
 	"errors"
 	"fmt"
+	coachGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.coach"
+	userGRPC "github.com/DanKo-code/FitnessCenter-Protobuf/gen/FitnessCenter.protobuf.user"
+	"github.com/google/uuid"
+	"log/slog"
 	"time"
 )
 
@@ -15,16 +20,66 @@ type TrainingRepository interface {
 	GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error)
 	GetTrainingByTime(ctx context.Context, timeFrom, timeUntil time.Time) (model.Training, error)
 	GetAvailableCoaches(ctx context.Context, training model.Training) ([]string, error)
+	GetById(ctx context.Context, id uuid.UUID) (model.Training, error)
 }
 
 type Training struct {
-	repository TrainingRepository
+	repository  TrainingRepository
+	coachClient coachGRPC.CoachClient
+	userClient  userGRPC.UserClient
 }
 
-func NewTraining(repository TrainingRepository) Training {
+func NewTraining(
+	repository TrainingRepository,
+	coachClient coachGRPC.CoachClient,
+	userClient userGRPC.UserClient,
+) Training {
 	return Training{
-		repository,
+		repository:  repository,
+		coachClient: coachClient,
+		userClient:  userClient,
 	}
+}
+
+func (t Training) IsValidParticipant(ctx context.Context, roomId, clientId, coachId uuid.UUID, role string) error {
+	training, err := t.repository.GetById(ctx, roomId)
+	if err != nil {
+		return nil
+	}
+
+	if role != "coach" {
+		if training.ClientId != clientId {
+			slog.Info("[Training Service] [IsValidParticipant]: invalid client id")
+			return fmt.Errorf("[Training Service] [IsValidParticipant]: %w", errorsx.ErrNotValidTrainingData)
+		}
+		if training.Status != "active" {
+			slog.Info("[Training Service] [IsValidParticipant]: status not active")
+			return fmt.Errorf("[Training Service] [IsValidParticipant]: %w", errorsx.ErrNotValidTrainingData)
+		}
+		if training.CoachId != coachId {
+			slog.Info("[Training Service] [IsValidParticipant]: invalid coach id")
+			return fmt.Errorf("[Training Service] [IsValidParticipant]: %w", errorsx.ErrNotValidTrainingData)
+		}
+	} else {
+		if training.Status != "active" {
+			slog.Info("[Training Service] [IsValidParticipant]: status not active")
+			return fmt.Errorf("[Training Service] [IsValidParticipant]: %w", errorsx.ErrNotValidTrainingData)
+		}
+		if training.CoachId != coachId {
+			slog.Info("[Training Service] [IsValidParticipant]: invalid coach id")
+			return fmt.Errorf("[Training Service] [IsValidParticipant]: %w", errorsx.ErrNotValidTrainingData)
+		}
+		coach, err := t.coachClient.GetCoachById(ctx, &coachGRPC.GetCoachByIdRequest{Id: coachId.String()})
+		if err != nil {
+			return fmt.Errorf("[Training Service] [IsValidParticipant]: %w", err)
+		}
+		if coach.CoachObject.User != clientId.String() {
+			slog.Info("[Training Service] [IsValidParticipant]: invalid coach id in user id")
+			return fmt.Errorf("[Training Service] [IsValidParticipant]: %w", errorsx.ErrNotValidTrainingData)
+		}
+	}
+
+	return nil
 }
 
 func (t Training) Insert(ctx context.Context, trainingModel model.Training) (model.Training, error) {
