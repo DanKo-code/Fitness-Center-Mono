@@ -143,7 +143,7 @@ func (app *App) Run(port string) error {
 	}
 
 	go func() {
-		if err := app.httpServer.ListenAndServe(); err != nil {
+		if err := app.httpServer.ListenAndServeTLS("./certs/cert.crt", "./certs/key.pem"); err != nil {
 			logger.FatalLogger.Printf("Failed to listen and serve: %v", err)
 		}
 	}()
