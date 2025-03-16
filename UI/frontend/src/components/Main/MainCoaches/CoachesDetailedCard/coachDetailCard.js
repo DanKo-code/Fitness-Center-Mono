@@ -258,7 +258,11 @@ export default function CoachDetailsCard(props) {
                   dayTrainingsReact[i].status = "недоступно";
                 }
 
-                if (currentUser.role === "coach" && userCoach.current) {
+                if (
+                  trainingsFromResp[j].Status === "active" &&
+                  currentUser.role === "coach" &&
+                  userCoach.current
+                ) {
                   dayTrainingsReact[i].status = "активно";
                 }
               }
