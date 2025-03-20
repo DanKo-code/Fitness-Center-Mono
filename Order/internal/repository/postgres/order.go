@@ -42,7 +42,7 @@ func (o *OrderRepository) CreateCoachAbonement(ctx context.Context, order *model
 func (o *OrderRepository) GetUserOrders(ctx context.Context, userId uuid.UUID) ([]*models.Order, error) {
 	var orders []*models.Order
 	err := o.db.SelectContext(ctx, &orders,
-		`SELECT id, abonement_id, user_id, status, created_time, updated_time
+		`SELECT id, abonement_id, user_id, status, created_time, updated_time, expiration_time
 		 FROM "order"
 		 WHERE user_id = $1`, userId)
 	if err != nil {

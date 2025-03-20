@@ -150,12 +150,13 @@ func (o *OrderUseCase) GetUserOrders(ctx context.Context, userId uuid.UUID) (*or
 	orderIdOrder := map[uuid.UUID]*orderGRPC.OrderObject{}
 	for _, order := range orders {
 		orderObject := &orderGRPC.OrderObject{
-			Id:          order.Id.String(),
-			UserId:      order.UserId.String(),
-			AbonementId: order.AbonementId.String(),
-			Status:      order.Status,
-			CreatedTime: order.CreatedTime.String(),
-			UpdatedTime: order.UpdatedTime.String(),
+			Id:             order.Id.String(),
+			UserId:         order.UserId.String(),
+			AbonementId:    order.AbonementId.String(),
+			Status:         order.Status,
+			CreatedTime:    order.CreatedTime.String(),
+			UpdatedTime:    order.UpdatedTime.String(),
+			ExpirationTime: order.ExpiredTime.String(),
 		}
 
 		orderIdOrder[order.Id] = orderObject

@@ -162,7 +162,7 @@ export default function MainProfile() {
         </div>
 
         {/*Orders List*/}
-        <div style={{ width: "40%" }}>
+        <div style={{ width: "45%" }}>
           <div
             style={{
               display: "flex",
@@ -179,17 +179,30 @@ export default function MainProfile() {
                 {orders
                   .sort(
                     (a, b) =>
-                      new Date(b.orderObject.created_time) -
-                      new Date(a.orderObject.created_time),
+                      new Date(b.orderObject.expiration_time) -
+                      new Date(a.orderObject.expiration_time),
                   )
                   .map((order) => (
-                    <AbonnementCard
-                      abonnement={{
-                        abonement: order.abonementObject,
-                        services: order.serviceObjects,
-                      }}
-                      status={order.orderObject.status}
-                    />
+                    <div style={{ marginBottom: "10px" }}>
+                      <AbonnementCard
+                        abonnement={{
+                          abonement: order.abonementObject,
+                          services: order.serviceObjects,
+                        }}
+                        status={order.orderObject.status}
+                      />
+                      <div
+                        style={{
+                          marginTop: "-10px",
+                          background: "rgb(160, 147, 197)",
+                          paddingLeft: "20px",
+                          paddingTop: "10px",
+                        }}
+                      >
+                        <div>Годен до:</div>
+                        {order.orderObject.expiration_time.split(".")[0]}
+                      </div>
+                    </div>
                   ))}
               </div>
             ) : (
