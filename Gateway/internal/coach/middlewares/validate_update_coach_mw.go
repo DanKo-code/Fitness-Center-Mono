@@ -24,6 +24,7 @@ func ValidateUpdateCoachMW() gin.HandlerFunc {
 		name, nameOk := form.Value["name"]
 		description, descriptionOk := form.Value["description"]
 		services, servicesOk := form.Value["services"]
+		shift, shiftOk := form.Value["shift"]
 
 		logger.DebugLogger.Printf(
 			"id: %v\n"+
@@ -50,7 +51,8 @@ func ValidateUpdateCoachMW() gin.HandlerFunc {
 
 		if (len(name) != 1 || !nameOk) &&
 			(len(description) != 1 || !descriptionOk) &&
-			(len(services) != 1 || !servicesOk) {
+			(len(services) != 1 || !servicesOk) &&
+			(len(shift) != 1 || !shiftOk) {
 			logger.ErrorLogger.Printf("at least 1 field is required for updating")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "для обновления требуется как минимум 1 поле"})
 			c.Set("InvalidUpdate", struct{}{})
@@ -77,6 +79,13 @@ func ValidateUpdateCoachMW() gin.HandlerFunc {
 		if len(descriptionValue) < 10 || len(nameValue) > 500 {
 			logger.ErrorLogger.Printf("Description must be between 10 and 500 characters long")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Длина описания должна составлять от 10 до 500 символов"})
+			return
+		}
+
+		shiftValue := shift[0]
+		if !(shiftValue == "1" || shiftValue == "2") {
+			logger.ErrorLogger.Printf("not valid schema")
+			c.JSON(http.StatusBadRequest, gin.H{"error": "невалидная смена"})
 			return
 		}
 
@@ -108,6 +117,11 @@ func ValidateUpdateCoachMW() gin.HandlerFunc {
 		if servicesOk {
 			updateCoachCommand.Services = servicesIds
 		}
+		if shiftOk {
+			updateCoachCommand.Shift = shiftValue
+		}
+
+		logger.InfoLogger.Printf("updateCoachCommand: %v", updateCoachCommand)
 
 		c.Set("UpdateCoachCommand", updateCoachCommand)
 

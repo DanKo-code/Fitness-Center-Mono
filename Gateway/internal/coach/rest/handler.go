@@ -150,7 +150,10 @@ func (h *Handler) UpdateCoach(c *gin.Context) {
 		Name:            updateCoachCommand.Name,
 		Description:     updateCoachCommand.Description,
 		CoachServiceIds: updateCoachCommand.Services,
+		Shift:           updateCoachCommand.Shift,
 	}
+
+	logger.InfoLogger.Printf("coachDataForUpdate: %v", coachDataForUpdate)
 
 	updateCoachRequestCoachDataForUpdate := &coachGRPC.UpdateCoachRequest_CoachDataForUpdate{
 		CoachDataForUpdate: coachDataForUpdate,

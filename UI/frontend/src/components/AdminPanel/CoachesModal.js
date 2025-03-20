@@ -258,12 +258,15 @@ export default function CoachesModal({ onClose }) {
         if (response.status === 200) {
           let coachWithServices = response.data.coach;
 
+          console.log("coachWithServices:", coachWithServices);
+
           setName(coachWithServices.coach.name);
           setDescription(coachWithServices.coach.description);
           setPhotoUrl(coachWithServices.coach.photo);
           setCoaches([coachWithServices, ...coaches]);
           setCurrentServices(coachWithServices.services);
           setCurrentCoach(coachWithServices);
+          setCurrentShift(coachWithServices.coach.shift);
 
           ShowSuccessMessage("Coach created successfully");
         }
@@ -297,7 +300,7 @@ export default function CoachesModal({ onClose }) {
         borderRadius: "8px",
         padding: "20px",
         width: "1000px",
-        height: "600px",
+        height: "620px",
       }}
     >
       <div>

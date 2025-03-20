@@ -268,6 +268,7 @@ func (c *CoachUseCase) GetCoachesWithServices(
 			CreatedTime: coach.CreatedTime.String(),
 			UpdatedTime: coach.UpdatedTime.String(),
 			User:        coach.User.String(),
+			Shift:       coach.Shift,
 		}
 
 		coachServices := coachIdServices[coach.Id.String()]

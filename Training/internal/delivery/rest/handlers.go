@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"time"
@@ -200,6 +201,9 @@ func (h Handlers) Join(c *gin.Context) {
 }
 
 func (h Handlers) GetTrainingsByDayAndCoach(c *gin.Context) {
+
+	slog.Info("GetTrainingsByDayAndCoach")
+
 	day := c.Param("day")
 	coachId := c.Param("coachId")
 
