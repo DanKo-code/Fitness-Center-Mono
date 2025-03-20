@@ -14,4 +14,5 @@ type Coach struct {
 	UpdatedTime time.Time `db:"updated_time"`
 	CreatedTime time.Time `db:"created_time"`
 	User        uuid.UUID `db:"user"`
+	Shift       string    `db:"shift"`
 }

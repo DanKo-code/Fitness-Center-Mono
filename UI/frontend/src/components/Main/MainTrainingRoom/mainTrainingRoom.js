@@ -28,30 +28,51 @@ const Room = (props) => {
   //ws obj
   const webSocketRef = useRef();
 
-  // get camera with micro
-  const openCamera = async () => {
-    const allDevices = await navigator.mediaDevices.enumerateDevices();
-    const cameras = allDevices.filter((device) => device.kind == "videoinput");
-    console.log(cameras);
+  const [cameras, setCameras] = useState([]);
+  const [microphones, setMicrophones] = useState([]);
+  const [selectedCamera, setSelectedCamera] = useState("");
+  const [selectedMicrophone, setSelectedMicrophone] = useState("");
+  const [isOpenMediaSelected, setIsOpenMediaSelected] = useState("");
 
-    const constraints = {
-      audio: true,
-      video: {
-        deviceId: cameras[0].deviceId,
-      },
-    };
+  const [isCameraOn, setIsCameraOn] = useState(true);
+  const [isMicrophoneOn, setIsMicrophoneOn] = useState(true);
 
-    try {
-      return await navigator.mediaDevices.getUserMedia(constraints);
-    } catch (err) {
-      console.log(err);
+  const toggleCamera = () => {
+    if (userStream.current) {
+      userStream.current.getVideoTracks().forEach((track) => {
+        track.enabled = !isCameraOn;
+      });
+      setIsCameraOn(!isCameraOn);
     }
   };
 
-  useEffect(() => {
-    openCamera().then((stream) => {
+  const toggleMicrophone = () => {
+    if (userStream.current) {
+      userStream.current.getAudioTracks().forEach((track) => {
+        track.enabled = !isMicrophoneOn;
+      });
+      setIsMicrophoneOn(!isMicrophoneOn);
+    }
+  };
+
+  const initDevices = async () => {
+    const allDevices = await navigator.mediaDevices.enumerateDevices();
+
+    setCameras(allDevices.filter((d) => d.kind === "videoinput"));
+    setMicrophones(allDevices.filter((d) => d.kind === "audioinput"));
+  };
+
+  const openMedia = async (videoDeviceId, audioDeviceId) => {
+    const constraints = {
+      video: videoDeviceId ? { deviceId: { exact: videoDeviceId } } : true,
+      audio: audioDeviceId ? { deviceId: { exact: audioDeviceId } } : true,
+    };
+
+    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
       userVideo.current.srcObject = stream;
       userStream.current = stream;
+
+      setIsOpenMediaSelected(true);
 
       const accessToken = inMemoryJWT.getToken();
 
@@ -115,6 +136,31 @@ const Room = (props) => {
         }
       });
     });
+  };
+
+  // get camera with micro
+  const openCamera = async () => {
+    const allDevices = await navigator.mediaDevices.enumerateDevices();
+    console.log("allDevices", allDevices);
+    const cameras = allDevices.filter((device) => device.kind == "videoinput");
+    console.log(cameras);
+
+    const constraints = {
+      audio: true,
+      video: {
+        deviceId: cameras[0].deviceId,
+      },
+    };
+
+    try {
+      return await navigator.mediaDevices.getUserMedia(constraints);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    initDevices().then((r) => console.log("devices received"));
   });
 
   const callUser = () => {
@@ -199,51 +245,156 @@ const Room = (props) => {
     <div
       style={{
         display: "flex",
-        alignItems: "center",
         justifyContent: "center",
-        gap: "40px",
-        background:
-          currentUser.role === "client"
-            ? "rgba(117,100,163,255)"
-            : "rgba(100,117,163,255)",
+        alignItems: "center",
+        background: "rgba(117,100,163,255)",
+        flexDirection: "column",
         width: "100%",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <video
-          style={{ ...videoStyle, transform: "scaleX(-1)" }}
-          autoPlay
-          ref={userVideo}
-        ></video>
-        <div
-          style={{
-            paddingTop: "10px",
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "24px",
-          }}
-        >
-          {currentUser.role === "client" ? coachName : clientName}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "40px",
+          background: "rgba(117,100,163,255)",
+          width: "100%",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <video
+            style={{ ...videoStyle, transform: "scaleX(-1)" }}
+            autoPlay
+            ref={userVideo}
+          ></video>
+          <div
+            style={{
+              paddingTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "24px",
+            }}
+          >
+            {currentUser.role === "client" ? clientName : coachName}
+          </div>
         </div>
-      </div>
 
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        <video
-          style={{ ...videoStyle, transform: "scaleX(-1)" }}
-          autoPlay
-          ref={partnerVideo}
-        ></video>
-        <div
-          style={{
-            paddingTop: "10px",
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "24px",
-          }}
-        >
-          {currentUser.role === "client" ? clientName : coachName}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <video
+            style={{ ...videoStyle, transform: "scaleX(-1)" }}
+            autoPlay
+            ref={partnerVideo}
+          ></video>
+          <div
+            style={{
+              paddingTop: "10px",
+              display: "flex",
+              justifyContent: "center",
+              fontSize: "24px",
+            }}
+          >
+            {currentUser.role === "client" ? coachName : clientName}
+          </div>
         </div>
       </div>
+      {!isOpenMediaSelected && (
+        <div
+          style={{
+            marginTop: "10px",
+            display: "flex",
+            width: "89%",
+            gap: "15px",
+          }}
+        >
+          <select
+            style={{
+              width: "150px",
+              height: "40px",
+              color: "white",
+              background: "rgba(160, 147, 197, 1)",
+              border: "none",
+              borderRadius: "5px",
+              padding: "5px 10px",
+              fontSize: "16px",
+              cursor: "pointer",
+              outline: "none",
+            }}
+            onChange={(e) => setSelectedCamera(e.target.value)}
+          >
+            {cameras.map((camera) => (
+              <option key={camera.deviceId} value={camera.deviceId}>
+                {camera.label || `Камера ${camera.deviceId}`}
+              </option>
+            ))}
+          </select>
+          <select
+            style={{
+              width: "150px",
+              height: "40px",
+              color: "white",
+              background: "rgba(160, 147, 197, 1)",
+              border: "none",
+              borderRadius: "5px",
+              padding: "5px 10px",
+              fontSize: "16px",
+              cursor: "pointer",
+              outline: "none",
+            }}
+            onChange={(e) => setSelectedMicrophone(e.target.value)}
+          >
+            {microphones.map((mic) => (
+              <option key={mic.deviceId} value={mic.deviceId}>
+                {mic.label || `Микрофон ${mic.deviceId}`}
+              </option>
+            ))}
+          </select>
+          <Button
+            style={{
+              width: "160px",
+              height: "40px",
+              color: "white",
+              background: "rgba(160, 147, 197, 1)",
+              border: "none",
+              borderRadius: "5px",
+              padding: "5px 10px",
+              fontSize: "16px",
+              cursor: "pointer",
+              outline: "none",
+            }}
+            onClick={() => openMedia(selectedCamera, selectedMicrophone)}
+          >
+            Начать звонок
+          </Button>
+        </div>
+      )}
+      {isOpenMediaSelected && (
+        <div
+          style={{
+            marginTop: "10px",
+            display: "flex",
+            width: "89%",
+            gap: "15px",
+          }}
+        >
+          <Button
+            onClick={toggleCamera}
+            style={{ background: "rgba(160, 147, 197, 1)", color: "white" }}
+          >
+            {isCameraOn ? "Выключить камеру" : "Включить камеру"}
+          </Button>
+          <Button
+            onClick={toggleMicrophone}
+            style={{
+              background: "rgba(160, 147, 197, 1)",
+              color: "white",
+              fontSize: "16px",
+            }}
+          >
+            {isMicrophoneOn ? "Выключить микрофон" : "Включить микрофон"}
+          </Button>
+        </div>
+      )}
     </div>
   ) : null;
 };

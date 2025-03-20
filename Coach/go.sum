@@ -4,6 +4,12 @@ github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27 h1:IrE6VUzgwTOUn97keA3/2ee4
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28 h1:uWm1PHddGCcsGT/+mfGQtSJwntIphwa4kJpSEw+JVBo=
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.29 h1:m/5UdfNynMcOB6bjPiG5ex1Vfjv5UzYHlEHKlBIs4+M=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.29/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.30 h1:FyITMc6aS33QNba1C7DhL0OnG5V383KIvyN10PWMJKA=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.30/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.31 h1:2ujFs00d4CW78GTq/TzkwZusuca+OO6p7nCKBq1qqMo=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.31/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
 github.com/aws/aws-sdk-go-v2 v1.32.6 h1:7BokKRgRPuGmKkFMhEg/jSul+tB9VvXhcViILtfG8b4=
 github.com/aws/aws-sdk-go-v2 v1.32.6/go.mod h1:P5WJBrYqqbWVaOxgH0X/FYYD47/nooaPOZPlQdmiN2U=
 github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.7 h1:lL7IfaFzngfx0ZwUGOZdsFFnQ5uLvR0hWqqhyE7Q9M8=

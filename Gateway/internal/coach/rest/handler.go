@@ -64,6 +64,7 @@ func (h *Handler) CreateCoach(c *gin.Context) {
 		Name:            createCoachCommand.Name,
 		Description:     createCoachCommand.Description,
 		CoachServiceIds: createCoachCommand.Services,
+		Shift:           createCoachCommand.Shift,
 	}
 
 	createCoachRequestCoachDataForCreate := &coachGRPC.CreateCoachRequest_CoachDataForCreate{
@@ -149,7 +150,10 @@ func (h *Handler) UpdateCoach(c *gin.Context) {
 		Name:            updateCoachCommand.Name,
 		Description:     updateCoachCommand.Description,
 		CoachServiceIds: updateCoachCommand.Services,
+		Shift:           updateCoachCommand.Shift,
 	}
+
+	logger.InfoLogger.Printf("coachDataForUpdate: %v", coachDataForUpdate)
 
 	updateCoachRequestCoachDataForUpdate := &coachGRPC.UpdateCoachRequest_CoachDataForUpdate{
 		CoachDataForUpdate: coachDataForUpdate,

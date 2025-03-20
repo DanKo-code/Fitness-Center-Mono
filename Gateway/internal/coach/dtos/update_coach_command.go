@@ -5,4 +5,5 @@ type UpdateCoachCommand struct {
 	Name        string
 	Description string
 	Services    []string
+	Shift       string
 }

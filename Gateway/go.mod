@@ -3,7 +3,7 @@ module Gateway
 go 1.23.3
 
 require (
-	github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28
+	github.com/DanKo-code/FitnessCenter-Protobuf v0.6.31
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.25.0

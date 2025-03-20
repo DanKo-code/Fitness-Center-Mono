@@ -77,6 +77,7 @@ func (c *CoachgRPC) CreateCoach(g grpc.ClientStreamingServer[coachProtobuf.Creat
 		Id:          uuid.New(),
 		Name:        castedCoachData.Name,
 		Description: castedCoachData.Description,
+		Shift:       castedCoachData.Shift,
 	}
 
 	var photoURL string
@@ -125,6 +126,7 @@ func (c *CoachgRPC) CreateCoach(g grpc.ClientStreamingServer[coachProtobuf.Creat
 		Photo:       coach.Photo,
 		CreatedTime: coach.CreatedTime.String(),
 		UpdatedTime: coach.UpdatedTime.String(),
+		Shift:       coach.Shift,
 	}
 
 	var coachWithServices *coachProtobuf.CoachWithServices
@@ -209,11 +211,14 @@ func (c *CoachgRPC) UpdateCoach(g grpc.ClientStreamingServer[coachProtobuf.Updat
 		return status.Error(codes.InvalidArgument, "coach data is not of type CoachProtobuf.CoachDataForCreate")
 	}
 
+	slog.Info("castedCoachData: %v", castedCoachData)
+
 	cmd := &dtos.UpdateCoachCommand{
 		Id:          uuid.MustParse(castedCoachData.Id),
 		Name:        castedCoachData.Name,
 		Description: castedCoachData.Description,
 		UpdatedTime: time.Now(),
+		Shift:       castedCoachData.Shift,
 	}
 
 	existingCoach, err := c.coachUseCase.GetCoachById(context.TODO(), uuid.MustParse(castedCoachData.Id))
@@ -291,6 +296,7 @@ func (c *CoachgRPC) UpdateCoach(g grpc.ClientStreamingServer[coachProtobuf.Updat
 		Photo:       coach.Photo,
 		CreatedTime: coach.CreatedTime.String(),
 		UpdatedTime: coach.UpdatedTime.String(),
+		Shift:       coach.Shift,
 	}
 
 	var coachWithServices *coachProtobuf.CoachWithServices

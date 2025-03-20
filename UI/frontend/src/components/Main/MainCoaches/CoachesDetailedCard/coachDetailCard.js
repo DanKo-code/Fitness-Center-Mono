@@ -223,7 +223,25 @@ export default function CoachDetailsCard(props) {
 
         let trainingsFromResp = response.data.trainings;
 
-        let dayTrainingsReact = [...initTrainingsState];
+        console.log("coach:", coach);
+
+        let dayTrainingsReact;
+        if (coach.coach.shift === "1") {
+          dayTrainingsReact = [
+            ...initTrainingsState.slice(
+              0,
+              Math.ceil(initTrainingsState.length / 2),
+            ),
+          ];
+        } else if (coach.coach.shift === "2") {
+          dayTrainingsReact = [
+            ...initTrainingsState.slice(
+              Math.ceil(initTrainingsState.length / 2),
+            ),
+          ];
+        }
+
+        console.log("dayTrainingsReact:", dayTrainingsReact);
 
         for (const dayTrainingsReactElement of dayTrainingsReact) {
           dayTrainingsReactElement.status = "свободно";

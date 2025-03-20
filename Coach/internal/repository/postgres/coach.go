@@ -24,8 +24,8 @@ func NewCoachRepository(db *sqlx.DB) *CoachRepository {
 
 func (coachRep *CoachRepository) CreateCoach(ctx context.Context, coach *models.Coach) (*models.Coach, error) {
 	_, err := coachRep.db.NamedExecContext(ctx, `
-	INSERT INTO "coach" (id, name, description, photo, created_time, updated_time, "user")
-	VALUES (:id, :name, :description, :photo, :created_time, :updated_time, :user)`, *coach)
+	INSERT INTO "coach" (id, name, description, photo, created_time, updated_time, "user", shift)
+	VALUES (:id, :name, :description, :photo, :created_time, :updated_time, :user, :shift)`, *coach)
 	if err != nil {
 		logger.ErrorLogger.Printf("Error CreateCoach: %v", err)
 		return nil, err
@@ -36,7 +36,7 @@ func (coachRep *CoachRepository) CreateCoach(ctx context.Context, coach *models.
 
 func (coachRep *CoachRepository) GetCoachById(ctx context.Context, id uuid.UUID) (*models.Coach, error) {
 	coach := &models.Coach{}
-	err := coachRep.db.GetContext(ctx, coach, `SELECT id, name, description, photo, created_time, updated_time, "user" FROM "coach" WHERE id = $1`, id)
+	err := coachRep.db.GetContext(ctx, coach, `SELECT id, name, description, photo, created_time, updated_time, "user", shift FROM "coach" WHERE id = $1`, id)
 	if err != nil {
 		logger.ErrorLogger.Printf("Error GetCoachById: %v", err)
 		return nil, err
@@ -56,6 +56,9 @@ func (coachRep *CoachRepository) UpdateCoach(ctx context.Context, cmd *dtos.Upda
 	}
 	if cmd.Photo != "" {
 		setFields["photo"] = cmd.Photo
+	}
+	if cmd.Shift != "" {
+		setFields["shift"] = cmd.Shift
 	}
 	setFields["updated_time"] = cmd.UpdatedTime
 
@@ -104,7 +107,7 @@ func (coachRep *CoachRepository) DeleteCoachById(ctx context.Context, id uuid.UU
 func (coachRep *CoachRepository) GetCoaches(ctx context.Context) ([]*models.Coach, error) {
 	var coaches []*models.Coach
 
-	err := coachRep.db.SelectContext(ctx, &coaches, `SELECT id, name, description, photo, created_time, updated_time, "user" FROM "coach"`)
+	err := coachRep.db.SelectContext(ctx, &coaches, `SELECT id, name, description, photo, created_time, updated_time, "user", shift FROM "coach"`)
 	if err != nil {
 		logger.ErrorLogger.Printf("Error GetCoaches: %v", err)
 		return nil, err
