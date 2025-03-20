@@ -77,6 +77,7 @@ func (c *CoachgRPC) CreateCoach(g grpc.ClientStreamingServer[coachProtobuf.Creat
 		Id:          uuid.New(),
 		Name:        castedCoachData.Name,
 		Description: castedCoachData.Description,
+		Shift:       castedCoachData.Shift,
 	}
 
 	var photoURL string

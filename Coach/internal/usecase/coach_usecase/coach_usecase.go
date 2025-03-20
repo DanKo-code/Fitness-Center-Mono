@@ -95,6 +95,7 @@ func (c *CoachUseCase) CreateCoach(
 		User:        uuid.MustParse(createdUser.UserObject.Id),
 		UpdatedTime: time.Now(),
 		CreatedTime: time.Now(),
+		Shift:       cmd.Shift,
 	}
 
 	createdCoach, err := c.coachRepo.CreateCoach(ctx, coach)

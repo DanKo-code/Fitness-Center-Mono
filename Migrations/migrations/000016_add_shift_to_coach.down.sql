@@ -1,0 +1,2 @@
+ALTER TABLE coach DROP COLUMN IF EXISTS shift;
+DROP TYPE IF EXISTS coach_shift;

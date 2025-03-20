@@ -2,6 +2,8 @@ github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27 h1:IrE6VUzgwTOUn97keA3/2ee4
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28 h1:uWm1PHddGCcsGT/+mfGQtSJwntIphwa4kJpSEw+JVBo=
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.29 h1:m/5UdfNynMcOB6bjPiG5ex1Vfjv5UzYHlEHKlBIs4+M=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.29/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
 github.com/KyleBanks/depth v1.2.1 h1:5h8fQADFrWtarTdtDudMmGsC7GPbOAu6RVB3ffsVFHc=
 github.com/KyleBanks/depth v1.2.1/go.mod h1:jzSb9d0L43HxTQfT+oSA1EEp2q+ne2uh6XgeJcm8brE=
 github.com/PuerkitoBio/purell v1.1.1 h1:WEQqlqaGbrPkxLJWfBwQmfEAE1Z7ONdDLqrN38tNFfI=

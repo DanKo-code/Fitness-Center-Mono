@@ -7,4 +7,5 @@ type CreateCoachCommand struct {
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
 	Photo       string    `json:"photo"`
+	Shift       string    `json:"shift"`
 }
