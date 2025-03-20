@@ -207,7 +207,7 @@ services:
       - STRIPE_API_KEY=${STRIPE_API_KEY}
     networks:
       - fitness-center-network
-    command: listen --forward-to gateway:${GATEWAY_PORT}/checkout-session-completed --api-key ${STRIPE_API_KEY} --events checkout.session.completed
+    command: listen --forward-to https://gateway:${GATEWAY_PORT}/checkout-session-completed --skip-verify --api-key ${STRIPE_API_KEY} --events checkout.session.completed
 
   training:
     build:
