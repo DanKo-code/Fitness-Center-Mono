@@ -150,11 +150,13 @@ export default function CoachesModal({ onClose }) {
       setDescription(currentCoach.coach.description);
       setPhotoUrl(currentCoach.coach.photo);
       setCurrentServices(currentCoach.services.map((as) => as));
+      setCurrentShift(currentCoach.coach.shift);
     } else {
       setName("");
       setDescription("");
       setCurrentServices([]);
       setPhotoUrl("");
+      setCurrentShift("");
     }
   }, [currentCoach]);
 
@@ -206,6 +208,7 @@ export default function CoachesModal({ onClose }) {
           "services",
           currentServices.map((service) => service.id),
         );
+        formData.append("shift", currentShift);
 
         const response = await Resource.put("/coaches", formData);
 
@@ -216,6 +219,7 @@ export default function CoachesModal({ onClose }) {
           setDescription(coachWithServices.coach.description);
           setCurrentServices(coachWithServices.services);
           setCurrentCoach(coachWithServices);
+          setCurrentShift(coachWithServices.coach.shift);
 
           const newArray = coaches.map((coach) => {
             if (coach.coach.id === coachWithServices.coach.id) {
@@ -247,6 +251,7 @@ export default function CoachesModal({ onClose }) {
           "services",
           currentServices.map((service) => service.id),
         );
+        formData.append("shift", currentShift);
 
         const response = await Resource.post("/coaches", formData);
 
@@ -427,43 +432,45 @@ export default function CoachesModal({ onClose }) {
             maxRows={10} // Максимальное количество строк для отображения
           />
 
-          <FormControl fullWidth>
-            <InputLabel fullWidth>Услуги</InputLabel>
-            <Select
-              fullWidth
-              multiple
-              value={currentServices}
-              input={<OutlinedInput label="Tag" />}
-              renderValue={(selected) =>
-                selected.map(
-                  (sel) => (translations[sel.title] || sel.title) + " ",
-                )
-              }
-              MenuProps={MenuProps}
-            >
-              {allServices.map((service) => (
-                <MenuItem key={service.id} value={service.title}>
-                  <Checkbox
-                    onChange={() => handleServicesChange(service)}
-                    checked={currentServices
-                      .map((ser) => ser.id)
-                      .includes(service.id)}
-                  />
-                  <ListItemText
-                    primary={
-                      service.title === "swimming-pool"
-                        ? "Бассейн"
-                        : service.title === "sauna"
-                          ? "Сауна"
-                          : service.title === "gym"
-                            ? "Тренажерный зал"
-                            : service.title
-                    }
-                  />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <div style={{ marginBottom: "10px" }}>
+            <FormControl fullWidth>
+              <InputLabel fullWidth>Услуги</InputLabel>
+              <Select
+                fullWidth
+                multiple
+                value={currentServices}
+                input={<OutlinedInput label="Tag" />}
+                renderValue={(selected) =>
+                  selected.map(
+                    (sel) => (translations[sel.title] || sel.title) + " ",
+                  )
+                }
+                MenuProps={MenuProps}
+              >
+                {allServices.map((service) => (
+                  <MenuItem key={service.id} value={service.title}>
+                    <Checkbox
+                      onChange={() => handleServicesChange(service)}
+                      checked={currentServices
+                        .map((ser) => ser.id)
+                        .includes(service.id)}
+                    />
+                    <ListItemText
+                      primary={
+                        service.title === "swimming-pool"
+                          ? "Бассейн"
+                          : service.title === "sauna"
+                            ? "Сауна"
+                            : service.title === "gym"
+                              ? "Тренажерный зал"
+                              : service.title
+                      }
+                    />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
 
           <FormControl fullWidth>
             <InputLabel fullWidth>Смена</InputLabel>

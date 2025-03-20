@@ -23,10 +23,12 @@ func ValidateCreateCoachMW() gin.HandlerFunc {
 		name := form.Value["name"]
 		description := form.Value["description"]
 		services := form.Value["services"]
+		shift := form.Value["shift"]
 
 		if (len(name) != 1 || name[0] == "") ||
 			(len(description) != 1 || description[0] == "") ||
-			(len(services) != 1 || services[0] == "") {
+			(len(services) != 1 || services[0] == "") ||
+			(len(shift) != 1 || shift[0] == "") {
 			logger.ErrorLogger.Printf(coach_errors.OnlyPhotoOptional.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": coach_errors.OnlyPhotoOptional.Error()})
 			return
@@ -63,10 +65,18 @@ func ValidateCreateCoachMW() gin.HandlerFunc {
 			return
 		}
 
+		shiftValue := shift[0]
+		if !(shiftValue == "1" || shiftValue == "2") {
+			logger.ErrorLogger.Printf("not valid schema")
+			c.JSON(http.StatusBadRequest, gin.H{"error": "невалидная смена"})
+			return
+		}
+
 		createCoachCommand := &dtos.CreateCoachCommand{
 			Name:        nameValue,
 			Description: descriptionValue,
 			Services:    servicesIds,
+			Shift:       shiftValue,
 		}
 
 		c.Set("CreateCoachCommand", createCoachCommand)
