@@ -541,8 +541,8 @@ export default function MainAbonnements() {
           <div
             style={{
               width: "1000px",
-              marginTop: "40px",
-              height: "420px",
+              marginTop: "20px",
+              height: "480px",
               overflowY: "scroll",
               display: "flex",
               flexWrap: "wrap",
@@ -555,7 +555,7 @@ export default function MainAbonnements() {
                 key={abonnement?.abonement?.id}
                 abonnement={abonnement}
                 width={"32%"}
-                height={"420px"}
+                height={"480px"}
                 buyButton={
                   !orders?.some(
                     (order) =>

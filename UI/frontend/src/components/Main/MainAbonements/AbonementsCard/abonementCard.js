@@ -208,7 +208,24 @@ export default function AbonnementCard(props) {
         </div>
       </div>
 
-      <div style={{ paddingLeft: "20px" }}>Услуги:</div>
+      {buyButton && user.role !== "admin" && user.role !== "coach" ? (
+        <Button
+          style={{
+            color: "white",
+            background: "rgba(117,100,163,255)",
+            width: "170px",
+            height: "50px",
+            marginLeft: "20px",
+          }}
+          onClick={handleBuy}
+        >
+          Купить
+        </Button>
+      ) : (
+        <div />
+      )}
+
+      <div style={{ marginTop: "10px", paddingLeft: "20px" }}>Услуги:</div>
       <div
         style={{
           paddingLeft: "20px",
@@ -247,22 +264,6 @@ export default function AbonnementCard(props) {
               </div>
             ))}
         </div>
-
-        {buyButton && user.role !== "admin" ? (
-          <Button
-            style={{
-              color: "white",
-              background: "rgba(117,100,163,255)",
-              width: "170px",
-              height: "50px",
-            }}
-            onClick={handleBuy}
-          >
-            Купить
-          </Button>
-        ) : (
-          <div />
-        )}
       </div>
     </div>
   );
