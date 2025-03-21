@@ -350,7 +350,11 @@ export default function MainAbonnements() {
             autoComplete="search"
             value={titleSearch}
             onChange={handleTitleSearchChange}
-            sx={{ input: { color: "white" }, label: { color: "white" } }}
+            sx={{
+              input: { color: "white" }, // Цвет вводимого текста
+              "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
+              "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+            }}
           ></TextField>
 
           <div style={{ width: "30%" }}>
@@ -366,7 +370,13 @@ export default function MainAbonnements() {
           </div>
 
           <FormControl style={{ width: "30%" }}>
-            <InputLabel id="sort-order-label" sx={{ color: "white" }}>
+            <InputLabel
+              id="sort-order-label"
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
               Фильтр сортировки
             </InputLabel>
             <Select
@@ -374,7 +384,9 @@ export default function MainAbonnements() {
               id="sort-order"
               value={sortFilter}
               onChange={handleSortFilterChange}
-              sx={{ color: "white" }}
+              sx={{
+                color: "white",
+              }}
             >
               <MenuItem value="title">Название</MenuItem>
               <MenuItem value="price">Цена</MenuItem>
@@ -391,7 +403,13 @@ export default function MainAbonnements() {
           }}
         >
           <FormControl fullWidth style={{ width: "33%" }}>
-            <InputLabel id="validity-period-label" sx={{ color: "white" }}>
+            <InputLabel
+              id="validity-period-label"
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
               Период валидности в месяцах
             </InputLabel>
             <Select
@@ -410,7 +428,14 @@ export default function MainAbonnements() {
           </FormControl>
 
           <FormControl fullWidth style={{ width: "30%" }}>
-            <InputLabel sx={{ color: "white" }}>Время посещения</InputLabel>
+            <InputLabel
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
+              Время посещения
+            </InputLabel>
             <Select
               value={visitingTime}
               label="Visiting Time"
@@ -425,7 +450,13 @@ export default function MainAbonnements() {
           </FormControl>
 
           <FormControl style={{ width: "30%" }}>
-            <InputLabel id="sort-order-label" sx={{ color: "white" }}>
+            <InputLabel
+              id="sort-order-label"
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
               Порядок сортировки
             </InputLabel>
             <Select
@@ -450,7 +481,13 @@ export default function MainAbonnements() {
           }}
         >
           <FormControl fullWidth>
-            <InputLabel fullWidth sx={{ color: "white" }}>
+            <InputLabel
+              fullWidth
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
               Услуги
             </InputLabel>
             <Select
