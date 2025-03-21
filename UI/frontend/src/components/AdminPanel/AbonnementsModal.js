@@ -351,11 +351,14 @@ export default function AbonnementsModal({ onClose }) {
                         style={{
                           border:
                             currentAbonnement === abonnement
-                              ? "3px solid yellow"
+                              ? "4px solid yellow"
                               : "none",
+                          borderRadius: "20px",
+                          marginBottom: "10px",
                         }}
                       >
                         <AbonnementCard
+                          height={"420px"}
                           abonnement={abonnement}
                           onClick={() => handleAbonementSelection(abonnement)}
                         />
@@ -416,15 +419,28 @@ export default function AbonnementsModal({ onClose }) {
               label="Название"
               value={title}
               onChange={handleTitleChange}
+              sx={{
+                input: { color: "white" }, // Цвет вводимого текста
+                "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
+                "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+              }}
             />
           </div>
 
           <FormControl fullWidth style={{ marginBottom: "10px" }}>
-            <InputLabel>Период Валидности в Месяцах</InputLabel>
+            <InputLabel
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
+              Период Валидности в Месяцах
+            </InputLabel>
             <Select
               value={validityPeriod}
               label="Validity Period"
               onChange={handleValidityPeriodChange}
+              sx={{ color: "white" }}
             >
               <MenuItem value={"1"}>1</MenuItem>
               <MenuItem value={"3"}>3</MenuItem>
@@ -434,11 +450,19 @@ export default function AbonnementsModal({ onClose }) {
           </FormControl>
 
           <FormControl fullWidth style={{ marginBottom: "10px" }}>
-            <InputLabel>Время Посещения</InputLabel>
+            <InputLabel
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
+              Время Посещения
+            </InputLabel>
             <Select
               value={visitingTime}
               label="Visiting Time"
               onChange={handleVisitingTimeChange}
+              sx={{ color: "white" }}
             >
               <MenuItem value={"7.00 - 14.00"}>7.00 - 14.00</MenuItem>
               <MenuItem value={"14.00 - 24.00"}>14.00 - 24.00</MenuItem>
@@ -447,14 +471,31 @@ export default function AbonnementsModal({ onClose }) {
           </FormControl>
 
           <FormControl fullWidth style={{ marginBottom: "10px" }}>
-            <InputLabel htmlFor="outlined-adornment-amount">
+            <InputLabel
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+              htmlFor="outlined-adornment-amount"
+            >
               Цена(BYN)
             </InputLabel>
             <OutlinedInput
               id="outlined-adornment-amount"
               startAdornment={
-                <InputAdornment position="start">BYN</InputAdornment>
+                <InputAdornment
+                  position="start"
+                  sx={{ color: "white !important" }}
+                >
+                  <span style={{ color: "white" }}>BYN</span>
+                </InputAdornment>
               }
+              sx={{
+                input: { color: "white" }, // Цвет вводимого текста
+                "& .MuiInputAdornment-root": { color: "white !important" }, // Цвет текста "BYN"
+                "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
+                "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+              }}
               label="Price"
               value={price}
               onChange={handlePriceChange}
@@ -462,7 +503,15 @@ export default function AbonnementsModal({ onClose }) {
           </FormControl>
 
           <FormControl fullWidth>
-            <InputLabel fullWidth>Услуги</InputLabel>
+            <InputLabel
+              fullWidth
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
+              Услуги
+            </InputLabel>
             <Select
               fullWidth
               multiple
@@ -474,6 +523,7 @@ export default function AbonnementsModal({ onClose }) {
                 )
               }
               MenuProps={MenuProps}
+              sx={{ color: "white" }}
             >
               {allServices.map((service) => (
                 <MenuItem key={service.id} value={service.title}>

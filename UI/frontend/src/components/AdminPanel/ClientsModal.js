@@ -142,7 +142,7 @@ export default function ClientsModal({ onClose }) {
           {clients.length > 0 ? (
             <div
               style={{
-                height: "400px",
+                height: "300px",
                 overflowY: "scroll",
               }}
             >
@@ -156,19 +156,31 @@ export default function ClientsModal({ onClose }) {
                     alignItems: "center",
                     padding: "5px 0",
                     border:
-                      currentClient === client ? "3px solid yellow" : "none",
+                      currentClient === client ? "4px solid yellow" : "none",
+                    borderRadius: "20px",
+                    overflow: "hidden",
                   }}
                   onClick={() => handleClientSelection(client)}
                 >
                   {/* Photo */}
-                  <img
+                  <div
                     style={{
                       width: "200px",
-                      height: "110px",
+                      height: "120px",
+                      borderRadius: "20px",
+                      overflow: "hidden",
                     }}
-                    src={client.photo || noAva}
-                    alt="client"
-                  />
+                  >
+                    {/*{abonnement.Photo}*/}
+                    <img
+                      style={{
+                        width: "100%",
+                        height: "120px",
+                        borderRadius: "20px",
+                      }}
+                      src={client.photo || noAva}
+                    />
+                  </div>
 
                   {/* Email */}
                   <div style={{ flex: 1 }}>{client.email}</div>
@@ -177,10 +189,14 @@ export default function ClientsModal({ onClose }) {
                   <div style={{ flex: 1 }}>{client.name}</div>
 
                   {/* Created Time */}
-                  <div style={{ flex: 1 }}>{client.created_time}</div>
+                  <div style={{ flex: 1 }}>
+                    {client.created_time.split(".")[0]}
+                  </div>
 
                   {/* Updated Time */}
-                  <div style={{ flex: 1 }}>{client.updated_time}</div>
+                  <div style={{ flex: 1 }}>
+                    {client.updated_time.split(".")[0]}
+                  </div>
                 </div>
               ))}
             </div>

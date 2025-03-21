@@ -420,10 +420,12 @@ export default function CoachDetailsCard(props) {
           marginTop: "50px",
         }}
       >
-        <div style={{ width: "400px", paddingRight: "20px" }}>
+        <div
+          style={{ width: "400px", paddingRight: "20px", borderRadius: "20px" }}
+        >
           {/*{abonnement.Photo}*/}
           <img
-            style={{ width: "100%", height: "auto" }}
+            style={{ width: "100%", height: "auto", borderRadius: "20px" }}
             src={coach.coach.photo}
           />
         </div>

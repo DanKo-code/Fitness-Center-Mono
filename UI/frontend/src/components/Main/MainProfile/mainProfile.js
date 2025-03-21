@@ -148,6 +148,11 @@ export default function MainProfile() {
             label="Имя"
             value={name}
             onChange={handleNameChange}
+            sx={{
+              input: { color: "white" }, // Цвет вводимого текста
+              "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
+              "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+            }}
           />
           <Button
             style={{
@@ -162,7 +167,7 @@ export default function MainProfile() {
         </div>
 
         {/*Orders List*/}
-        <div style={{ width: "45%" }}>
+        <div style={{ width: "48%" }}>
           <div
             style={{
               display: "flex",
@@ -193,13 +198,15 @@ export default function MainProfile() {
                       />
                       <div
                         style={{
-                          marginTop: "-10px",
+                          marginTop: "-18px",
                           background: "rgb(160, 147, 197)",
                           paddingLeft: "20px",
-                          paddingTop: "10px",
+                          paddingTop: "20px",
+                          borderRadius: "0 0 20px 20px",
+                          paddingBottom: "10px",
                         }}
                       >
-                        <div>Годен до:</div>
+                        <div style={{ paddingTop: "5px" }}>Годен до:</div>
                         {order.orderObject.expiration_time.split(".")[0]}
                       </div>
                     </div>

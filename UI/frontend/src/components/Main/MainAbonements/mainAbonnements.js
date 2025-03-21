@@ -320,16 +320,18 @@ export default function MainAbonnements() {
   return (
     <div
       style={{
-        width: "70%",
+        width: "100%",
         height: "100vh",
         background: "rgba(117,100,163,255)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        flexDirection: "column",
       }}
     >
       <div
         style={{
+          width: "900px",
           marginLeft: "5%",
           marginRight: "5%",
         }}
@@ -527,49 +529,59 @@ export default function MainAbonnements() {
             </Select>
           </FormControl>
         </div>
+      </div>
 
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          {showAbonnementsList ? (
-            <div
-              style={{
-                marginTop: "40px",
-                height: "400px",
-                overflowY: "scroll",
-              }}
-            >
-              {searchedAbonnements.map((abonnement) => (
-                <AbonnementCard
-                  key={abonnement?.abonement?.id}
-                  abonnement={abonnement}
-                  width={"600px"}
-                  height={"400px"}
-                  buyButton={
-                    !orders?.some(
-                      (order) =>
-                        abonnement?.abonement?.id ===
-                          order?.orderObject?.abonement_id &&
-                        order?.orderObject?.status === "Valid",
-                    )
-                  }
-                />
-              ))}
-            </div>
-          ) : (
-            <div
-              style={{
-                marginTop: "40px",
-                width: "600px",
-                height: "400px",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                fontSize: "20px",
-              }}
-            >
-              Таких абонентов не существует
-            </div>
-          )}
-        </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {showAbonnementsList ? (
+          <div
+            style={{
+              width: "1000px",
+              marginTop: "40px",
+              height: "420px",
+              overflowY: "scroll",
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+              justifyContent: "start",
+            }}
+          >
+            {searchedAbonnements.map((abonnement) => (
+              <AbonnementCard
+                key={abonnement?.abonement?.id}
+                abonnement={abonnement}
+                width={"32%"}
+                height={"420px"}
+                buyButton={
+                  !orders?.some(
+                    (order) =>
+                      abonnement?.abonement?.id ===
+                        order?.orderObject?.abonement_id &&
+                      order?.orderObject?.status === "Valid",
+                  )
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <div
+            style={{
+              marginTop: "40px",
+              width: "600px",
+              height: "400px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "20px",
+            }}
+          >
+            Таких абонентов не существует
+          </div>
+        )}
       </div>
     </div>
   );

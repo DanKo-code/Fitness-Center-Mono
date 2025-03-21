@@ -340,8 +340,10 @@ export default function CoachesModal({ onClose }) {
                         style={{
                           border:
                             currentCoach === coach
-                              ? "3px solid yellow"
+                              ? "4px solid yellow"
                               : "none",
+                          borderRadius: "20px",
+                          marginBottom: "10px",
                         }}
                       >
                         {/*<AbonnementCard
@@ -416,32 +418,60 @@ export default function CoachesModal({ onClose }) {
               label="Имя"
               value={name}
               onChange={handleNameChange}
+              sx={{
+                input: { color: "white" }, // Цвет вводимого текста
+                "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
+                "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+              }}
             />
           </div>
 
           <TextareaAutosize
             style={{
               width: "100%",
-              minHeight: "100px", // Минимальная высота для текстового поля
-              resize: "none", // Отключаем изменение размера по умолчанию
-              backgroundColor: "transparent", // Прозрачный фон
+              minHeight: "100px",
+              resize: "none",
+              backgroundColor: "transparent",
               borderRadius: "4px",
               padding: "8px",
               boxSizing: "border-box",
               marginBottom: "10px",
+              border: "1px solid rgba(0, 0, 0, 0.23)", // Темная граница по умолчанию
+              outline: "none",
+              color: "white", // Белый текст при вводе
+              caretColor: "white", // Белый курсор
             }}
+            placeholder="Описание"
             value={description}
             onChange={handleDescriptionChange}
-            maxRows={10} // Максимальное количество строк для отображения
+            maxRows={10}
           />
+
+          <style>
+            {`
+    textarea::placeholder {
+      color: white;
+      font-size: 16px;
+    }
+  `}
+          </style>
 
           <div style={{ marginBottom: "10px" }}>
             <FormControl fullWidth>
-              <InputLabel fullWidth>Услуги</InputLabel>
+              <InputLabel
+                fullWidth
+                sx={{
+                  color: "white !important", // Принудительно белый цвет
+                  "&.Mui-focused": { color: "white !important" }, // При фокусе
+                }}
+              >
+                Услуги
+              </InputLabel>
               <Select
                 fullWidth
                 multiple
                 value={currentServices}
+                sx={{ color: "white" }}
                 input={<OutlinedInput label="Tag" />}
                 renderValue={(selected) =>
                   selected.map(
@@ -476,9 +506,18 @@ export default function CoachesModal({ onClose }) {
           </div>
 
           <FormControl fullWidth>
-            <InputLabel fullWidth>Смена</InputLabel>
+            <InputLabel
+              fullWidth
+              sx={{
+                color: "white !important", // Принудительно белый цвет
+                "&.Mui-focused": { color: "white !important" }, // При фокусе
+              }}
+            >
+              Смена
+            </InputLabel>
             <Select
               fullWidth
+              sx={{ color: "white" }}
               value={currentShift}
               onChange={(e) => setCurrentShift(e.target.value)}
               input={<OutlinedInput label="Tag" />}
