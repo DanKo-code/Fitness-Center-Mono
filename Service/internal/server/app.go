@@ -174,22 +174,22 @@ func insertInitServices(serviceUseCase usecase.ServiceUseCase, cloudUseCase usec
 		return err
 	}
 
-	//gym sauna
-	saunaPhotoBytes, err := readImageToBytes("internal/images/sauna.png")
+	//gym tennis
+	tennisPhotoBytes, err := readImageToBytes("internal/images/tennis.png")
 	if err != nil {
 		return err
 	}
-	randomSaunaID := uuid.New().String()
-	saunaUrl, err := cloudUseCase.PutObject(context.TODO(), saunaPhotoBytes, "service/"+randomSaunaID)
+	randomTennisID := uuid.New().String()
+	tennisUrl, err := cloudUseCase.PutObject(context.TODO(), tennisPhotoBytes, "service/"+randomTennisID)
 	if err != nil {
 		return err
 	}
-	saunaServiceReq := &dtos.CreateServiceCommand{
+	tennisServiceReq := &dtos.CreateServiceCommand{
 		Id:    uuid.New(),
-		Title: "sauna",
-		Photo: saunaUrl,
+		Title: "tennis",
+		Photo: tennisUrl,
 	}
-	_, err = serviceUseCase.CreateService(context.TODO(), saunaServiceReq)
+	_, err = serviceUseCase.CreateService(context.TODO(), tennisServiceReq)
 	if err != nil {
 		return err
 	}

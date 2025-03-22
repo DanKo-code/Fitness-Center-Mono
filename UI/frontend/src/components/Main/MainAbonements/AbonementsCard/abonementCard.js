@@ -238,8 +238,8 @@ export default function AbonnementCard(props) {
                 <div>
                   {Service.title === "swimming-pool"
                     ? "Бассейн"
-                    : Service.title === "sauna"
-                      ? "Сауна"
+                    : Service.title === "tennis"
+                      ? "Теннис"
                       : Service.title === "gym"
                         ? "Тренажерный зал"
                         : Service.title}

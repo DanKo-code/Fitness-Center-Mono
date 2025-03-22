@@ -295,7 +295,7 @@ export default function AbonnementsModal({ onClose }) {
 
   const translations = {
     "swimming-pool": "Бассейн",
-    sauna: "Сауна",
+    tennis: "Теннис",
     gym: "Тренажерный зал",
   };
 
@@ -537,8 +537,8 @@ export default function AbonnementsModal({ onClose }) {
                     primary={
                       service.title === "swimming-pool"
                         ? "Бассейн"
-                        : service.title === "sauna"
-                          ? "Сауна"
+                        : service.title === "tennis"
+                          ? "Теннис"
                           : service.title === "gym"
                             ? "Тренажерный зал"
                             : service.title

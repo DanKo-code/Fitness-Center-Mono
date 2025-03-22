@@ -313,7 +313,7 @@ export default function MainAbonnements() {
 
   const translations = {
     "swimming-pool": "Бассейн",
-    sauna: "Сауна",
+    tennis: "Теннис",
     gym: "Тренажерный зал",
   };
 
@@ -517,8 +517,8 @@ export default function MainAbonnements() {
                     primary={
                       service.title === "swimming-pool"
                         ? "Бассейн"
-                        : service.title === "sauna"
-                          ? "Сауна"
+                        : service.title === "tennis"
+                          ? "Теннис"
                           : service.title === "gym"
                             ? "Тренажерный зал"
                             : service.title

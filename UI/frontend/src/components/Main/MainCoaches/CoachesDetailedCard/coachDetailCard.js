@@ -464,8 +464,8 @@ export default function CoachDetailsCard(props) {
                   <div>
                     {Service.title === "swimming-pool"
                       ? "Бассейн"
-                      : Service.title === "sauna"
-                        ? "Сауна"
+                      : Service.title === "tennis"
+                        ? "Теннис"
                         : Service.title === "gym"
                           ? "Тренажерный зал"
                           : Service.title}
@@ -641,7 +641,7 @@ export default function CoachDetailsCard(props) {
               {dayTrainings.length > 0 ? (
                 <div>
                   {dayTrainings.map((training) => {
-                    const client = allUsers.current.find(
+                    const client = allUsers.current?.find(
                       (c) => c.ClientId === training.client_id,
                     );
 
@@ -685,7 +685,9 @@ export default function CoachDetailsCard(props) {
                           ) : (
                             <div style={{ flex: 1, color: "red" }}></div>
                           )
-                        ) : null}
+                        ) : (
+                          <div style={{ flex: 1 }}></div>
+                        )}
 
                         {/* Время */}
                         <div style={{ flex: 1 }}>
@@ -695,6 +697,7 @@ export default function CoachDetailsCard(props) {
                         {/* Статус */}
                         <Button
                           style={{
+                            width: "300px",
                             flex: 1,
                             color: "white",
                             background:
@@ -713,7 +716,8 @@ export default function CoachDetailsCard(props) {
                               training.status === "свободно" &&
                               training.client_id !== currentUser.id) ||
                             (currentUser.role === "coach" &&
-                              training.status !== "активно")
+                              training.status !== "активно") ||
+                            currentUser.role === "admin"
                           }
                           onClick={() =>
                             handleTrainingSelect(
