@@ -1,6 +1,6 @@
 DO $$
     DECLARE
-        new_host TEXT := 'https://192.168.140.136'; -- Введите новый хост
+        new_host TEXT := 'https://192.168.199.136'; -- Введите новый хост
     BEGIN
         -- Обновление колонок photo в каждой из таблиц
         UPDATE abonement

@@ -39,7 +39,7 @@ func (luc *LocalstackUseCase) PutObject(ctx context.Context, object []byte, name
 	fileURL := fmt.Sprintf("%s/%s/%s", endpoint, luc.config.Bucket, name)
 
 	//change to localhost
-	fileURL = strings.Replace(fileURL, "localstack", "192.168.140.136", 1)
+	fileURL = strings.Replace(fileURL, "localstack", "192.168.199.136", 1)
 
 	return fileURL, nil
 }

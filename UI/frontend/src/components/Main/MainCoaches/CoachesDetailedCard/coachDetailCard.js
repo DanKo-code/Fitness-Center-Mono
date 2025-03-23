@@ -55,6 +55,8 @@ export default function CoachDetailsCard(props) {
   const userCoach = useRef(false);
   const allUsers = useRef(false);
 
+  const [isDisabled, setIsDisabled] = useState(false);
+
   let currentUser = useSelector((state) => state.userSliceMode.user);
 
   useEffect(() => {
@@ -192,12 +194,35 @@ export default function CoachDetailsCard(props) {
           `/trainingRoom/${trainingId}/${coach.coach.id}/${coach.coach.name}/${clientName}`,
         );
       }
-
       return;
     }
 
+    if (status === "забронировано") {
+      setIsDisabled(true);
+      const response = await TrainingResource.delete("/training/" + trainingId);
+
+      if (response.status === 200) {
+        setDayTrainings((prevTrainings) =>
+          prevTrainings.map((training) =>
+            training.time_from === timeFrom && training.time_until === timeUntil
+              ? { ...training, status: "свободно" }
+              : training,
+          ),
+        );
+
+        ShowSuccessMessage("Тренировка успешно отменена");
+        setTimeout(() => {
+          setIsDisabled(false); // Включаем кнопку через 2 секунды
+        }, 2000);
+        return;
+      }
+
+      ShowErrorMessage("Ошибка отменены тренировки");
+      return;
+    }
     //change statuses if no "активно"
     try {
+      setIsDisabled(true);
       const data = {
         coach_id: coach.coach.id,
         time_from: timeFrom,
@@ -213,7 +238,7 @@ export default function CoachDetailsCard(props) {
         setDayTrainings((prevTrainings) =>
           prevTrainings.map((training) =>
             training.time_from === timeFrom && training.time_until === timeUntil
-              ? { ...training, status: "забронировано" }
+              ? { ...training, status: "забронировано", id: response.data.Id }
               : training,
           ),
         );
@@ -229,6 +254,9 @@ export default function CoachDetailsCard(props) {
 
       console.error("Can't book training: " + JSON.stringify(error, null, 2));
     }
+    setTimeout(() => {
+      setIsDisabled(false); // Включаем кнопку через 2 секунды
+    }, 2000);
   };
 
   /*comments schedule buttons*/
@@ -766,7 +794,7 @@ export default function CoachDetailsCard(props) {
                                     : "rgba(160, 147, 197, 1)", // Цвет по умолчанию
                           }}
                           disabled={
-                            training.status === "забронировано" ||
+                            isDisabled ||
                             training.status === "недоступно" ||
                             (today === date &&
                               training.status === "свободно" &&

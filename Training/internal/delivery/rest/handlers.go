@@ -24,6 +24,7 @@ type trainingUseCase interface {
 	Insert(ctx context.Context, training model.Training) (model.Training, error)
 	GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error)
 	IsValidParticipant(ctx context.Context, roomId, clientId, coachId uuid.UUID, role string) error
+	Delete(ctx context.Context, id uuid.UUID) error
 }
 
 type Handlers struct {
@@ -78,6 +79,31 @@ func (h Handlers) Insert(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, insertedTrainingModel)
+}
+
+func (h Handlers) Delete(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		slog.Info("id not setted")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id not setted"})
+		return
+	}
+
+	idUUID, err := uuid.Parse(id)
+	if err != nil {
+		slog.Info("id not uuid")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id not uuid"})
+		return
+	}
+
+	err = h.useCase.Delete(c.Request.Context(), idUUID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	c.Status(http.StatusOK)
 }
 
 func createTimeFromAndTimeUntil(date, timeFrom, timeUntil string) (convertedTimeFrom, convertedTimeUntil time.Time, err error) {

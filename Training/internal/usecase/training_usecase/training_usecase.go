@@ -21,6 +21,7 @@ type TrainingRepository interface {
 	GetTrainingByTime(ctx context.Context, timeFrom, timeUntil time.Time) (model.Training, error)
 	GetAvailableCoaches(ctx context.Context, training model.Training) ([]string, error)
 	GetById(ctx context.Context, id uuid.UUID) (model.Training, error)
+	Delete(ctx context.Context, id uuid.UUID) error
 }
 
 type Training struct {
@@ -116,6 +117,15 @@ func (t Training) Insert(ctx context.Context, trainingModel model.Training) (mod
 	}
 
 	return insertedTrainingModel, nil
+}
+
+func (t Training) Delete(ctx context.Context, id uuid.UUID) error {
+	err := t.repository.Delete(ctx, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (t Training) UpdateRoomsList(ctx context.Context, roomMap *model.RoomMap) error {

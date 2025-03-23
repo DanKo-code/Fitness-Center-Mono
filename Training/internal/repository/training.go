@@ -59,6 +59,17 @@ func (t Training) Insert(ctx context.Context, training model.Training) (model.Tr
 	return training, nil
 }
 
+func (t Training) Delete(ctx context.Context, id uuid.UUID) error {
+	query := `DELETE FROM training WHERE id = $1`
+
+	_, err := t.db.ExecContext(ctx, query, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete training with id %s: %w", id, err)
+	}
+
+	return nil
+}
+
 func (t Training) UpdateTrainingsStatuses(ctx context.Context) (activeTrainings []model.Training, passedTrainings []model.Training, err error) {
 
 	tx, err := t.db.Beginx()
