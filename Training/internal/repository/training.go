@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
+	"log/slog"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -195,10 +196,13 @@ func (t Training) GetAvailableCoaches(ctx context.Context, training model.Traini
 				AND CAST(replace(split_part(abonement.visiting_time, ' - ', 2), '.', ':') || ':00' AS TIME) 
 				>= CAST($4 AS TIME)
 			)
-		);
+		)
+		AND "order".expiration_time > $5;
 	`
 
-	err := t.db.SelectContext(ctx, &coachIDs, query, training.ClientId, training.CoachId, training.TimeFrom, training.TimeUntil)
+	slog.Info("training.TimeFrom", training.TimeFrom)
+
+	err := t.db.SelectContext(ctx, &coachIDs, query, training.ClientId, training.CoachId, training.TimeFrom, training.TimeUntil, training.TimeFrom)
 	if err != nil {
 		return nil, err
 	}
