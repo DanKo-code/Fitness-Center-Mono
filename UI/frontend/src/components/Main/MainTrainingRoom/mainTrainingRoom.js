@@ -160,6 +160,32 @@ const Room = (props) => {
 
   useEffect(() => {
     initDevices().then((r) => console.log("devices received"));
+
+    return () => {
+      console.log("Cleaning up resources...");
+
+      // Остановка всех треков в медиа-потоке пользователя
+      if (userStream.current) {
+        userStream.current.getTracks().forEach((track) => track.stop());
+        userStream.current = null;
+      }
+
+      // Очистка видеоэлементов
+      if (userVideo.current) userVideo.current.srcObject = null;
+      if (partnerVideo.current) partnerVideo.current.srcObject = null;
+
+      // Закрытие WebSocket соединения
+      if (webSocketRef.current) {
+        webSocketRef.current.close();
+        webSocketRef.current = null;
+      }
+
+      // Закрытие и очистка PeerConnection
+      if (peerRef.current) {
+        peerRef.current.close();
+        peerRef.current = null;
+      }
+    };
   }, []);
 
   const callUser = () => {
