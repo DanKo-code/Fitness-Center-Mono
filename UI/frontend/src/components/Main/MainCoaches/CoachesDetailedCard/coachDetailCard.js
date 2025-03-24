@@ -561,9 +561,13 @@ export default function CoachDetailsCard(props) {
                         }}
                       >
                         <div style={{ marginRight: "10px" }}>
-                          <div style={{ width: "100px" }}>
+                          <div style={{ width: "100px", borderRadius: "20px" }}>
                             <img
-                              style={{ width: "100%", height: "auto" }}
+                              style={{
+                                width: "100%",
+                                height: "auto",
+                                borderRadius: "20px",
+                              }}
                               src={comment.userObject.photo || noAva}
                             />
                           </div>
@@ -669,10 +673,15 @@ export default function CoachDetailsCard(props) {
                                     style={{
                                       width: "100%",
                                       paddingRight: "20px",
+                                      borderRadius: "20px",
                                     }}
                                   >
                                     <img
-                                      style={{ width: "100%", height: "auto" }}
+                                      style={{
+                                        width: "100%",
+                                        height: "auto",
+                                        borderRadius: "20px",
+                                      }}
                                       src={client.photo}
                                     />
                                   </div>

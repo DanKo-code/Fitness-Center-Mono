@@ -7,6 +7,7 @@ import ShowErrorMessage from "../../../utils/showErrorMessage";
 import noAva from "../../../images/no_ava.png";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import config from "../../../config";
 import AbonnementCard from "../MainAbonements/AbonementsCard/abonementCard";
 import { useNavigate, useParams } from "react-router-dom";
 import inMemoryJWT from "../../../services/inMemoryJWT";
@@ -56,112 +57,110 @@ const Room = (props) => {
   };
 
   const initDevices = async () => {
-    const allDevices = await navigator.mediaDevices.enumerateDevices();
+    try {
+      // Запрашиваем разрешение на доступ к камере и микрофону
+      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
-    setCameras(allDevices.filter((d) => d.kind === "videoinput"));
-    setMicrophones(allDevices.filter((d) => d.kind === "audioinput"));
+      // После получения доступа перечисляем устройства
+      const allDevices = await navigator.mediaDevices.enumerateDevices();
+
+      setCameras(allDevices.filter((d) => d.kind === "videoinput"));
+      setMicrophones(allDevices.filter((d) => d.kind === "audioinput"));
+    } catch (error) {
+      console.error("Ошибка доступа к устройствам:", error);
+      ShowErrorMessage("Необходимо дать доступ к устройствам ввода и вывода");
+    }
   };
 
   const openMedia = async (videoDeviceId, audioDeviceId) => {
     const constraints = {
       video: videoDeviceId ? { deviceId: { exact: videoDeviceId } } : true,
-      audio: audioDeviceId ? { deviceId: { exact: audioDeviceId } } : true,
-    };
-
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-      userVideo.current.srcObject = stream;
-      userStream.current = stream;
-
-      setIsOpenMediaSelected(true);
-
-      const accessToken = inMemoryJWT.getToken();
-
-      webSocketRef.current = new WebSocket(
-        `wss://localhost:3499/training/join/${trainingId}?coachId=${coachId}&token=${accessToken}`,
-      );
-
-      webSocketRef.current.addEventListener("open", () => {
-        webSocketRef.current.send(JSON.stringify({ join: true }));
-      });
-
-      webSocketRef.current.addEventListener("message", async (e) => {
-        const message = JSON.parse(e.data);
-
-        console.log("message: " + JSON.stringify(e));
-
-        if (message.join) {
-          callUser();
-        }
-
-        if (message.offer) {
-          handleOffer(message.offer);
-        }
-
-        if (message.answer) {
-          console.log("Receiving Answer");
-          peerRef.current.setRemoteDescription(
-            new RTCSessionDescription(message.answer),
-          );
-        }
-
-        if (message.iceCandidate) {
-          console.log("Receiving and Adding ICE Candidate");
-          try {
-            await peerRef.current.addIceCandidate(message.iceCandidate);
-          } catch (err) {
-            console.log("Error Receiving ICE Candidate", err);
-          }
-        }
-
-        if (message.end) {
-          if (userStream.current) {
-            userStream.current.getTracks().forEach((track) => track.stop());
-            userStream.current = null;
-          }
-
-          if (userVideo.current) userVideo.current.srcObject = null;
-          if (partnerVideo.current) partnerVideo.current.srcObject = null;
-
-          if (peerRef.current) {
-            peerRef.current.close();
-            peerRef.current = null;
-          }
-
-          if (webSocketRef.current) {
-            webSocketRef.current.close();
-            webSocketRef.current = null;
-          }
-
-          navigate("/main");
-        }
-      });
-    });
-  };
-
-  // get camera with micro
-  const openCamera = async () => {
-    const allDevices = await navigator.mediaDevices.enumerateDevices();
-    console.log("allDevices", allDevices);
-    const cameras = allDevices.filter((device) => device.kind == "videoinput");
-    console.log(cameras);
-
-    const constraints = {
-      audio: true,
-      video: {
-        deviceId: cameras[0].deviceId,
+      audio: {
+        deviceId: audioDeviceId ? { exact: audioDeviceId } : undefined,
+        echoCancellation: true, // Включение подавления эха
+        noiseSuppression: true, // Подавление шума
       },
     };
 
-    try {
-      return await navigator.mediaDevices.getUserMedia(constraints);
-    } catch (err) {
-      console.log(err);
-    }
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then((stream) => {
+        userVideo.current.srcObject = stream;
+        userStream.current = stream;
+
+        setIsOpenMediaSelected(true);
+
+        const accessToken = inMemoryJWT.getToken();
+
+        webSocketRef.current = new WebSocket(
+          config.TRAINING_JOIN_API_URL +
+            `/training/join/${trainingId}?coachId=${coachId}&token=${accessToken}`,
+        );
+
+        webSocketRef.current.addEventListener("open", () => {
+          webSocketRef.current.send(JSON.stringify({ join: true }));
+        });
+
+        webSocketRef.current.addEventListener("message", async (e) => {
+          const message = JSON.parse(e.data);
+
+          console.log("message: " + JSON.stringify(e));
+
+          if (message.join) {
+            callUser();
+          }
+
+          if (message.offer) {
+            handleOffer(message.offer);
+          }
+
+          if (message.answer) {
+            console.log("Receiving Answer");
+            peerRef.current.setRemoteDescription(
+              new RTCSessionDescription(message.answer),
+            );
+          }
+
+          if (message.iceCandidate) {
+            console.log("Receiving and Adding ICE Candidate");
+            try {
+              await peerRef.current.addIceCandidate(message.iceCandidate);
+            } catch (err) {
+              console.log("Error Receiving ICE Candidate", err);
+            }
+          }
+
+          if (message.end) {
+            if (userStream.current) {
+              userStream.current.getTracks().forEach((track) => track.stop());
+              userStream.current = null;
+            }
+
+            if (userVideo.current) userVideo.current.srcObject = null;
+            if (partnerVideo.current) partnerVideo.current.srcObject = null;
+
+            if (peerRef.current) {
+              peerRef.current.close();
+              peerRef.current = null;
+            }
+
+            if (webSocketRef.current) {
+              webSocketRef.current.close();
+              webSocketRef.current = null;
+            }
+
+            navigate("/main");
+          }
+        });
+      })
+      .catch((e) => {
+        ShowErrorMessage("Невалидные устройства ввода или вывода");
+      });
   };
 
   useEffect(() => {
     initDevices().then((r) => console.log("devices received"));
-  });
+  }, []);
 
   const callUser = () => {
     console.log("Calling Other User");

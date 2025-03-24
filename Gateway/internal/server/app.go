@@ -109,7 +109,7 @@ func (app *App) Run(port string) error {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://localhost:3333", "https://localhost:3001"},
+		AllowOrigins:     []string{"https://192.168.140.136:3333", "https://https://192.168.140.86:3333"},
 		AllowHeaders:     []string{"Content-Type", "Authorization", "Upgrade", "Connection"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		ExposeHeaders:    []string{"Upgrade"},
@@ -143,7 +143,7 @@ func (app *App) Run(port string) error {
 	}
 
 	go func() {
-		if err := app.httpServer.ListenAndServeTLS("./certs/cert.crt", "./certs/key.pem"); err != nil {
+		if err := app.httpServer.ListenAndServeTLS("./certs/cert.pem", "./certs/key.pem"); err != nil {
 			logger.FatalLogger.Printf("Failed to listen and serve: %v", err)
 		}
 	}()
