@@ -15,6 +15,7 @@ import showErrorMessage from "../../../../utils/showErrorMessage";
 import ShowErrorMessage from "../../../../utils/showErrorMessage";
 import ShowSuccessMessage from "../../../../utils/showSuccessMessage";
 import noAva from "../../../../images/no_ava.png";
+import CloseIcon from "@mui/icons-material/Close";
 
 const initTrainingsState = [
   { time_from: "07:00", time_until: "08:00", status: "свободно" },
@@ -135,6 +136,29 @@ export default function CoachDetailsCard(props) {
       }
 
       console.error("Can't send review: " + JSON.stringify(error, null, 2));
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      console.log("commentId", commentId);
+
+      const response = await Resource.delete("/reviews/" + commentId);
+
+      if (response.status === 200) {
+        setCoachComments((coachComments) =>
+          coachComments.filter(
+            (comment) =>
+              comment.reviewObject.Id !== response.data.reviewObject.Id,
+          ),
+        );
+
+        ShowSuccessMessage("Комментарий успешно удален");
+      }
+    } catch (error) {
+      ShowErrorMessage("Can't delete review");
+
+      console.error("Can't delete review: " + JSON.stringify(error, null, 2));
     }
   };
 
@@ -551,15 +575,37 @@ export default function CoachDetailsCard(props) {
                     .map((comment) => (
                       <div
                         style={{
+                          position: "relative",
                           display: "flex",
                           marginBottom: "50px",
                           background: "rgba(160, 147, 197, 1)",
                           padding: "10px",
                           borderRadius: "10px",
-                          width: "500px",
+                          width: "600px",
                           alignItems: "flex-start",
                         }}
                       >
+                        {/* Иконка крестика MUI */}
+                        {currentUser.role === "admin" && (
+                          <CloseIcon
+                            onClick={() =>
+                              handleDeleteComment(comment.reviewObject.id)
+                            } // Здесь можно вызвать функцию удаления
+                            style={{
+                              position: "absolute",
+                              top: "10px",
+                              right: "10px",
+                              cursor: "pointer",
+                              color: "#fff",
+                              background: "rgba(0, 0, 0, 0.3)",
+                              borderRadius: "50%",
+                              width: "24px",
+                              height: "24px",
+                              padding: "4px",
+                            }}
+                          />
+                        )}
+
                         <div style={{ marginRight: "10px" }}>
                           <div style={{ width: "100px", borderRadius: "20px" }}>
                             <img
@@ -581,6 +627,7 @@ export default function CoachDetailsCard(props) {
                             flex: 1,
                             whiteSpace: "normal",
                             wordBreak: "break-word",
+                            marginRight: "40px",
                           }}
                         >
                           {comment.reviewObject.body}

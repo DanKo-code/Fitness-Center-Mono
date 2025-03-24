@@ -113,3 +113,34 @@ func (h *Handler) CreateCoachReview(c *gin.Context) {
 		"reviewWithUser": reviewWithUser,
 	})
 }
+
+func (h *Handler) DeleteCoachReview(c *gin.Context) {
+
+	id := c.Param("id")
+
+	if id == "" {
+		logger.ErrorLogger.Printf("id not setted")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id not setted"})
+		return
+	}
+
+	idUUID, err := uuid.Parse(id)
+	if err != nil {
+		logger.ErrorLogger.Printf("id not uuid")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id not uuid"})
+		return
+	}
+
+	deleteReviewByIdRequest := &reviewGRPC.DeleteReviewByIdRequest{Id: idUUID.String()}
+
+	resp, err := (*h.reviewClient).DeleteReviewById(c.Request.Context(), deleteReviewByIdRequest)
+	if err != nil {
+		logger.ErrorLogger.Printf(err.Error())
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"reviewObject": resp.ReviewObject,
+	})
+}

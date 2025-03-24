@@ -16,4 +16,5 @@ func RegisterHTTPEndpoints(
 	h := NewHandler(reviewClient, userClient)
 
 	router.POST("/reviews", middlewares.VerifyAccessTokenMiddleware(), middlewares.IsClientMiddleware(), h.CreateCoachReview)
+	router.DELETE("/reviews/:id", middlewares.VerifyAccessTokenMiddleware(), middlewares.IsAdminMiddleware(), h.DeleteCoachReview)
 }
