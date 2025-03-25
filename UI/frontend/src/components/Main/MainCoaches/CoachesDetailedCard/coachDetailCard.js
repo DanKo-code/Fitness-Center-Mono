@@ -147,11 +147,13 @@ export default function CoachDetailsCard(props) {
 
       const response = await Resource.delete("/reviews/" + commentId);
 
+      console.log("coachComments:", coachComments);
+      console.log("commentId:", commentId);
+
       if (response.status === 200) {
         setCoachComments((coachComments) =>
           coachComments.filter(
-            (comment) =>
-              comment.reviewObject.Id !== response.data.reviewObject.Id,
+            (comment) => comment.reviewObject.id !== commentId,
           ),
         );
 
@@ -318,6 +320,8 @@ export default function CoachDetailsCard(props) {
                   trainingsFromResp[j].ClientId === currentUser.id
                 ) {
                   dayTrainingsReact[i].status = "забронировано";
+                  dayTrainingsReact[i].client_id =
+                    trainingsFromResp[j].ClientId;
                 }
 
                 if (
@@ -325,6 +329,8 @@ export default function CoachDetailsCard(props) {
                   trainingsFromResp[j].ClientId !== currentUser.id
                 ) {
                   dayTrainingsReact[i].status = "недоступно";
+                  dayTrainingsReact[i].client_id =
+                    trainingsFromResp[j].ClientId;
                 }
 
                 if (
@@ -332,6 +338,8 @@ export default function CoachDetailsCard(props) {
                   trainingsFromResp[j].ClientId === currentUser.id
                 ) {
                   dayTrainingsReact[i].status = "активно";
+                  dayTrainingsReact[i].client_id =
+                    trainingsFromResp[j].ClientId;
                 }
 
                 if (
@@ -339,10 +347,14 @@ export default function CoachDetailsCard(props) {
                   trainingsFromResp[j].ClientId !== currentUser.id
                 ) {
                   dayTrainingsReact[i].status = "недоступно";
+                  dayTrainingsReact[i].client_id =
+                    trainingsFromResp[j].ClientId;
                 }
 
                 if (trainingsFromResp[j].Status === "passed") {
                   dayTrainingsReact[i].status = "недоступно";
+                  dayTrainingsReact[i].client_id =
+                    trainingsFromResp[j].ClientId;
                 }
 
                 if (
@@ -351,6 +363,8 @@ export default function CoachDetailsCard(props) {
                   userCoach.current
                 ) {
                   dayTrainingsReact[i].status = "активно";
+                  dayTrainingsReact[i].client_id =
+                    trainingsFromResp[j].ClientId;
                 }
               }
             }
@@ -721,7 +735,7 @@ export default function CoachDetailsCard(props) {
                 <div>
                   {dayTrainings.map((training) => {
                     const client = allUsers.current?.find(
-                      (c) => c.ClientId === training.client_id,
+                      (c) => c.id === training.client_id,
                     );
 
                     return (
@@ -739,8 +753,10 @@ export default function CoachDetailsCard(props) {
                           training.status === "активно" ||
                           training.status === "недоступно" ? (
                             (() => {
+                              console.log("allUsers:", allUsers);
+                              console.log("training:", training);
                               const client = allUsers.current.find(
-                                (c) => c.ClientId === training.client_id,
+                                (c) => c.id === training.client_id,
                               );
                               return client ? (
                                 <div style={{ flex: 1 }}>
@@ -809,7 +825,7 @@ export default function CoachDetailsCard(props) {
                               training.time_until,
                               training.status,
                               training.id,
-                              client.name,
+                              client?.name,
                             )
                           }
                         >
