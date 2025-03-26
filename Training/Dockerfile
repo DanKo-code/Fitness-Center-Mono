@@ -18,6 +18,8 @@ COPY --from=build /app/Training .
 
 COPY .env .
 
+COPY ./certs ./certs
+
 EXPOSE ${APP_PORT}
 
 CMD ["./Training"]
