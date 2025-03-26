@@ -58,8 +58,8 @@ func (o *OrderUseCase) CreateCoachAbonement(ctx context.Context, cmd *dtos.Creat
 		AbonementId: cmd.AbonementId,
 		UserId:      cmd.UserId,
 		Status:      "Valid",
-		UpdatedTime: time.Now(),
-		CreatedTime: time.Now(),
+		UpdatedTime: time.Now().Add(3 * time.Hour),
+		CreatedTime: time.Now().Add(3 * time.Hour),
 	}
 
 	number, err := strconv.Atoi(abonement.AbonementObject.Validity)

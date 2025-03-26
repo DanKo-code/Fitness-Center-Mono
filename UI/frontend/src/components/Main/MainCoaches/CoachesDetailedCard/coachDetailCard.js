@@ -678,7 +678,7 @@ export default function CoachDetailsCard(props) {
                     ))}
                 </div>
               ) : (
-                <div>There are no comments</div>
+                <div>Пока нету комментариев</div>
               )}
             </div>
           </>

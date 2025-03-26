@@ -14,6 +14,10 @@ FROM alpine:latest
 
 WORKDIR /root/
 
+# Устанавливаем часовой пояс GMT+3
+ENV TZ=Europe/Moscow
+RUN apk add --no-cache tzdata && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 COPY --from=build /app/Order .
 
 COPY .env .

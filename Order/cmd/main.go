@@ -1,11 +1,10 @@
 package main
 
 import (
-	"os"
-
 	"github.com/DanKo-code/FitnessCenter-Order/internal/server"
 	"github.com/DanKo-code/FitnessCenter-Order/pkg/logger"
 	"github.com/joho/godotenv"
+	"os"
 )
 
 func main() {
