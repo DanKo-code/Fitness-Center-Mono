@@ -171,10 +171,15 @@ func VerifyAccessToken(accessToken string) (*Claims, error) {
 }
 
 func (h Handlers) Join(c *gin.Context) {
+
+	slog.Info("Join")
+
 	roomId := c.Param("roomId")
 
 	coachId := c.Query("coachId")
 	token := c.Query("token")
+
+	slog.Info("before VerifyAccessToken")
 
 	claims, err := VerifyAccessToken(token)
 	if err != nil {
@@ -191,17 +196,25 @@ func (h Handlers) Join(c *gin.Context) {
 	roomKey.ClientId = uuid.Nil
 	roomKey.CoachId = uuid.Nil
 
+	slog.Info("before IsValidParticipant")
+
 	err = h.useCase.IsValidParticipant(c.Request.Context(), roomKey.RoomId, uuid.MustParse(claims.UserId), uuid.MustParse(coachId), claims.Role)
 	if err != nil {
+		slog.Info("error IsValidParticipant", err)
+		c.Error(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
+
+	slog.Info("before upgrader.Upgrade")
 
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
 		c.Error(err)
 		return
 	}
+
+	slog.Info("after upgrader.Upgrade")
 
 	h.roomMap.InsertIntoRoom(roomKey, ws)
 	for {

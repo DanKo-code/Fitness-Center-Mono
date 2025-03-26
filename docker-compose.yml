@@ -226,6 +226,17 @@ services:
     networks:
       - fitness-center-network
 
+  ui:
+    build:
+      context: ./UI/frontend
+      dockerfile: ./Dockerfile
+    container_name: ui
+    ports:
+      - "81:81"
+      - "443:443"
+    networks:
+      - fitness-center-network
+
 volumes:
   fitness-center-db-data:
   fitness-center-ls-data: 

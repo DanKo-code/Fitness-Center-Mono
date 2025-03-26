@@ -45,7 +45,8 @@ func NewTraining(
 func (t Training) IsValidParticipant(ctx context.Context, roomId, clientId, coachId uuid.UUID, role string) error {
 	training, err := t.repository.GetById(ctx, roomId)
 	if err != nil {
-		return nil
+		slog.Info("repository.GetById err", err)
+		return err
 	}
 
 	if role != "coach" {
