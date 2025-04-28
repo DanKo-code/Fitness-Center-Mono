@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36 Edg/135.0.0.0" version="26.2.13">
   <diagram id="4JZlmCExkBi3lWqlm5E2" name="Страница — 1">
-    <mxGraphModel dx="942" dy="-651" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1335" dy="1646" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -169,9 +169,9 @@
             <mxPoint x="870" y="2490" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="hvm-jDke4rjOwN58F3rQ-84" value="&amp;lt;&amp;lt;расширить&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;entryX=0.795;entryY=0.081;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.323;exitY=0.991;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="hvm-jDke4rjOwN58F3rQ-27" target="hvm-jDke4rjOwN58F3rQ-16" edge="1">
+        <mxCell id="hvm-jDke4rjOwN58F3rQ-84" value="&amp;lt;&amp;lt;расширить&amp;gt;&amp;gt;" style="html=1;verticalAlign=bottom;endArrow=open;dashed=1;endSize=8;curved=0;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.795;entryY=0.081;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="hvm-jDke4rjOwN58F3rQ-27" target="hvm-jDke4rjOwN58F3rQ-16" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1060" y="2380" as="sourcePoint" />
+            <mxPoint x="1017" y="2510" as="sourcePoint" />
             <mxPoint x="919" y="2528" as="targetPoint" />
           </mxGeometry>
         </mxCell>
@@ -335,7 +335,7 @@
           <mxGeometry x="41" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="hvm-jDke4rjOwN58F3rQ-23" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="925" y="2295" width="430" height="770" as="geometry" />
+          <mxGeometry x="880" y="2290" width="430" height="770" as="geometry" />
         </mxCell>
         <mxCell id="hvm-jDke4rjOwN58F3rQ-24" value="сортировка абонементов" style="ellipse;whiteSpace=wrap;html=1;" parent="hvm-jDke4rjOwN58F3rQ-23" vertex="1">
           <mxGeometry y="15" width="120" height="80" as="geometry" />
@@ -343,17 +343,14 @@
         <mxCell id="hvm-jDke4rjOwN58F3rQ-25" value="8" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="hvm-jDke4rjOwN58F3rQ-23" vertex="1">
           <mxGeometry x="41" width="30" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="hvm-jDke4rjOwN58F3rQ-36" value="просмотр отзывов о тренерах" style="ellipse;whiteSpace=wrap;html=1;" parent="hvm-jDke4rjOwN58F3rQ-23" vertex="1">
-          <mxGeometry x="170" y="405" width="120" height="80" as="geometry" />
+        <mxCell id="hvm-jDke4rjOwN58F3rQ-35" value="" style="group" parent="hvm-jDke4rjOwN58F3rQ-23" vertex="1" connectable="0">
+          <mxGeometry x="218" y="395" width="120" height="95" as="geometry" />
         </mxCell>
-        <mxCell id="hvm-jDke4rjOwN58F3rQ-37" value="13" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="hvm-jDke4rjOwN58F3rQ-23" vertex="1">
-          <mxGeometry x="211" y="390" width="30" height="30" as="geometry" />
+        <mxCell id="hvm-jDke4rjOwN58F3rQ-36" value="просмотр отзывов о тренерах" style="ellipse;whiteSpace=wrap;html=1;" parent="hvm-jDke4rjOwN58F3rQ-35" vertex="1">
+          <mxGeometry y="15" width="120" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="hvm-jDke4rjOwN58F3rQ-27" value="фильтрация абонементов" style="ellipse;whiteSpace=wrap;html=1;" parent="hvm-jDke4rjOwN58F3rQ-23" vertex="1">
-          <mxGeometry x="142" y="-13" width="120" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="hvm-jDke4rjOwN58F3rQ-28" value="10" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="hvm-jDke4rjOwN58F3rQ-23" vertex="1">
-          <mxGeometry x="172" y="-23" width="30" height="30" as="geometry" />
+        <mxCell id="hvm-jDke4rjOwN58F3rQ-37" value="13" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="hvm-jDke4rjOwN58F3rQ-35" vertex="1">
+          <mxGeometry x="41" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="hvm-jDke4rjOwN58F3rQ-15" value="" style="group" parent="1" vertex="1" connectable="0">
           <mxGeometry x="860" y="2440" width="120" height="95" as="geometry" />
@@ -383,7 +380,7 @@
           <mxGeometry x="23" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="OYH4tpUUc5tMkIrWW81Y-22" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="1000" y="2910" width="120" height="95" as="geometry" />
+          <mxGeometry x="1014" y="2900" width="120" height="95" as="geometry" />
         </mxCell>
         <mxCell id="OYH4tpUUc5tMkIrWW81Y-23" value="отмена бронирования онлайн тренировки" style="ellipse;whiteSpace=wrap;html=1;" parent="OYH4tpUUc5tMkIrWW81Y-22" vertex="1">
           <mxGeometry y="15" width="120" height="80" as="geometry" />
@@ -444,6 +441,12 @@
         </mxCell>
         <mxCell id="hvm-jDke4rjOwN58F3rQ-139" value="23" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;direction=east;" parent="1" vertex="1">
           <mxGeometry x="951" y="2105" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="hvm-jDke4rjOwN58F3rQ-27" value="фильтрация абонементов" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1030" y="2285" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="hvm-jDke4rjOwN58F3rQ-28" value="10" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" parent="1" vertex="1">
+          <mxGeometry x="1071" y="2270" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="hvm-jDke4rjOwN58F3rQ-39" value="редактирование профиля" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="760" y="2125" width="120" height="80" as="geometry" />
