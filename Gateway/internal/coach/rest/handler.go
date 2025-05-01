@@ -65,6 +65,7 @@ func (h *Handler) CreateCoach(c *gin.Context) {
 		Description:     createCoachCommand.Description,
 		CoachServiceIds: createCoachCommand.Services,
 		Shift:           createCoachCommand.Shift,
+		Email:           createCoachCommand.Email,
 	}
 
 	createCoachRequestCoachDataForCreate := &coachGRPC.CreateCoachRequest_CoachDataForCreate{

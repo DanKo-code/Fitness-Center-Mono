@@ -47,6 +47,7 @@ export default function CoachesModal({ onClose }) {
 
   const [currentServices, setCurrentServices] = useState([]);
   const [currentShift, setCurrentShift] = useState("");
+  const [email, setEmail] = useState("");
   const [allServices, setAllServices] = useState([]);
 
   const handleFileChange = (e) => {
@@ -131,6 +132,9 @@ export default function CoachesModal({ onClose }) {
 
   const handleNameChange = async (event) => {
     setName(event.target.value);
+  };
+  const handleEmailChange = async (event) => {
+    setEmail(event.target.value);
   };
   const handleDescriptionChange = async (e) => {
     const inputValue = e.target.value;
@@ -252,6 +256,7 @@ export default function CoachesModal({ onClose }) {
           currentServices.map((service) => service.id),
         );
         formData.append("shift", currentShift);
+        formData.append("email", email);
 
         const response = await Resource.post("/coaches", formData);
 
@@ -267,6 +272,7 @@ export default function CoachesModal({ onClose }) {
           setCurrentServices(coachWithServices.services);
           setCurrentCoach(coachWithServices);
           setCurrentShift(coachWithServices.coach.shift);
+          setEmail("");
 
           ShowSuccessMessage("Coach created successfully");
         }
@@ -412,18 +418,39 @@ export default function CoachesModal({ onClose }) {
 */}
             </div>
 
-            <TextField
-              style={{ marginBottom: "10px" }}
-              fullWidth
-              label="Имя"
-              value={name}
-              onChange={handleNameChange}
-              sx={{
-                input: { color: "white" }, // Цвет вводимого текста
-                "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
-                "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+            <div
+              style={{
+                width: "100%",
               }}
-            />
+            >
+              <TextField
+                style={{ marginBottom: "10px" }}
+                fullWidth
+                label="Имя"
+                value={name}
+                onChange={handleNameChange}
+                sx={{
+                  input: { color: "white" }, // Цвет вводимого текста
+                  "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
+                  "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+                }}
+              />
+
+              {!currentCoach && (
+                <TextField
+                  style={{ marginBottom: "10px" }}
+                  fullWidth
+                  label="Почта"
+                  value={email}
+                  onChange={handleEmailChange}
+                  sx={{
+                    input: { color: "white" }, // Цвет вводимого текста
+                    "& .MuiInputLabel-root": { color: "white" }, // Обычное состояние лейбла
+                    "& .MuiInputLabel-root.Mui-focused": { color: "white" }, // Фокусное состояние лейбла
+                  }}
+                />
+              )}
+            </div>
           </div>
 
           <TextareaAutosize

@@ -8,4 +8,5 @@ type CreateCoachCommand struct {
 	Description string    `json:"description"`
 	Photo       string    `json:"photo"`
 	Shift       string    `json:"shift"`
+	Email       string    `json:"email"`
 }

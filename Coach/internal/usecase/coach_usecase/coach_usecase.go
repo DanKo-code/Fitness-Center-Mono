@@ -3,6 +3,8 @@ package coach_usecase
 import (
 	"context"
 	"fmt"
+	"math/rand"
+	"net/smtp"
 	"strings"
 	"time"
 
@@ -43,6 +45,40 @@ func NewCoachUseCase(
 	}
 }
 
+func sendEmailGmail(to, subject, body string) error {
+	from := "danilakozlyakovsky@gmail.com"
+	password := "xbfz zfim atgv lvyo" // Сюда вставь пароль приложения
+
+	// Настройки Gmail SMTP
+	smtpHost := "smtp.gmail.com"
+	smtpPort := "587"
+
+	// Собираем письмо
+	message := []byte("To: " + to + "\r\n" +
+		"Subject: " + subject + "\r\n" +
+		"Content-Type: text/plain; charset=\"UTF-8\"\r\n" +
+		"\r\n" +
+		body + "\r\n")
+
+	// Аутентификация
+	auth := smtp.PlainAuth("", from, password, smtpHost)
+
+	// Отправка
+	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, from, []string{to}, message)
+	return err
+}
+
+func generateRandomPassword(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*"
+	seededRand := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	password := make([]byte, length)
+	for i := range password {
+		password[i] = charset[seededRand.Intn(len(charset))]
+	}
+	return string(password)
+}
+
 func (c *CoachUseCase) CreateCoach(
 	ctx context.Context,
 	cmd *dtos.CreateCoachCommand,
@@ -58,9 +94,9 @@ func (c *CoachUseCase) CreateCoach(
 	}
 
 	userDataForCreate := &userGRPC.UserDataForCreate{
-		Email:    uuid.New().String() + "@gmail.com",
+		Email:    cmd.Email,
 		Role:     "coach",
-		Password: "TankiDanik2003",
+		Password: generateRandomPassword(12),
 		Name:     cmd.Name,
 	}
 
@@ -101,6 +137,14 @@ func (c *CoachUseCase) CreateCoach(
 	createdCoach, err := c.coachRepo.CreateCoach(ctx, coach)
 	if err != nil {
 		return nil, err
+	}
+
+	//todo send email with pass
+	err = sendEmailGmail(cmd.Email, "FitLab пароль", userDataForCreate.Password)
+	if err != nil {
+		fmt.Println("Ошибка:", err)
+	} else {
+		fmt.Println("Письмо отправлено.")
 	}
 
 	return createdCoach, nil

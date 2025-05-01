@@ -5,4 +5,5 @@ type CreateCoachCommand struct {
 	Description string
 	Services    []string
 	Shift       string
+	Email       string
 }

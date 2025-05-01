@@ -4,6 +4,7 @@ import (
 	"Gateway/internal/coach/coach_errors"
 	"Gateway/internal/coach/dtos"
 	"Gateway/pkg/logger"
+	"log/slog"
 	"net/http"
 	"regexp"
 	"strings"
@@ -24,11 +25,13 @@ func ValidateCreateCoachMW() gin.HandlerFunc {
 		description := form.Value["description"]
 		services := form.Value["services"]
 		shift := form.Value["shift"]
+		email := form.Value["email"]
 
 		if (len(name) != 1 || name[0] == "") ||
 			(len(description) != 1 || description[0] == "") ||
 			(len(services) != 1 || services[0] == "") ||
-			(len(shift) != 1 || shift[0] == "") {
+			(len(shift) != 1 || shift[0] == "") ||
+			(len(email) != 1 || email[0] == "") {
 			logger.ErrorLogger.Printf(coach_errors.OnlyPhotoOptional.Error())
 			c.JSON(http.StatusBadRequest, gin.H{"error": coach_errors.OnlyPhotoOptional.Error()})
 			return
@@ -65,10 +68,23 @@ func ValidateCreateCoachMW() gin.HandlerFunc {
 			return
 		}
 
+		//shift
 		shiftValue := shift[0]
 		if !(shiftValue == "1" || shiftValue == "2") {
 			logger.ErrorLogger.Printf("not valid schema")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "невалидная смена"})
+			return
+		}
+
+		// email validation
+
+		emailValue := email[0]
+		slog.Info("emailValue", emailValue)
+		emailRegex := `^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`
+		matched, _ = regexp.MatchString(emailRegex, emailValue)
+		if !matched {
+			logger.ErrorLogger.Printf("Invalid email format")
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Некорректный формат email"})
 			return
 		}
 
@@ -77,6 +93,7 @@ func ValidateCreateCoachMW() gin.HandlerFunc {
 			Description: descriptionValue,
 			Services:    servicesIds,
 			Shift:       shiftValue,
+			Email:       emailValue,
 		}
 
 		c.Set("CreateCoachCommand", createCoachCommand)
