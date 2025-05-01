@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+
 import { FitnessCenter } from "@mui/icons-material";
 import Button from "@mui/material/Button";
 import HouseIcon from "@mui/icons-material/House";
@@ -21,6 +24,8 @@ export const AuthClient = axios.create({
 });
 
 export default function MainNav() {
+  const [activeTab, setActiveTab] = useState("");
+
   let user = useSelector((state) => state.userSliceMode.user);
 
   const { LogOut } = useContext(AuthContext);
@@ -29,6 +34,24 @@ export default function MainNav() {
   const handleLogOut = async () => {
     await LogOut();
   };
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path.includes("/main/home")) setActiveTab("home");
+    else if (path.includes("/main/abonnements")) setActiveTab("abonnements");
+    else if (path.includes("/main/coaches")) setActiveTab("coaches");
+    else if (path.includes("/main/profile")) setActiveTab("profile");
+    else if (path.includes("/adminPanel")) setActiveTab("admin");
+  }, []);
+
+  const buttonStyle = (tab) => ({
+    color: "white",
+    background:
+      activeTab === tab ? "rgb(95, 80, 135)" : "rgba(117,100,163,255)",
+    border: activeTab === tab ? "2px solid white" : "none",
+    marginTop: "5%",
+    opacity: activeTab === tab ? 1 : 0.9,
+  });
 
   return (
     <div
@@ -67,17 +90,14 @@ export default function MainNav() {
         <div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Button
-              style={{
-                color: "white",
-                background: "rgba(117,100,163,255)",
-                marginTop: "5%",
-              }}
+              style={buttonStyle("home")}
               startIcon={<HouseIcon sx={{ width: 50, height: 50 }} />}
               sx={{
                 justifyContent: "flex-start", // Выравнивание контента по левому краю
                 paddingLeft: "25%", // Добавляем отступ слева для текста
               }}
               onClick={() => {
+                setActiveTab("home");
                 navigate("/main/home");
               }}
             >
@@ -85,17 +105,14 @@ export default function MainNav() {
             </Button>
 
             <Button
-              style={{
-                color: "white",
-                background: "rgba(117,100,163,255)",
-                marginTop: "5%",
-              }}
+              style={buttonStyle("abonnements")}
               startIcon={<CardMembershipIcon sx={{ width: 50, height: 50 }} />}
               sx={{
                 justifyContent: "flex-start", // Выравнивание контента по левому краю
                 paddingLeft: "25%", // Добавляем отступ слева для текста
               }}
               onClick={() => {
+                setActiveTab("abonnements");
                 navigate("/main/abonnements");
               }}
             >
@@ -103,17 +120,14 @@ export default function MainNav() {
             </Button>
 
             <Button
-              style={{
-                color: "white",
-                background: "rgba(117,100,163,255)",
-                marginTop: "5%",
-              }}
+              style={buttonStyle("coaches")}
               startIcon={<GroupsIcon sx={{ width: 50, height: 50 }} />}
               sx={{
                 justifyContent: "flex-start", // Выравнивание контента по левому краю
                 paddingLeft: "25%", // Добавляем отступ слева для текста
               }}
               onClick={() => {
+                setActiveTab("coaches");
                 navigate("/main/coaches");
               }}
             >
@@ -122,11 +136,7 @@ export default function MainNav() {
 
             {user?.role === "client" && (
               <Button
-                style={{
-                  color: "white",
-                  background: "rgba(117,100,163,255)",
-                  marginTop: "5%",
-                }}
+                style={buttonStyle("profile")}
                 startIcon={
                   <ManageAccountsIcon sx={{ width: 50, height: 50 }} />
                 }
@@ -135,6 +145,7 @@ export default function MainNav() {
                   paddingLeft: "25%", // Добавляем отступ слева для текста
                 }}
                 onClick={() => {
+                  setActiveTab("profile");
                   navigate("/main/profile");
                 }}
               >
@@ -144,13 +155,12 @@ export default function MainNav() {
 
             {user?.role === "admin" && (
               <Button
-                style={{
-                  color: "white",
-                  background: "rgba(117,100,163,255)",
-                  height: "62px",
-                  marginTop: "5%",
-                }}
+                style={buttonStyle("admin")}
+                startIcon={
+                  <AdminPanelSettingsIcon sx={{ width: 50, height: 50 }} />
+                }
                 onClick={() => {
+                  setActiveTab("admin");
                   navigate("/adminPanel");
                 }}
               >
