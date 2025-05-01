@@ -90,11 +90,14 @@ export default function CoachDetailsCard(props) {
       }
     };
 
-    fetchCoaches().then((r) =>
-      Resource.get("/users/for-coach").then((res) => {
-        console.log("/users/for-coach: " + JSON.stringify(res, null, 2));
-        allUsers.current = res.data.clients;
-      }),
+    fetchCoaches().then(
+      (r) =>
+        Resource.get("/users/for-coach").then((res) => {
+          console.log("/users/for-coach: " + JSON.stringify(res, null, 2));
+          allUsers.current = res.data.clients;
+        }),
+
+      handleDateChange(today),
     );
   }, [coach.reviewWithUser, currentUser.id]);
 
@@ -751,9 +754,11 @@ export default function CoachDetailsCard(props) {
               {dayTrainings.length > 0 ? (
                 <div>
                   {dayTrainings.map((training) => {
-                    const client = allUsers.current?.find(
-                      (c) => c.id === training.client_id,
-                    );
+                    const client = Array.isArray(allUsers?.current)
+                      ? allUsers.current.find(
+                          (u) => u.id === training.client_id,
+                        )
+                      : null;
 
                     return (
                       <div
@@ -772,9 +777,11 @@ export default function CoachDetailsCard(props) {
                             (() => {
                               console.log("allUsers:", allUsers);
                               console.log("training:", training);
-                              const client = allUsers.current.find(
-                                (c) => c.id === training.client_id,
-                              );
+                              const client = Array.isArray(allUsers?.current)
+                                ? allUsers.current.find(
+                                    (u) => u.id === training.client_id,
+                                  )
+                                : null;
                               return client ? (
                                 <div style={{ flex: 1 }}>
                                   <div
