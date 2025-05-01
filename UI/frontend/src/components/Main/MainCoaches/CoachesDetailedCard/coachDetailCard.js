@@ -487,19 +487,21 @@ export default function CoachDetailsCard(props) {
         }}
       >
         <div
-          style={{ width: "400px", paddingRight: "20px", borderRadius: "20px" }}
+          style={{ width: "300px", paddingRight: "20px", borderRadius: "20px" }}
         >
-          {/*{abonnement.Photo}*/}
+          {/*Photo*/}
           <img
             style={{ width: "100%", height: "auto", borderRadius: "20px" }}
             src={coach.coach.photo}
           />
         </div>
 
+        {/*Name*/}
         <div style={{ marginTop: "5px", fontSize: "24px" }}>
           {coach.coach.name}
         </div>
 
+        {/*Description*/}
         <div
           style={{ marginTop: "5px", fontSize: "18px", marginBottom: "20px" }}
         >

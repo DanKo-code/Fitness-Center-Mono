@@ -379,7 +379,7 @@ export default function MainAbonnements() {
                 "&.Mui-focused": { color: "white !important" }, // При фокусе
               }}
             >
-              Фильтр сортировки
+              Сортировка
             </InputLabel>
             <Select
               labelId="sort-order-label"
@@ -468,8 +468,8 @@ export default function MainAbonnements() {
               onChange={handleSortOrderChange}
               sx={{ color: "white" }}
             >
-              <MenuItem value="asc">Восходящий</MenuItem>
-              <MenuItem value="desc">Нисходящий</MenuItem>
+              <MenuItem value="asc">Возрастающий</MenuItem>
+              <MenuItem value="desc">Убывающий</MenuItem>
             </Select>
           </FormControl>
         </div>
