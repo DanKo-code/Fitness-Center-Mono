@@ -480,50 +480,63 @@ export default function CoachDetailsCard(props) {
           background: "rgba(117,100,163,255)",
           marginBottom: "10px",
           display: "flex",
-          alignItems: "center",
           justifyContent: "center",
           flexDirection: "column",
           marginTop: "50px",
         }}
       >
         <div
-          style={{ width: "300px", paddingRight: "20px", borderRadius: "20px" }}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
-          {/*Photo*/}
-          <img
-            style={{ width: "100%", height: "auto", borderRadius: "20px" }}
-            src={coach.coach.photo}
-          />
-        </div>
+          <div>
+            <div
+              style={{
+                width: "250px",
+                paddingRight: "20px",
+                borderRadius: "20px",
+              }}
+            >
+              {/*Photo*/}
+              <img
+                style={{ width: "100%", height: "auto", borderRadius: "20px" }}
+                src={coach.coach.photo}
+              />
+            </div>
 
-        {/*Name*/}
-        <div style={{ marginTop: "5px", fontSize: "24px" }}>
-          {coach.coach.name}
-        </div>
+            {/*Name*/}
+            <div style={{ marginTop: "5px", fontSize: "24px" }}>
+              {coach.coach.name}
+            </div>
+          </div>
 
-        {/*Description*/}
-        <div
-          style={{ marginTop: "5px", fontSize: "18px", marginBottom: "20px" }}
-        >
-          {coach.coach.description}
+          {/*Description*/}
+          <div
+            style={{ marginTop: "5px", fontSize: "18px", marginBottom: "20px" }}
+          >
+            {coach.coach.description}
+          </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
             width: "100%",
+            gap: "100px",
             marginBottom: "20px",
           }}
         >
           <div>
-            <div style={{ paddingBottom: "15px", fontSize: "18px" }}>
+            <div style={{ paddingBottom: "15px", fontSize: "24px" }}>
               Услуги:
             </div>
             <div style={{ display: "flex" }}>
               {coach.services.map((Service) => (
                 <div style={{ marginRight: "10px" }}>
-                  <div style={{ width: "80px", height: "60px" }}>
+                  <div style={{ width: "60px", height: "40px" }}>
                     <img
                       style={{ width: "100%", height: "auto" }}
                       src={Service.photo}
@@ -543,73 +556,75 @@ export default function CoachDetailsCard(props) {
             </div>
           </div>
 
-          {currentUser.role === "client" && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "100px",
+            }}
+          >
             <Button
+              onClick={() => setActive("schedule")}
+              disabled={active === "schedule"}
               style={{
-                marginTop: "20px",
                 color: "white",
-                background: "rgba(160, 147, 197, 1)",
-                width: "270px",
-                height: "50px",
-                marginBottom: "50px",
+                background:
+                  active === "schedule"
+                    ? "rgb(122, 110, 157)"
+                    : "rgba(160, 147, 197, 1)",
+                border: active === "schedule" ? "2px solid white" : "none",
+                height: "62px",
+                marginTop: "5%",
               }}
-              onClick={handleOpenModal}
             >
-              Оставить отзыв
+              Расписание
             </Button>
-          )}
+
+            <Button
+              onClick={() => setActive("comments")}
+              disabled={active === "comments"}
+              style={{
+                color: "white",
+                background:
+                  active === "comments"
+                    ? "rgb(122, 110, 157)"
+                    : "rgba(160, 147, 197, 1)",
+                border: active === "comments" ? "2px solid white" : "none",
+                height: "62px",
+                marginTop: "5%",
+              }}
+            >
+              Комментарии
+            </Button>
+          </div>
         </div>
 
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: "200px",
-          }}
-        >
+        {currentUser.role === "client" && active === "comments" && (
           <Button
-            onClick={() => setActive("schedule")}
-            disabled={active === "schedule"}
             style={{
+              marginTop: "20px",
               color: "white",
               background: "rgba(160, 147, 197, 1)",
-              height: "62px",
-              marginTop: "5%",
+              width: "270px",
+              height: "50px",
             }}
+            onClick={handleOpenModal}
           >
-            Расписание
+            Оставить отзыв
           </Button>
-
-          <Button
-            onClick={() => setActive("comments")}
-            disabled={active === "comments"}
-            style={{
-              color: "white",
-              background: "rgba(160, 147, 197, 1)",
-              height: "62px",
-              marginTop: "5%",
-            }}
-          >
-            Комментарии
-          </Button>
-        </div>
+        )}
 
         {active === "comments" && (
-          <>
-            <div style={{ marginTop: "5px", fontSize: "18px" }}>
-              Комментарии:
-            </div>
-
+          <div>
             <div
               style={{
                 display: "flex",
-                justifyContent: "center",
                 marginTop: "5px",
                 width: "100%",
               }}
             >
               {coachComments.length > 0 ? (
-                <div style={{ marginTop: "40px" }}>
+                <div style={{ marginTop: "40px", width: "100%" }}>
                   {coachComments
                     .sort(
                       (a, b) =>
@@ -625,7 +640,7 @@ export default function CoachDetailsCard(props) {
                           background: "rgba(160, 147, 197, 1)",
                           padding: "10px",
                           borderRadius: "10px",
-                          width: "600px",
+                          width: "100%",
                           alignItems: "flex-start",
                         }}
                       >
@@ -683,12 +698,12 @@ export default function CoachDetailsCard(props) {
                 <div>Пока нету комментариев</div>
               )}
             </div>
-          </>
+          </div>
         )}
 
         {active === "schedule" && (
           <div style={{ marginTop: "20px" }}>
-            <div style={{ display: "flex", justifyContent: "center" }}>
+            <div style={{ display: "flex" }}>
               <input
                 type="date"
                 value={date}
