@@ -38,6 +38,10 @@ const initTrainingsState = [
 
 const today = new Date().toISOString().split("T")[0];
 
+const maxDate = new Date();
+const formatDate = (date) => date.toISOString().split("T")[0];
+maxDate.setMonth(maxDate.getMonth() + 3);
+
 export default function CoachDetailsCard(props) {
   const location = useLocation();
   const { coach } = location.state || {}; // Получаем переданный пропс
@@ -268,6 +272,13 @@ export default function CoachDetailsCard(props) {
   const [active, setActive] = useState("schedule");
 
   const handleDateChange = async (dateFromInput) => {
+    const day = new Date(dateFromInput).getDay();
+    // 0 - воскресенье, 6 - суббота
+    if (day === 0 || day === 6) {
+      ShowErrorMessage("Пожалуйста, выберите рабочий день (пн-пт)");
+      return;
+    }
+
     setDate(dateFromInput);
 
     try {
@@ -711,7 +722,14 @@ export default function CoachDetailsCard(props) {
                 type="date"
                 value={date}
                 onChange={(e) => handleDateChange(e.target.value)}
+                onClick={(e) => {
+                  const day = new Date(e.target.value).getDay();
+                  if (day === 0 || day === 6) {
+                    e.target.value = ""; // Сброс значения, если выбран выходной
+                  }
+                }}
                 min={today}
+                max={formatDate(maxDate)}
                 style={{
                   padding: "10px",
                   fontSize: "16px",
