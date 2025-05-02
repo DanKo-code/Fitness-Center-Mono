@@ -210,6 +210,15 @@ func (c *CoachUseCase) DeleteCoachById(
 		}
 	}
 
+	nuc := *c.userClient
+
+	deleteUserByIdRequest := &userGRPC.DeleteUserByIdRequest{Id: coach.User.String()}
+
+	_, err = nuc.DeleteUserById(ctx, deleteUserByIdRequest)
+	if err != nil {
+		return nil, err
+	}
+
 	return coach, nil
 }
 
