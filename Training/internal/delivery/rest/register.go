@@ -15,4 +15,5 @@ func RegisterEndpoints(router *gin.Engine, useCase trainingUseCase, roomMap *mod
 	authorized.DELETE("/training/:id", middlewares.IsClientMiddleware(), h.Delete)
 	router.GET("/training/join/:roomId", h.Join)
 	router.GET("/training/day/:day/coach/:coachId", h.GetTrainingsByDayAndCoach)
+	router.GET("/training/client/:clientId", h.GetActiveTrainingsByCoachId)
 }

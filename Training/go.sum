@@ -3,6 +3,8 @@ github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27 h1:IrE6VUzgwTOUn97keA3/2ee4
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.27/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28 h1:uWm1PHddGCcsGT/+mfGQtSJwntIphwa4kJpSEw+JVBo=
 github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.33 h1:tzpUl+mkLoSSn/W3fjEPepFoGK5bul53/s6tgAiyFIU=
+github.com/DanKo-code/FitnessCenter-Protobuf v0.6.33/go.mod h1:/Swu1W/3S1bdwWiZx3hy52uvpLKWoyNCiZ8thKnK6K0=
 github.com/bytedance/sonic v1.11.6 h1:oUp34TzMlL+OY1OUWxHqsdkgC/Zfc85zGqw9siXjrc0=
 github.com/bytedance/sonic v1.11.6/go.mod h1:LysEHSvpvDySVdC2f87zGWf6CIKJcAvqab1ZaiQtds4=
 github.com/bytedance/sonic v1.12.6 h1:/isNmCUF2x3Sh8RAp/4mh4ZGkcFAX/hLrzrK3AvpRzk=

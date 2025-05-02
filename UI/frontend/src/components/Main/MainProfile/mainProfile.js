@@ -3,12 +3,13 @@ import React, { useEffect, useState, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 import AbonnementCard from "../MainAbonements/AbonementsCard/abonementCard";
 import { setUser } from "../../../states/storeSlice/appStateSlice";
 import { useDispatch, useSelector } from "react-redux";
 import config from "../../../config";
 import inMemoryJWT from "../../../services/inMemoryJWT";
-import { Resource } from "../../../context/AuthContext";
+import { Resource, TrainingResource } from "../../../context/AuthContext";
 import ShowErrorMessage from "../../../utils/showErrorMessage";
 import ShowSuccessMessage from "../../../utils/showSuccessMessage";
 import noAva from "../../../images/no_ava.png";
@@ -22,6 +23,7 @@ export default function MainProfile() {
   const [name, setName] = useState("");
   const [showAbonnementsList, setShowAbonnementsList] = useState(true);
   const [orders, setOrders] = useState([]);
+  const [trainingsWithCoaches, setTrainingsWithCoaches] = useState([]);
 
   let user = useSelector((state) => state.userSliceMode.user);
 
@@ -44,6 +46,8 @@ export default function MainProfile() {
     fileInputRef.current.click(); // Активируем скрытый input
   };
 
+  const navigate = useNavigate();
+
   // useEffect для установки данных пользователя
   useEffect(() => {
     if (user) {
@@ -57,6 +61,16 @@ export default function MainProfile() {
               JSON.stringify(response.data.orders, null, 2),
           );
           setOrders(response.data.orders);
+
+          return TrainingResource.get("/training/client/" + user.id);
+        })
+        .then((res) => {
+          console.log(
+            "response.data.trainingsWithCoaches: " +
+              JSON.stringify(res.data.trainingsWithCoaches, null, 2),
+          );
+
+          setTrainingsWithCoaches(res.data.trainingsWithCoaches);
         })
         .catch((error) => {
           console.error("Failed to fetch orders:", error);
@@ -95,10 +109,20 @@ export default function MainProfile() {
     }
   };
 
+  const handleTrainingSelect = async (
+    trainingId,
+    coachId,
+    coachName,
+    currentUserName,
+  ) => {
+    navigate(
+      `/trainingRoom/${trainingId}/${coachId}/${coachName}/${currentUserName}`,
+    );
+  };
+
   return (
     <div
       style={{
-        width: "70%",
         height: "100vh",
         background: "rgba(117,100,163,255)",
         display: "flex",
@@ -118,7 +142,7 @@ export default function MainProfile() {
         }}
       >
         {/*Change User Data Form*/}
-        <div style={{ width: "40%", display: "flex", flexDirection: "column" }}>
+        <div style={{ width: "25%", display: "flex", flexDirection: "column" }}>
           <input
             type="file"
             accept="image/*" // Разрешаем только фото
@@ -166,18 +190,138 @@ export default function MainProfile() {
           </Button>
         </div>
 
+        {/*Trainings*/}
+        {trainingsWithCoaches.length > 0 && (
+          <div style={{ width: "35%" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "start",
+                marginBottom: "20px",
+                fontSize: "24px",
+              }}
+            >
+              Забронированные тренировки
+            </div>
+            <div style={{ height: "550px", overflowY: "scroll" }}>
+              {trainingsWithCoaches
+                .sort(
+                  (a, b) =>
+                    new Date(a.Training.TimeFrom) -
+                    new Date(b.Training.TimeFrom),
+                )
+                .map((trainingWithCoach) => (
+                  <div
+                    style={{
+                      padding: "20px 5px",
+                      background: "rgb(160, 147, 197)",
+                      borderRadius: "20px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-evenly",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "150px",
+                          borderRadius: "20px",
+                        }}
+                      >
+                        <img
+                          style={{
+                            width: "100%",
+                            height: "120px",
+                            objectFit: "cover",
+                            borderRadius: "20px",
+                          }}
+                          src={trainingWithCoach.Coach.Photo || noAva}
+                        ></img>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <div>
+                          {
+                            new Date(trainingWithCoach.Training.TimeFrom)
+                              .toISOString()
+                              .split("T")[0]
+                          }
+                        </div>
+                        <div>
+                          {new Date(trainingWithCoach.Training.TimeFrom)
+                            .toISOString()
+                            .split("T")[1]
+                            .substring(0, 5) +
+                            "-" +
+                            new Date(trainingWithCoach.Training.TimeUntil)
+                              .toISOString()
+                              .split("T")[1]
+                              .substring(0, 5)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {trainingWithCoach.Training.Status == "active" && (
+                      <div
+                        style={{
+                          marginTop: "5px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Button
+                          style={{
+                            color: "white",
+                            background: "rgba(117,100,163,255)",
+                            width: "90%",
+                            height: "50px",
+                            marginLeft: "20px",
+                          }}
+                          onClick={() =>
+                            handleTrainingSelect(
+                              trainingWithCoach.Training.Id,
+                              trainingWithCoach.Training.CoachId,
+                              trainingWithCoach.Coach.Name,
+                              user.name,
+                            )
+                          }
+                        >
+                          Подключится
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+
         {/*Orders List*/}
-        <div style={{ width: "48%" }}>
+        <div style={{ width: "35%" }}>
           <div
             style={{
               display: "flex",
               justifyContent: "center",
+              alignItems: "start",
               marginBottom: "20px",
               fontSize: "24px",
             }}
           >
-            Приобретенные абонементы
+            <div>Приобретенные абонементы</div>
           </div>
+
           <div style={{ height: "550px", overflowY: "scroll" }}>
             {orders ? (
               <div>

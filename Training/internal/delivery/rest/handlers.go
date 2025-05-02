@@ -25,6 +25,7 @@ type trainingUseCase interface {
 	GetTrainingsByDateAndCoach(ctx context.Context, date string, coachId string) ([]model.Training, error)
 	IsValidParticipant(ctx context.Context, roomId, clientId, coachId uuid.UUID, role string) error
 	Delete(ctx context.Context, id uuid.UUID) error
+	GetActiveTrainingsByClient(ctx context.Context, clientId string) ([]model.TrainingWithCoachDetails, error)
 }
 
 type Handlers struct {
@@ -39,6 +40,21 @@ func NewHandler(useCase trainingUseCase, roomMap *model.RoomMap, broadcast chan 
 		roomMap,
 		broadcast,
 	}
+}
+
+func (h Handlers) GetActiveTrainingsByCoachId(c *gin.Context) {
+	clientId := c.Param("clientId")
+
+	slog.Info("clientId", clientId)
+
+	trainingsWithCoaches, err := h.useCase.GetActiveTrainingsByClient(context.Background(), clientId)
+	if err != nil {
+		c.Error(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"trainingsWithCoaches": trainingsWithCoaches})
 }
 
 func (h Handlers) Insert(c *gin.Context) {

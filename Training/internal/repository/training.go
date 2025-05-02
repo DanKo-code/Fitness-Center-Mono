@@ -167,6 +167,30 @@ func (t Training) GetTrainingsByDateAndCoach(ctx context.Context, date string, c
 	return trainingsModel, nil
 }
 
+func (t Training) GetActiveTrainingsByClient(ctx context.Context, clientId string) ([]model.Training, error) {
+
+	var trainings []TrainingDB
+
+	query := `
+				SELECT id, time_from, time_until, status, coach_id, client_id, created_time, updated_time
+				FROM training
+				WHERE client_id = $1 AND status != 'passed'
+			`
+
+	err := t.db.SelectContext(ctx, &trainings, query, clientId)
+	if err != nil {
+		return nil, err
+	}
+
+	var trainingsModel []model.Training
+
+	for _, training := range trainings {
+		trainingsModel = append(trainingsModel, convertTrainingDBToModel(training))
+	}
+
+	return trainingsModel, nil
+}
+
 func (t Training) GetTrainingByTime(ctx context.Context, timeFrom, timeUntil time.Time) (model.Training, error) {
 
 	var trainingDB TrainingDB

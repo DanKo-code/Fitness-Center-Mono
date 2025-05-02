@@ -22,6 +22,7 @@ type TrainingRepository interface {
 	GetAvailableCoaches(ctx context.Context, training model.Training) ([]string, error)
 	GetById(ctx context.Context, id uuid.UUID) (model.Training, error)
 	Delete(ctx context.Context, id uuid.UUID) error
+	GetActiveTrainingsByClient(ctx context.Context, clientId string) ([]model.Training, error)
 }
 
 type Training struct {
@@ -161,4 +162,44 @@ func (t Training) GetTrainingsByDateAndCoach(ctx context.Context, date string, c
 	}
 
 	return trainings, nil
+}
+
+func (t Training) GetActiveTrainingsByClient(ctx context.Context, clientId string) ([]model.TrainingWithCoachDetails, error) {
+
+	trainings, err := t.repository.GetActiveTrainingsByClient(ctx, clientId)
+	if err != nil {
+		return nil, err
+	}
+
+	slog.Info("trainings", trainings)
+
+	var trainingsWithCoachesDetails []model.TrainingWithCoachDetails
+
+	for _, training := range trainings {
+
+		getCoachByIdRequest := &coachGRPC.GetCoachByIdRequest{Id: training.CoachId.String()}
+
+		coach, err := t.coachClient.GetCoachById(ctx, getCoachByIdRequest)
+		if err != nil {
+			return nil, err
+		}
+
+		trainingsWithCoachesDetails = append(trainingsWithCoachesDetails, model.TrainingWithCoachDetails{
+			Training: training,
+			Coach: model.Coach{
+				Id:          coach.CoachObject.Id,
+				Name:        coach.CoachObject.Name,
+				Description: coach.CoachObject.Description,
+				Photo:       coach.CoachObject.Photo,
+				UpdatedTime: coach.CoachObject.UpdatedTime,
+				CreatedTime: coach.CoachObject.CreatedTime,
+				User:        coach.CoachObject.User,
+				Shift:       coach.CoachObject.Shift,
+			},
+		})
+	}
+
+	slog.Info("trainingsWithCoachesDetails", trainingsWithCoachesDetails)
+
+	return trainingsWithCoachesDetails, nil
 }

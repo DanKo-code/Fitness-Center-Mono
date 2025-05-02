@@ -16,3 +16,19 @@ type Training struct {
 	CreatedTime time.Time
 	UpdatedTime time.Time
 }
+
+type Coach struct {
+	Id          string
+	Name        string
+	Description string
+	Photo       string
+	UpdatedTime string
+	CreatedTime string
+	User        string
+	Shift       string
+}
+
+type TrainingWithCoachDetails struct {
+	Training Training
+	Coach    Coach
+}

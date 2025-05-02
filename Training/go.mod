@@ -5,7 +5,7 @@ go 1.23.3
 require github.com/gorilla/websocket v1.5.3
 
 require (
-	github.com/DanKo-code/FitnessCenter-Protobuf v0.6.28 // indirect
+	github.com/DanKo-code/FitnessCenter-Protobuf v0.6.33 // indirect
 	github.com/bytedance/sonic v1.12.6 // indirect
 	github.com/bytedance/sonic/loader v0.2.1 // indirect
 	github.com/cloudwego/base64x v0.1.4 // indirect
