@@ -464,8 +464,8 @@ export default function AbonnementsModal({ onClose }) {
               onChange={handleVisitingTimeChange}
               sx={{ color: "white" }}
             >
-              <MenuItem value={"7.00 - 14.00"}>7.00 - 14.00</MenuItem>
-              <MenuItem value={"14.00 - 24.00"}>14.00 - 24.00</MenuItem>
+              <MenuItem value={"7.00 - 15.00"}>7.00 - 15.00</MenuItem>
+              <MenuItem value={"15.00 - 23.00"}>15.00 - 23.00</MenuItem>
               <MenuItem value={"Any Time"}>Любое время</MenuItem>
             </Select>
           </FormControl>
