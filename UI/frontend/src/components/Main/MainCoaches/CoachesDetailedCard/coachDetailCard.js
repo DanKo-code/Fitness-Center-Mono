@@ -684,8 +684,9 @@ export default function CoachDetailsCard(props) {
                             <img
                               style={{
                                 width: "100%",
-                                height: "auto",
+                                height: "80px",
                                 borderRadius: "20px",
+                                objectFit: "cover",
                               }}
                               src={comment.userObject.photo || noAva}
                             />

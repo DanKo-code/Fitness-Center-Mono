@@ -177,6 +177,7 @@ export default function ClientsModal({ onClose }) {
                         width: "100%",
                         height: "120px",
                         borderRadius: "20px",
+                        objectFit: "cover",
                       }}
                       src={client.photo || noAva}
                     />

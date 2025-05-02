@@ -123,6 +123,7 @@ export default function MainProfile() {
   return (
     <div
       style={{
+        width: "100%",
         height: "100vh",
         background: "rgba(117,100,163,255)",
         display: "flex",
@@ -189,125 +190,131 @@ export default function MainProfile() {
             Изменить
           </Button>
         </div>
-
         {/*Trainings*/}
-        {trainingsWithCoaches.length > 0 && (
-          <div style={{ width: "35%" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "start",
-                marginBottom: "20px",
-                fontSize: "24px",
-              }}
-            >
-              Забронированные тренировки
-            </div>
-            <div style={{ height: "550px", overflowY: "scroll" }}>
-              {trainingsWithCoaches
-                .sort(
-                  (a, b) =>
-                    new Date(a.Training.TimeFrom) -
-                    new Date(b.Training.TimeFrom),
-                )
-                .map((trainingWithCoach) => (
-                  <div
-                    style={{
-                      padding: "20px 5px",
-                      background: "rgb(160, 147, 197)",
-                      borderRadius: "20px",
-                      marginBottom: "20px",
-                    }}
-                  >
+        <div style={{ width: "35%" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "start",
+              marginBottom: "20px",
+              fontSize: "24px",
+            }}
+          >
+            Забронированные тренировки
+          </div>
+          <div style={{ height: "550px", overflowY: "scroll" }}>
+            {trainingsWithCoaches ? (
+              <div
+                style={{
+                  paddingRight: "10px",
+                }}
+              >
+                {trainingsWithCoaches
+                  .sort(
+                    (a, b) =>
+                      new Date(a.Training.TimeFrom) -
+                      new Date(b.Training.TimeFrom),
+                  )
+                  .map((trainingWithCoach) => (
                     <div
                       style={{
-                        display: "flex",
-                        justifyContent: "space-evenly",
-                        alignItems: "center",
+                        padding: "20px 5px",
+                        background: "rgb(160, 147, 197)",
+                        borderRadius: "20px",
+                        marginBottom: "20px",
                       }}
                     >
                       <div
                         style={{
-                          width: "150px",
-                          borderRadius: "20px",
-                        }}
-                      >
-                        <img
-                          style={{
-                            width: "100%",
-                            height: "120px",
-                            objectFit: "cover",
-                            borderRadius: "20px",
-                          }}
-                          src={trainingWithCoach.Coach.Photo || noAva}
-                        ></img>
-                      </div>
-
-                      <div
-                        style={{
                           display: "flex",
-                          gap: "10px",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <div>
-                          {
-                            new Date(trainingWithCoach.Training.TimeFrom)
-                              .toISOString()
-                              .split("T")[0]
-                          }
-                        </div>
-                        <div>
-                          {new Date(trainingWithCoach.Training.TimeFrom)
-                            .toISOString()
-                            .split("T")[1]
-                            .substring(0, 5) +
-                            "-" +
-                            new Date(trainingWithCoach.Training.TimeUntil)
-                              .toISOString()
-                              .split("T")[1]
-                              .substring(0, 5)}
-                        </div>
-                      </div>
-                    </div>
-
-                    {trainingWithCoach.Training.Status == "active" && (
-                      <div
-                        style={{
-                          marginTop: "5px",
-                          display: "flex",
-                          justifyContent: "center",
+                          justifyContent: "space-evenly",
                           alignItems: "center",
                         }}
                       >
-                        <Button
+                        <div
                           style={{
-                            color: "white",
-                            background: "rgba(117,100,163,255)",
-                            width: "90%",
-                            height: "50px",
-                            marginLeft: "20px",
+                            width: "150px",
+                            borderRadius: "20px",
                           }}
-                          onClick={() =>
-                            handleTrainingSelect(
-                              trainingWithCoach.Training.Id,
-                              trainingWithCoach.Training.CoachId,
-                              trainingWithCoach.Coach.Name,
-                              user.name,
-                            )
-                          }
                         >
-                          Подключиться
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
+                          <img
+                            style={{
+                              width: "100%",
+                              height: "120px",
+                              objectFit: "cover",
+                              borderRadius: "20px",
+                            }}
+                            src={trainingWithCoach.Coach.Photo || noAva}
+                          ></img>
+                        </div>
 
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <div>
+                            {
+                              new Date(trainingWithCoach.Training.TimeFrom)
+                                .toISOString()
+                                .split("T")[0]
+                            }
+                          </div>
+                          <div>
+                            {new Date(trainingWithCoach.Training.TimeFrom)
+                              .toISOString()
+                              .split("T")[1]
+                              .substring(0, 5) +
+                              "-" +
+                              new Date(trainingWithCoach.Training.TimeUntil)
+                                .toISOString()
+                                .split("T")[1]
+                                .substring(0, 5)}
+                          </div>
+                        </div>
+                      </div>
+
+                      {trainingWithCoach.Training.Status == "active" && (
+                        <div
+                          style={{
+                            marginTop: "5px",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Button
+                            style={{
+                              color: "white",
+                              background: "rgba(117,100,163,255)",
+                              width: "90%",
+                              height: "50px",
+                              marginLeft: "20px",
+                            }}
+                            onClick={() =>
+                              handleTrainingSelect(
+                                trainingWithCoach.Training.Id,
+                                trainingWithCoach.Training.CoachId,
+                                trainingWithCoach.Coach.Name,
+                                user.name,
+                              )
+                            }
+                          >
+                            Подключиться
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            ) : (
+              <div>Нет никакаих тренировок</div>
+            )}
+          </div>
+        </div>
         {/*Orders List*/}
         <div style={{ width: "35%" }}>
           <div
@@ -324,7 +331,11 @@ export default function MainProfile() {
 
           <div style={{ height: "550px", overflowY: "scroll" }}>
             {orders ? (
-              <div>
+              <div
+                style={{
+                  paddingRight: "10px",
+                }}
+              >
                 {orders
                   .sort(
                     (a, b) =>
