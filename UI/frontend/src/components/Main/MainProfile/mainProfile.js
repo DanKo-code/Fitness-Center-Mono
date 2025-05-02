@@ -298,7 +298,7 @@ export default function MainProfile() {
                             )
                           }
                         >
-                          Подключится
+                          Подключиться
                         </Button>
                       </div>
                     )}
