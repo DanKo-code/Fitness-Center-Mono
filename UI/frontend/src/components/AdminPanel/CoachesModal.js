@@ -290,7 +290,7 @@ export default function CoachesModal({ onClose }) {
 
   const translations = {
     "swimming-pool": "Бассейн",
-    tennis: "Сауна",
+    tennis: "Теннис",
     gym: "Тренажерный зал",
   };
 

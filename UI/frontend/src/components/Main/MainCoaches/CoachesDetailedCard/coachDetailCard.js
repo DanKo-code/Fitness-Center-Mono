@@ -310,6 +310,7 @@ export default function CoachDetailsCard(props) {
         }
 
         console.log("dayTrainingsReact:", dayTrainingsReact);
+        console.log("trainingsFromResp:", trainingsFromResp);
 
         for (const dayTrainingsReactElement of dayTrainingsReact) {
           dayTrainingsReactElement.status = "свободно";
@@ -317,6 +318,7 @@ export default function CoachDetailsCard(props) {
 
         setDayTrainings([...dayTrainingsReact]);
 
+        /*проставление статусов*/
         if (trainingsFromResp.length > 0) {
           for (let i = 0; i < dayTrainingsReact.length; i++) {
             //
@@ -770,9 +772,9 @@ export default function CoachDetailsCard(props) {
               </div>
 
               {/* Список клиентов */}
-              {dayTrainings.length > 0 ? (
+              {dayTrainings?.length > 0 ? (
                 <div>
-                  {dayTrainings.map((training) => {
+                  {dayTrainings?.map((training) => {
                     const client = Array.isArray(allUsers?.current)
                       ? allUsers.current.find(
                           (u) => u.id === training.client_id,
@@ -793,7 +795,11 @@ export default function CoachDetailsCard(props) {
                         {currentUser.role === "coach" ? (
                           training.status === "активно" ||
                           training.status === "недоступно" ? (
-                            (() => {
+                            (async () => {
+                              await new Promise((resolve) =>
+                                setTimeout(resolve, 1000),
+                              );
+
                               console.log("allUsers:", allUsers);
                               console.log("training:", training);
                               const client = Array.isArray(allUsers?.current)
