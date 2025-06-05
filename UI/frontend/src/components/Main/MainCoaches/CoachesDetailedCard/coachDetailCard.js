@@ -57,7 +57,7 @@ export default function CoachDetailsCard(props) {
   const navigate = useNavigate();
 
   const userCoach = useRef(false);
-  const allUsers = useRef(false);
+  const [allUsers, setAllUsers] = useState("");
 
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -98,7 +98,7 @@ export default function CoachDetailsCard(props) {
       (r) =>
         Resource.get("/users/for-coach").then((res) => {
           console.log("/users/for-coach: " + JSON.stringify(res, null, 2));
-          allUsers.current = res.data.clients;
+          setAllUsers(res.data.clients);
         }),
 
       handleDateChange(today),
@@ -775,10 +775,8 @@ export default function CoachDetailsCard(props) {
               {dayTrainings?.length > 0 ? (
                 <div>
                   {dayTrainings?.map((training) => {
-                    const client = Array.isArray(allUsers?.current)
-                      ? allUsers.current.find(
-                          (u) => u.id === training.client_id,
-                        )
+                    const client = Array.isArray(allUsers)
+                      ? allUsers.find((u) => u.id === training.client_id)
                       : null;
 
                     return (
@@ -795,15 +793,11 @@ export default function CoachDetailsCard(props) {
                         {currentUser.role === "coach" ? (
                           training.status === "активно" ||
                           training.status === "недоступно" ? (
-                            (async () => {
-                              await new Promise((resolve) =>
-                                setTimeout(resolve, 1000),
-                              );
-
+                            (() => {
                               console.log("allUsers:", allUsers);
                               console.log("training:", training);
-                              const client = Array.isArray(allUsers?.current)
-                                ? allUsers.current.find(
+                              const client = Array.isArray(allUsers)
+                                ? allUsers.find(
                                     (u) => u.id === training.client_id,
                                   )
                                 : null;
